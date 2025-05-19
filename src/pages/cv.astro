@@ -1,0 +1,457 @@
+---
+import Layout from '../layouts/BlogPost.astro';
+---
+
+<Layout
+    title="Curriculum Vitae"
+    description="CV Raul Casado"
+    pubDate={new Date('August 08 2021')}
+    heroImage="/blog-placeholder-about.jpg"
+>
+    <div class="cv-container">
+        <div class="cv-header">
+            <div class="cv-header-content">
+                <h1>Curriculum Vitae</h1>
+                <p class="cv-subtitle">
+                    My professional experience, skills, and education.
+                </p>
+            </div>
+            <button class="cv-download-btn">
+                <span class="cv-icon download-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                </span>
+                Download CV
+            </button>
+        </div>
+
+        <!-- Personal Information -->
+        <div class="cv-card">
+            <div class="cv-card-header">
+                <h2 class="cv-card-title">Personal Information</h2>
+            </div>
+            <div class="cv-card-content cv-personal-info">
+                <div class="cv-info-item">
+                    <span class="cv-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                    </span>
+                    <span>raulcasado969@gmail.com</span>
+                </div>
+                <div class="cv-info-item">
+                    <span class="cv-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                    </span>
+                    <span>662042822</span>
+                </div>
+                <div class="cv-info-item">
+                    <span class="cv-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    </span>
+                    <span>Málaga</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Work Experience -->
+        <div class="cv-card">
+            <div class="cv-card-header">
+                <h2 class="cv-card-title">Work Experience</h2>
+            </div>
+            <div class="cv-card-content">
+                <div class="cv-experience-item">
+                    <div class="cv-experience-header">
+                        <h3>Selectra</h3>
+                        <div class="cv-badge cv-badge-outline">2/24 - 3/24</div>
+                    </div>
+                    <p class="cv-company-title">Teleoperador</p>
+                    <p class="cv-description">
+                        Aprendí a trabajar bajo presión, trabajo en equipo, mejorar comunicación, paciencia, manejo de frustración y estrés, creatividad para resolver problemas, escuchar.
+                    </p>
+                    <ul class="cv-experience-list">
+                        <li>Manejo de cuentas de clientes para reducir los errores.</li>
+                        <li>Partícipe de distintas lecciones para estar actualizado con las últimas novedades del producto.</li>
+                    </ul>
+                    <div class="cv-skills-badges">
+                        <span class="cv-badge cv-badge-outline">Trabajo bajo presión</span>
+                        <span class="cv-badge cv-badge-outline">Comunicación</span>
+                        <span class="cv-badge cv-badge-outline">Escucha activa</span>
+                        <span class="cv-badge cv-badge-outline">Resolución de problemas</span>
+                        <span class="cv-badge cv-badge-outline">Gestión del estrés</span>
+                    </div>
+                </div>
+
+                <div class="cv-experience-item">
+                    <div class="cv-experience-header">
+                        <h3>Konecta</h3>
+                        <div class="cv-badge cv-badge-outline">12/23 - 1/24</div>
+                    </div>
+                    <p class="cv-company-title">Teleoperador</p>
+                    <p class="cv-description">
+                        Aprendí a trabajar sobre objetivos con límites mensuales, trabajo bajo presión, venta fría, trabajo en equipo.
+                    </p>
+                    <div class="cv-skills-badges">
+                        <span class="cv-badge cv-badge-outline">Orientación a objetivos</span>
+                        <span class="cv-badge cv-badge-outline">Trabajo en equipo</span>
+                        <span class="cv-badge cv-badge-outline">Venta fría</span>
+                        <span class="cv-badge cv-badge-outline">Trabajo bajo presión</span>
+                    </div>
+                </div>
+
+                <div class="cv-experience-item">
+                    <div class="cv-experience-header">
+                        <h3>Madein:media</h3>
+                        <div class="cv-badge cv-badge-outline">3/23 - 6/23</div>
+                    </div>
+                    <p class="cv-company-title">Programador Web</p>
+                    <p class="cv-description">
+                        Trabajo en equipo, solucionar problemas, gestión de la frustración, comunicación con equipo, gestión del tiempo, organización, pensamiento crítico.
+                    </p>
+                    <ul class="cv-experience-list">
+                        <li>Trabajé con Wordpress, HTML, CSS, Javascript, Jquery, PHP, MySQL, montado de la página, diseño de la misma y manejo de los datos.</li>
+                        <li>Colaboré en reuniones para poder aumentar las visitas de la página.</li>
+                        <li>Realicé el despliegue a producción, asegurando una transición sin problemas.</li>
+                        <li>Participé en reuniones con clientes comprendiendo sus necesidades y requisitos.</li>
+                    </ul>
+                    <div class="cv-skills-badges">
+                        <span class="cv-tech-badge">HTML</span>
+                        <span class="cv-tech-badge">CSS</span>
+                        <span class="cv-tech-badge">JavaScript</span>
+                        <span class="cv-tech-badge">PHP</span>
+                        <span class="cv-tech-badge">MySQL</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Education -->
+        <div class="cv-card">
+            <div class="cv-card-header">
+                <h2 class="cv-card-title">Education</h2>
+            </div>
+            <div class="cv-card-content">
+                <div class="cv-education-item">
+                    <div class="cv-education-header">
+                        <h3>42 Málaga (Telefónica)</h3>
+                        <div class="cv-badge cv-badge-outline">Actual</div>
+                    </div>
+                    <p class="cv-institution">Estudiante de 42</p>
+                </div>
+
+                <div class="cv-education-item">
+                    <div class="cv-education-header">
+                        <h3>I.E.S Politécnico Jesús Marín</h3>
+                        <div class="cv-badge cv-badge-outline">2023</div>
+                    </div>
+                    <p class="cv-institution">Desarrollo de aplicaciones web</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Skills -->
+        <div class="cv-card">
+            <div class="cv-card-header">
+                <h2 class="cv-card-title">Skills</h2>
+            </div>
+            <div class="cv-card-content">
+                <div class="cv-skills-grid">
+                    <div class="cv-skills-column">
+                        <h3>Technical Skills</h3>
+                        <div class="cv-skills-badges">
+                            <span class="cv-badge">CSS3</span>
+                            <span class="cv-badge">HTML5</span>
+                            <span class="cv-badge">PHP</span>
+                            <span class="cv-badge">JavaScript</span>
+                            <span class="cv-badge">TypeScript</span>
+                            <span class="cv-badge">Python</span>
+                            <span class="cv-badge">Laravel</span>
+                            <span class="cv-badge">MySQL</span>
+                            <span class="cv-badge">Git</span>
+                            <span class="cv-badge">C</span>
+                        </div>
+                    </div>
+                    
+                    <div class="cv-skills-column">
+                        <h3>Languages</h3>
+                        <div class="cv-skills-badges">
+                            <span class="cv-badge cv-badge-outline">Inglés</span>
+                            <span class="cv-badge cv-badge-outline">Español</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Availability Section -->
+        <div class="cv-card">
+            <div class="cv-card-header">
+                <h2 class="cv-card-title">Availability</h2>
+            </div>
+            <div class="cv-card-content">
+                <p class="cv-description">
+                    Disponibilidad tanto horaria como geográfica.
+                </p>
+            </div>
+        </div>
+    </div>
+</Layout>
+
+<style>
+    .cv-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+    
+    .cv-header {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .cv-header-content {
+        flex: 1;
+    }
+    
+    h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        line-height: 1.2;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.025em;
+        color: hsl(var(--foreground));
+    }
+    
+    .cv-subtitle {
+        font-size: 1.25rem;
+        color: hsl(var(--muted-foreground));
+        max-width: 700px;
+        margin-top: 0;
+    }
+    
+    .cv-download-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        background-color: hsl(var(--primary));
+        color: hsl(var(--primary-foreground));
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--radius);
+        font-weight: 500;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+    }
+    
+    .cv-download-btn:hover {
+        opacity: 0.9;
+    }
+    
+    .cv-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: hsl(var(--muted-foreground));
+    }
+    
+    .download-icon {
+        color: hsl(var(--primary-foreground));
+    }
+    
+    .cv-card {
+        background-color: hsl(var(--card));
+        border-radius: var(--radius);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        border: 1px solid hsl(var(--border));
+        transition: box-shadow 0.2s ease-in-out;
+    }
+    
+    .cv-card:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .cv-card-header {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid hsl(var(--border));
+        background-color: hsl(var(--secondary) / 0.3);
+    }
+    
+    .cv-card-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin: 0;
+        color: hsl(var(--foreground));
+    }
+    
+    .cv-card-content {
+        padding: 1.5rem;
+    }
+    
+    .cv-personal-info {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(1, 1fr);
+    }
+    
+    .cv-info-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    
+    .cv-experience-item, .cv-education-item {
+        padding-bottom: 1.75rem;
+        margin-bottom: 1.75rem;
+        border-bottom: 1px solid hsl(var(--border));
+    }
+    
+    .cv-experience-item:last-child, .cv-education-item:last-child {
+        padding-bottom: 0;
+        margin-bottom: 0;
+        border-bottom: none;
+    }
+    
+    .cv-experience-header, .cv-education-header {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .cv-experience-header h3, .cv-education-header h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin: 0;
+        color: hsl(var(--foreground));
+    }
+    
+    .cv-company-title, .cv-institution {
+        font-weight: 500;
+        margin-bottom: 0.75rem;
+        color: hsl(var(--foreground));
+    }
+    
+    .cv-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background-color: hsl(var(--secondary));
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: hsl(var(--secondary-foreground));
+    }
+    
+    .cv-badge-outline {
+        background-color: transparent;
+        border: 1px solid hsl(var(--border));
+        color: hsl(var(--foreground));
+    }
+    
+    .cv-description {
+        color: hsl(var(--muted-foreground));
+        margin-bottom: 1.25rem;
+        line-height: 1.6;
+    }
+    
+    .cv-experience-list {
+        margin-top: 0.75rem;
+        margin-bottom: 1.25rem;
+        padding-left: 1.5rem;
+    }
+    
+    .cv-experience-list li {
+        margin-bottom: 0.5rem;
+        color: hsl(var(--muted-foreground));
+    }
+    
+    .cv-skills-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .cv-skills-column h3 {
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: hsl(var(--foreground));
+    }
+    
+    .cv-skills-badges, .cv-tech-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .cv-tech-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.25rem 0.75rem;
+        background-color: hsl(var(--primary) / 0.15);
+        color: hsl(var(--primary));
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+    
+    .cv-links-section, .cv-availability {
+        margin-top: 2rem;
+    }
+    
+    .cv-links-section h3, .cv-availability h3 {
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        color: hsl(var(--foreground));
+    }
+    
+    .cv-link {
+        color: hsl(var(--primary));
+        text-decoration: none;
+        font-weight: 500;
+    }
+    
+    .cv-link:hover {
+        text-decoration: underline;
+    }
+    
+    /* Responsive Design */
+    @media (min-width: 768px) {
+        .cv-header {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .cv-personal-info {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .cv-experience-header, .cv-education-header {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .cv-skills-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    
+    @media (max-width: 640px) {
+        h1 {
+            font-size: 2rem;
+        }
+        
+        .cv-subtitle {
+            font-size: 1.125rem;
+        }
+    }
+</style>
