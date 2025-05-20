@@ -1,14 +1,328 @@
 ---
 import Layout from '../layouts/BlogPost.astro';
+
+const username = "RaulCasado";
+
+const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated`);
+const repositories = await response.json();
+
+// Helper function to determine color based on language
+function getLanguageColor(language) {
+  const colors = {
+    JavaScript: '#f0db4f', // Slightly darker yellow for better contrast
+    TypeScript: '#3178c6',
+    HTML: '#e34c26',
+    CSS: '#563d7c',
+    Python: '#3572A5',
+    Java: '#b07219',
+    C: '#555555',
+    'C++': '#f34b7d',
+    PHP: '#4F5D95'
+  };
+  
+  return colors[language] || '#8e8e8e';
+}
+
+// Create language icons
+function getLanguageIcon(language) {
+  if (!language) return '';
+  
+  const icons = {
+    JavaScript: 'JS',
+    TypeScript: 'TS',
+    HTML: 'HTML',
+    CSS: 'CSS',
+    Python: 'PY',
+    Java: 'JV',
+    C: 'C',
+    'C++': 'C++',
+    PHP: 'PHP'
+  };
+  
+  return icons[language] || language.substring(0, 2).toUpperCase();
+}
+
+const projects = repositories
+  .filter(repo => !repo.fork)
+  .map(repo => ({
+    name: repo.name,
+    description: repo.description,
+    url: repo.html_url,
+    language: repo.language,
+    stars: repo.stargazers_count,
+    updatedAt: repo.updated_at // Store the raw date to format it differently in the UI
+  }));
 ---
 
 <Layout
-	title="Portfolio"
-	description="Mi portafolio"
-	pubDate={new Date('August 08 2021')}
-	heroImage="/blog-placeholder-about.jpg"
+  title="Portfolio"
+  description="Mi portafolio de proyectos"
+  pubDate={new Date('May 20 2025')}
 >
-
-    <p>
-        Esta es una página en construcción para mi portafolio.
+  <div class="portfolio-container">
+    <h2>Mis Proyectos</h2>
+    <p class="portfolio-intro">
+      Estos son algunos de mis proyectos personales y profesionales. Todos están disponibles en mi GitHub.
     </p>
+    
+    <div class="projects-grid">
+      {projects.map(project => (
+        <div class={`project-card ${project.language ? `lang-${project.language.toLowerCase()}` : ''}`}>
+          <div class="project-header">
+            <div class="project-icon">
+              {getLanguageIcon(project.language)}
+            </div>
+            <div class="project-title-container">
+              <h3 class="project-title">{project.name}</h3>
+              {project.language && (
+                <span class="project-language-pill" style={`--lang-color: ${getLanguageColor(project.language)};`}>
+                  {project.language}
+                </span>
+              )}
+            </div>
+          </div>
+          
+          <p class="project-description">{project.description || 'No hay descripción disponible'}</p>
+          
+          <div class="project-meta">
+            <div class="project-stats">
+              <span class="project-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                {project.stars}
+              </span>
+              <span class="project-updated" title={project.updatedAt}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                {new Date(project.updatedAt).toLocaleDateString('es-ES', {year: 'numeric', month: 'short'})}
+              </span>
+            </div>
+            
+            <a href={project.url} target="_blank" rel="noopener noreferrer" class="project-link">
+              Ver en GitHub
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</Layout>
+
+<script define:vars={{ projects }}>
+  // Helper function to determine color based on language
+  function getLanguageColor(language) {
+    const colors = {
+      JavaScript: '#b3a600', // Darker yellow for better text contrast against white
+      TypeScript: '#3178c6',
+      HTML: '#e34c26',
+      CSS: '#563d7c',
+      Python: '#3572A5',
+      Java: '#b07219',
+      C: '#555555',
+      'C++': '#f34b7d',
+      'C#': '#178600',
+      PHP: '#4F5D95',
+      Ruby: '#701516',
+      Go: '#00ADD8',
+      Swift: '#F05138',
+      Kotlin: '#A97BFF',
+      Rust: '#DEA584'
+    };
+    
+    return colors[language] || '#8e8e8e';
+  }
+  
+  // Create language icons
+  function getLanguageIcon(language) {
+    if (!language) return '';
+    
+    const icons = {
+      JavaScript: 'JS',
+      TypeScript: 'TS',
+      HTML: 'HTML',
+      CSS: 'CSS',
+      Python: 'PY',
+      Java: 'JV',
+      C: 'C',
+      'C++': 'C++',
+      'C#': 'C#',
+      PHP: 'PHP',
+      Ruby: 'RB',
+      Go: 'GO',
+      Swift: 'SW',
+      Kotlin: 'KT',
+      Rust: 'RS'
+    };
+    
+    return icons[language] || language.substring(0, 2).toUpperCase();
+  }
+  
+  // Apply language colors to elements
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.project-card').forEach(card => {
+      const languagePill = card.querySelector('.project-language-pill');
+      if (languagePill) {
+        const language = languagePill.textContent.trim();
+        const color = getLanguageColor(language);
+        card.style.setProperty('--lang-color', color);
+      }
+    });
+  });
+</script>
+
+<style>
+  .portfolio-container {
+    max-width: 100%;
+  }
+  
+  .portfolio-intro {
+    margin-bottom: 2rem;
+    color: hsl(var(--muted-foreground));
+  }
+  
+  .projects-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+  }
+  
+  .project-card {
+    padding: 1.25rem;
+    border-radius: 0.5rem;
+    background-color: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    transition: transform 0.2s ease, border-color 0.2s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .project-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--lang-color, hsl(var(--primary)));
+  }
+  
+  .project-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--lang-color, hsl(var(--primary)));
+  }
+  
+  .project-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+  }
+  
+  .project-icon {
+    width: 2rem;
+    height: 2rem;
+    background-color: hsl(var(--secondary) / 0.1);
+    border-radius: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--lang-color, hsl(var(--foreground)));
+    font-size: 0.9rem;
+    margin-top: 0.2rem;
+  }
+  
+  .project-title-container {
+    flex: 1;
+  }
+  
+  .project-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    /* Removed text truncation to ensure full project name is visible */
+  }
+  
+  .project-language-pill {
+    display: inline-flex;
+    padding: 0.1rem 0.4rem;
+    background-color: var(--lang-color, hsl(var(--primary) / 0.1));
+    color: white; /* White text for most languages */
+    text-shadow: 0 0 1px rgba(0, 0, 0, 0.7); /* Stronger text shadow for better contrast */
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600; /* Slightly bolder text for better visibility */
+  }
+  
+  .project-description {
+    color: hsl(var(--muted-foreground));
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  
+  .project-meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 0.75rem;
+    border-top: 1px solid hsl(var(--border));
+  }
+  
+  .project-stats {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+  
+  .project-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.8rem;
+    color: hsl(var(--muted-foreground));
+  }
+  
+  .project-language-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  
+  .project-updated {
+    font-size: 0.8rem;
+    color: hsl(var(--muted-foreground));
+    white-space: nowrap; /* Prevent date from breaking to new line */
+  }
+  
+  .project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: hsl(var(--primary));
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s ease, transform 0.2s ease;
+    padding: 0.2rem 0;
+  }
+  
+  .project-link:hover {
+    transform: translateY(-1px);
+    color: hsl(var(--primary) / 0.8);
+  }
+  
+  @media (min-width: 640px) {
+    .projects-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .projects-grid {
+      grid-template-columns: repeat(2, 1fr); /* Changed from 3 to 2 columns for better readability */
+    }
+  }
+</style>
