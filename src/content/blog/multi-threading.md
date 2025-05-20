@@ -2,7 +2,7 @@
 title : 'Multithreading'
 description : 'Una exploración filosófica del problema de los filósofos comensales y conceptos de programación concurrente'
 pubDate: ' May 13 2025'
-heroImage : '/blog-placeholder-1.jpg'
+heroImage : '/philo.webp'
 heroImageAlt : 'Una ilustración conceptual de cinco filósofos sentados alrededor de una mesa'
 ---
 
@@ -53,7 +53,7 @@ int counter = 0; // variable compartida
 
 void* increment(void* arg) {
     for (int i = 0; i < NUM_INCREMENTS; ++i) {
-        counter++; // 🚨 condición de carrera aquí
+        counter++; // ⚠️ condición de carrera aquí
     }
     return NULL;
 }
@@ -149,6 +149,6 @@ El problema de los filósofos nos enseña lecciones fundamentales sobre cómo di
 
 Como diría Sócrates si viviera en nuestra era: *"Solo sé que no sé nada... sobre sincronización de hilos"*.
 
-Y tú, ¿te has enfrentado alguna vez a problemas de concurrencia en tus proyectos? ¿Cómo los has resuelto? Déjame tus comentarios y experiencias abajo. 
+Y tú, ¿te has enfrentado alguna vez a problemas de concurrencia en tus proyectos? ¿Cómo los has resuelto? Déjame tus comentarios y experiencias abajo.
 
-Si te ha gustado este artículo, compártelo con tus amigos filósofos y programadores. Juntos podemos evitar deadlocks sociales y digitales.
+Si te ha gustado este artículo, compártelo con tus amigos filósofos y programadores o con cualquiera que necesite leerlo. ¡Hasta la próxima!
