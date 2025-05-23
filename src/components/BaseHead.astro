@@ -40,6 +40,19 @@ const { title, description, image = '/blog-placeholder-1.jpg' } = Astro.props;
 <meta name="title" content={title} />
 <meta name="description" content={description} />
 
+<!-- Theme Management - Early load to prevent flash -->
+<script is:inline>
+  // Immediately apply the saved theme to prevent flash of unstyled content
+  const getPreferredTheme = () => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) return savedTheme;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  };
+  
+  // Apply theme right away before page loads
+  document.documentElement.classList.add(getPreferredTheme());
+</script>
+
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website" />
 <meta property="og:url" content={Astro.url} />

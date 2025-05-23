@@ -1,22 +1,43 @@
 ---
-import Layout from '../layouts/BlogPost.astro';
+import StandardPageLayout from '../layouts/StandardPageLayout.astro';
 ---
 
-<Layout
+<StandardPageLayout
 	title="Sobre Mí"
 	description="Raúl Casado - Desarrollador Web"
-	pubDate={new Date('August 08 2021')}
-	heroImage="/blog-placeholder-about.jpg"
 >
 	<div class="about-container">
 		<div class="about-personal-intro">
   			<h2>Hola, soy Raúl Casado 👋</h2>
-  			<p class="about-description">
-   				Un apasionado Desarrollador Web 🖥️ con experiencia en proyectos creativos y en continuo aprendizaje en 42. Me encuentro en busca de una oportunidad que me haga crecer profesionalmente junto a la empresa.
-    			Mi camino comenzó con DAW el ciclo de grado superior, esto despertó mi curiosidad y ganas de aprender más cuando lo completé seguía ampliando mis conocimientos en Python y otros lenguajes. También he desarrollado proyectos con Frameworks como Flask, lo que me ha dado una buena base de como hacer aplicaciones escalables y eficientes.
-    			Lo que más me motiva es crear soluciones tecnológicas que resuelvan problemas reales, y busco proyectos donde pueda aplicar mi creatividad junto con mis habilidades técnicas para generar un impacto positivo.
-				A futuro me gustaría especializarme en el desarrollo de aplicaciones web especialmente en el backend, y seguir aprendiendo sobre nuevas tecnologías y tendencias en el mundo del desarrollo.
-  			</p>
+<p class="about-description">
+    ¡Hola! Soy un desarrollador web, 🖥️
+    Tengo experiencia en crear proyectos o por lo menos lo intento, siempre estoy en la búsqueda
+    de aprender algo nuevo en 42 o por mi cuenta.
+</p>
+
+<p class="about-description">
+    Actualmente estoy en la búsqueda de una oportunidad que me permita crecer profesionalmente. Me encantaría encontrar un lugar donde pueda avanzar y aprender junto con la empresa.
+</p>
+
+<p class="about-description">
+    Todo comenzó con el ciclo de grado superior en DAW. Ahí fue donde me picó
+    la curiosidad y las ganas de aprender no me han abandonado, incluso después de terminar,
+    seguí estudiando. Lo siguiente fue Python y otras tecnologías como React y frameworks
+    como Flask, lo que me proporcionó una buena base para crear aplicaciones escalables
+    y eficientes.
+</p>
+
+<p class="about-description">
+    Lo que me motiva es usar la tecnología para crear soluciones que resuelvan
+    problemas reales. Quiero encontrar proyectos donde pueda combinar mi creatividad con
+    mis habilidades técnicas.
+</p>
+
+<p class="about-description">
+    De cara al futuro, me gustaría especializarme en el desarrollo de aplicaciones web,
+    especialmente en el backend. Además, quiero seguir aprendiendo, ya que siempre hay algo nuevo.
+    Como otro framework de JS, pero eso ya es otro tema.
+</p>
 		</div>
 
 		<div class="about-metrics">
@@ -26,7 +47,7 @@ import Layout from '../layouts/BlogPost.astro';
 					<div class="about-metric-label">Para nuevos proyectos</div>
 				</div>
 				<div class="about-metric-item">
-					<div class="about-metric-value">+500</div>
+					<div class="about-metric-value">+1000</div>
 					<div class="about-metric-label">Horas de estudio</div>
 				</div>
 				<div class="about-metric-item">
@@ -97,8 +118,8 @@ import Layout from '../layouts/BlogPost.astro';
 					<span>Flask</span>
 				</span>
 				<span class="about-tech-badge">
-					<img src="https://cdn.simpleicons.org/linux" alt="linux" height="16" />
-					<span>Linux</span>
+					<img src="https://cdn.simpleicons.org/gnubash" alt="Bash" height="16" />
+					<span>Bash</span>
 				</span>
 				<span class="about-tech-badge">
 					<img src="https://cdn.simpleicons.org/git" alt="Git" height="16" />
@@ -123,9 +144,9 @@ import Layout from '../layouts/BlogPost.astro';
 			</div>
 		</div>
 		<div class="about-philosophy">
-  			<h3>Mi Enfoque</h3>
+  			<h3>Mi propósito como desarrollador</h3>
   			<p class="about-description">
-    			Creo que el mejor código es aquel que resuelve problemas de forma elegante y mantenible. Me esfuerzo por crear soluciones que sean tan intuitivas para los usuarios como para otros desarrolladores que trabajen con mi código. Mi experiencia trabajando en equipo en proyectos de 42 me ha enseñado la importancia de la comunicación clara y la documentación efectiva.
+    			Veo la programación como una forma continua de aprender y superarme. Cada proyecto es una oportunidad para descubrir nuevas ideas, reforzar conocimientos previos y resolver desafíos reales. No se trata de reinventar la rueda, sino de entender cómo y por qué funciona, para construir soluciones mejores y más eficientes.
   			</p>
 		</div>
 		<div class="about-personal-section">
@@ -145,7 +166,7 @@ import Layout from '../layouts/BlogPost.astro';
 			</p>
 		</div>
 	</div>
-</Layout>
+</StandardPageLayout>
 
 <style>
 	.about-container {

@@ -1,11 +1,10 @@
 ---
-import Layout from '../layouts/BlogPost.astro';
+import StandardPageLayout from '../layouts/StandardPageLayout.astro';
 ---
 
-<Layout
+<StandardPageLayout
     title="Curriculum Vitae"
     description="CV Raul Casado"
-    pubDate={new Date('May 20 2025')}
 >
     <div class="cv-container">
         <div class="cv-header">
@@ -273,7 +272,7 @@ import Layout from '../layouts/BlogPost.astro';
             </div>
         </div>
     </div>
-</Layout>
+</StandardPageLayout>
 
 <style>
     .cv-container {

@@ -2,7 +2,8 @@
   Global styles for personal website
  */
 
-:root {
+:root,
+.light {
 	/* Base colors */
 	--background: 0 0% 100%;
 	--foreground: 222.2 84% 4.9%;
@@ -49,6 +50,46 @@
 	--box-shadow:
 		0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
 		0 16px 32px rgba(var(--gray), 33%);
+}
+
+/* Dark theme */
+.dark {
+	/* Base colors - dark mode */
+	--background: 222.2 84% 4.9%;
+	--foreground: 210 40% 98%;
+	
+	/* Primary colors - dark mode */
+	--primary: 217.2 91.2% 59.8%;
+	--primary-foreground: 222.2 47.4% 11.2%;
+	
+	/* Secondary colors - dark mode */
+	--secondary: 217.2 32.6% 17.5%;
+	--secondary-foreground: 210 40% 98%;
+	
+	/* Muted colors - dark mode */
+	--muted: 217.2 32.6% 17.5%;
+	--muted-foreground: 215 20.2% 65.1%;
+	
+	/* Accent colors - dark mode */
+	--accent: 217.2 32.6% 17.5%;
+	--accent-foreground: 210 40% 98%;
+	
+	/* Card styles - dark mode */
+	--card: 222.2 84% 4.9%;
+	--card-foreground: 210 40% 98%;
+	
+	/* Border styles - dark mode */
+	--border: 217.2 32.6% 17.5%;
+	--input: 217.2 32.6% 17.5%;
+	
+	/* Legacy colors - dark mode adaptations */
+	--black: 210, 220, 240;
+	--gray: 156, 175, 219;
+	--gray-light: 21, 23, 30;
+	--gray-dark: 194, 201, 217;
+	--box-shadow:
+		0 2px 6px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.5),
+		0 16px 32px rgba(0, 0, 0, 0.5);
 }
 @font-face {
 	font-family: 'Atkinson';

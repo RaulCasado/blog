@@ -1,5 +1,5 @@
 ---
-import Layout from '../layouts/BlogPost.astro';
+import StandardPageLayout from '../layouts/StandardPageLayout.astro';
 
 const username = "RaulCasado";
 
@@ -54,10 +54,9 @@ const projects = repositories
   }));
 ---
 
-<Layout
+<StandardPageLayout
   title="Portfolio"
   description="Mi portafolio de proyectos"
-  pubDate={new Date('May 20 2025')}
 >
   <div class="portfolio-container">
     <h2>Mis Proyectos</h2>
@@ -105,7 +104,7 @@ const projects = repositories
       ))}
     </div>
   </div>
-</Layout>
+</StandardPageLayout>
 
 <script define:vars={{ projects }}>
   // Helper function to determine color based on language

@@ -1,0 +1,159 @@
+---
+export interface Props {
+  url: string;
+  title: string;
+  description?: string;
+}
+
+const { url, title, description } = Astro.props;
+
+const encodedUrl = encodeURIComponent(url);
+const encodedTitle = encodeURIComponent(title);
+const encodedDescription = description ? encodeURIComponent(description) : '';
+
+const platforms = [
+  {
+    name: 'Twitter',
+    icon: 'https://cdn.simpleicons.org/x/currentColor',
+    url: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`,
+  },
+  {
+    name: 'Facebook',
+    icon: 'https://cdn.simpleicons.org/facebook/currentColor',
+    url: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+  },
+{
+    name: 'LinkedIn',
+    icon: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iY3VycmVudENvbG9yIj48cGF0aCBkPSJNMjAuNDQ3IDE5LjcyNnYtNS4zYzAtMi43NC0xLjQ3LTQuMDItMy40MjctNC4wMi0xLjU4MSAwLTIuMjg3Ljg2My0yLjY4NCAxLjQ3di0xLjI1OWgtMi45NzJjLjAzOS44NDUgMCA5LjAxIDAgOS4wMWgyLjk3MnYtNS4wMzJjMC0uMjY3LjAyLS41MzQuMTAxLS43MjQuMjIxLS41MzQuNzI1LTEuMDg4IDEuNTctMS4wODggMS4xMDcgMCAxLjU1Ljg0NCAxLjU1IDIuMDgydjQuNzYyaDIuOXpNOC4yNiA5LjUxOGgwYy45OTYgMCAxLjYxNy0uNjYgMS42MTctMS40OTctLjAxOS0uODUtLjYyMS0xLjQ5Ny0xLjYtMS40OTctLjk3NyAwLTEuNjE2LjY0Ni0xLjYxNiAxLjQ5NyAwIC44MzYuNjIgMS40OTYgMS41OCAxLjQ5N2guMDE5ek05Ljc0NCAxOC45NXYtOC45OThINi43NTV2OC45OThIOS43NDR6Ii8+PC9zdmc+',
+    url: `https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}&title=${encodedTitle}&summary=${encodedDescription}`,
+},
+  {
+    name: 'Reddit',
+    icon: 'https://cdn.simpleicons.org/reddit/currentColor',
+    url: `https://www.reddit.com/submit?url=${encodedUrl}&title=${encodedTitle}`,
+  }
+];
+---
+
+<div class="social-share-container">
+  <h4>Comparte este artículo:</h4>
+  <div class="social-share-buttons">
+    {platforms.map(platform => (
+      <a
+        href={platform.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="social-share-button"
+        aria-label={`Compartir en ${platform.name}`}
+        title={`Compartir en ${platform.name}`}
+      >
+        <img src={platform.icon} alt={`${platform.name} logo`} class="social-share-icon" />
+        <span class="sr-only">{platform.name}</span>
+      </a>
+    ))}
+    <button
+      id="copy-link-button"
+      class="social-share-button"
+      aria-label="Copiar enlace al portapapeles"
+      title="Copiar enlace"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="social-share-icon">
+        <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path>
+      </svg>
+      <span class="sr-only">Copiar enlace</span>
+    </button>
+  </div>
+  <div id="copy-link-feedback" class="copy-link-feedback" aria-live="polite"></div>
+</div>
+
+<script define:vars={{ urlToCopy: url }}>
+  const copyButton = document.getElementById('copy-link-button');
+  const feedbackElement = document.getElementById('copy-link-feedback');
+
+  if (copyButton && feedbackElement) {
+    copyButton.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(urlToCopy);
+        feedbackElement.textContent = '¡Enlace copiado!';
+        feedbackElement.style.opacity = '1';
+        setTimeout(() => {
+          feedbackElement.style.opacity = '0';
+          feedbackElement.textContent = '';
+        }, 2000);
+      } catch (err) {
+        console.error('Error al copiar el enlace: ', err);
+        feedbackElement.textContent = 'Error al copiar';
+        feedbackElement.style.opacity = '1';
+         setTimeout(() => {
+          feedbackElement.style.opacity = '0';
+          feedbackElement.textContent = '';
+        }, 2000);
+      }
+    });
+  }
+</script>
+
+<style>
+  .social-share-container {
+    margin-top: 2.5rem;
+    margin-bottom: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid hsl(var(--border) / 0.5);
+  }
+
+  .social-share-container h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: hsl(var(--foreground));
+  }
+
+  .social-share-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .social-share-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem;
+    background-color: hsl(var(--secondary) / 0.3);
+    color: hsl(var(--foreground));
+    border-radius: var(--radius);
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    border: 1px solid hsl(var(--border) / 0.7);
+  }
+
+  .social-share-button:hover {
+    background-color: hsl(var(--secondary) / 0.6);
+    transform: translateY(-1px);
+  }
+
+  .social-share-icon {
+    width: 1.25rem; /* 20px */
+    height: 1.25rem; /* 20px */
+  }
+
+  .sr-only { /* Screen reader only text */
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  .copy-link-feedback {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: hsl(var(--primary));
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+</style>
