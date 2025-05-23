@@ -13,6 +13,10 @@ const posts = (await getCollection('blog')).sort(
 // Calculate estimated reading time for each post (placeholder - would need actual content)
 function getReadingTime(post) {
 	const wordsPerMinute = 200; // Average reading speed
+	
+	// Check if post.body exists before trying to split it
+	if (!post.body) return 1; // Default to 1 minute if no content is available
+	
 	const words = post.body.split(/\s+/).length; // Split by whitespace
 	const minutes = Math.ceil(words / wordsPerMinute);
 	return minutes;
