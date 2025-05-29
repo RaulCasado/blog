@@ -15,8 +15,15 @@ const filteredHeadings = headings.filter((heading) => heading.depth >= 2 && head
 ---
 
 <nav class="toc-container">
-  <div class="toc-inner">
+  <div class="toc-header">
     <h2>{title}</h2>
+    <button class="toc-toggle" aria-label="Toggle table of contents">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </button>
+  </div>
+  <div class="toc-inner">
     <ul class="toc-list">
       {
         filteredHeadings.map((heading) => (
@@ -29,29 +36,133 @@ const filteredHeadings = headings.filter((heading) => heading.depth >= 2 && head
   </div>
 </nav>
 
+<script>
+  // Toggle functionality for mobile TOC
+  document.addEventListener('DOMContentLoaded', () => {
+    const tocToggle = document.querySelector('.toc-toggle');
+    const tocInner = document.querySelector('.toc-inner');
+    
+    if (tocToggle && tocInner) {
+      // On mobile, start collapsed
+      if (window.innerWidth < 768) {
+        tocInner.classList.add('collapsed');
+      }
+      
+      tocToggle.addEventListener('click', () => {
+        tocInner.classList.toggle('collapsed');
+        tocToggle.classList.toggle('rotated');
+      });
+      
+      // Close TOC when clicking on links (on mobile)
+      const tocLinks = document.querySelectorAll('.toc-item a');
+      tocLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          if (window.innerWidth < 768) {
+            tocInner.classList.add('collapsed');
+            tocToggle.classList.remove('rotated');
+          }
+        });
+      });
+    }
+  });
+</script>
+
 <style>
   .toc-container {
-    position: sticky;
-    top: 2rem;
-    max-height: calc(100vh - 4rem);
-    overflow-y: auto;
+    position: relative;
     background-color: hsl(var(--secondary) / 0.3);
     border-radius: var(--radius);
-    padding: 1.5rem;
-    margin-bottom: 2rem;
+    padding: 0.75rem;
+    margin-bottom: 1.5rem;
     border: 1px solid hsl(var(--border));
     scrollbar-width: thin;
+    width: 100%;
+  }
+  
+  .toc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    width: 100%;
+  }
+  
+  .toc-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: var(--radius);
+    transition: background-color 0.2s ease;
+  }
+  
+  .toc-toggle:hover {
+    background-color: hsl(var(--muted));
+  }
+  
+  .toc-toggle.rotated svg {
+    transform: rotate(180deg);
+  }
+  
+  .toc-toggle svg {
+    transition: transform 0.2s ease;
   }
   
   .toc-inner {
-    max-width: 250px;
+    width: 100%;
+    overflow-y: auto;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    max-height: 250px;
+  }
+  
+  .toc-inner.collapsed {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+  }
+  
+  @media (min-width: 768px) {
+    .toc-container {
+      padding: 1rem;
+    }
+    
+    .toc-inner {
+      max-height: 300px;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .toc-container {
+      position: sticky;
+      top: 2rem;
+      max-height: calc(100vh - 4rem);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .toc-inner {
+      max-height: calc(100vh - 8rem);
+      max-width: 250px;
+    }
+    
+    .toc-toggle {
+      display: none;
+    }
+    
+    .toc-inner.collapsed {
+      max-height: unset;
+      opacity: 1;
+    }
   }
 
   .toc-container h2 {
-    font-size: 1.25rem;
+    font-size: 1.125rem;
     font-weight: 600;
     margin-top: 0;
-    margin-bottom: 1rem;
+    margin-bottom: 0.25rem;
   }
 
   .toc-list {
@@ -62,6 +173,8 @@ const filteredHeadings = headings.filter((heading) => heading.depth >= 2 && head
 
   .toc-item {
     margin-bottom: 0.5rem;
+    line-height: 1.4;
+    font-size: 0.9375rem;
   }
 
   .toc-item a {
@@ -69,6 +182,20 @@ const filteredHeadings = headings.filter((heading) => heading.depth >= 2 && head
     text-decoration: none;
     transition: color 0.2s ease;
     display: inline-block;
+    width: 100%;
+    white-space: normal;
+    word-break: break-word;
+  }
+  
+  @media (min-width: 768px) {
+    .toc-container h2 {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+    
+    .toc-item {
+      font-size: 1rem;
+    }
   }
 
   .toc-item a:hover {

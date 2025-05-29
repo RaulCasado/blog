@@ -2,6 +2,25 @@
   Global styles for personal website
  */
 
+/* Global box-sizing reset */
+*, *::before, *::after {
+	box-sizing: border-box;
+}
+
+/* Add theme transition for smoother theme switching */
+html {
+	transition: background-color 0.3s ease, color 0.3s ease;
+	overflow-x: hidden;
+	width: 100%;
+	max-width: 100%;
+}
+
+body {
+	overflow-x: hidden;
+	width: 100%;
+	max-width: 100%;
+}
+
 :root,
 .light {
 	/* Base colors */
@@ -202,12 +221,62 @@ hr {
 	border: none;
 	border-top: 1px solid rgb(var(--gray-light));
 }
-@media (max-width: 720px) {
+/* Add styles for code blocks and markdown content */
+pre, code {
+	overflow-x: auto;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+	max-width: 100%;
+}
+
+pre {
+	padding: 1rem;
+	border-radius: var(--radius);
+	background-color: hsl(var(--muted));
+	margin: 1rem 0;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 1rem 0;
+	overflow-x: auto;
+	display: block;
+}
+
+table th, table td {
+	padding: 0.5rem;
+	border: 1px solid hsl(var(--border));
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
 	body {
-		font-size: 18px;
+		font-size: 16px;
 	}
 	main {
-		padding: 1em;
+		padding: 0.5em;
+	}
+	
+	/* Mobile menu styles */
+	body.menu-open {
+		overflow: hidden;
+	}
+	
+	/* Improve code block display on mobile */
+	pre {
+		font-size: 14px;
+		padding: 0.75rem;
+		margin: 0.75rem 0;
+	}
+	
+	table {
+		font-size: 14px;
 	}
 }
 

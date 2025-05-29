@@ -8,20 +8,6 @@ heroImageAlt : 'Una ilustración conceptual de cinco filósofos sentados alreded
 
 # Una mirada filosófica al Multithreading
 
-## Tabla de Contenidos
-- [Introducción](#introducción)
-- [¿Qué es el Multithreading?](#qué-es-el-multithreading)
-- [¿Qué es el problema de los filósofos?](#qué-es-el-problema-de-los-filósofos)
-- [Conceptos clave en el multithreading](#conceptos-clave-en-el-multithreading)
-  - [Recursos compartidos y data racing](#1-recursos-compartidos-y-data-racing)
-  - [Semáforos: Control de Flujo con Capacidad](#11-semáforos-control-de-flujo-con-capacidad)
-  - [Deadlock (Bloqueo mutuo)](#2-deadlock-bloqueo-mutuo)
-  - [Liberación de recursos](#3-liberación-de-recursos)
-- [¿Cómo lo aplicamos en el mundo real?](#cómo-lo-aplicamos-en-el-mundo-real)
-- [Conclusión](#conclusión)
-- [Más Allá de lo Básico: Un Vistazo Rápido a Conceptos Avanzados](#más-allá-de-lo-básico-un-vistazo-rápido-a-conceptos-avanzados)
-- [Recursos adicionales](#recursos-adicionales)
-
 ## Introducción
 
 Si estás leyendo esto, da igual que sepas o no lo que es el multithreading. Con este artículo quiero explicar con mis propias palabras qué es el multithreading y cómo funciona. Ya me enfrenté al problema de los filósofos en la escuela de 42 y quiero compartir mi experiencia con vosotros. Espero que os sirva de ayuda y que no os quedéis con dudas. Si tenéis alguna pregunta, no dudéis en dejarla en los comentarios.

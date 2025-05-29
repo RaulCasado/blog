@@ -1,0 +1,50 @@
+---
+---
+
+<button id="burger-menu-toggle" class="burger-menu" aria-label="Abrir menu de navegación">
+  <span class="burger-line"></span>
+  <span class="burger-line"></span>
+  <span class="burger-line"></span>
+</button>
+
+<style>
+  .burger-menu {
+    display: none; /* Hidden by default on desktop */
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 22px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 20;
+  }
+
+  .burger-line {
+    width: 100%;
+    height: 2px;
+    background-color: hsl(var(--foreground));
+    transition: all 0.3s ease-in-out;
+  }
+
+  /* Media query for mobile view */
+  @media (max-width: 768px) {
+    .burger-menu {
+      display: flex;
+    }
+  }
+
+  /* Active state for animation */
+  .burger-menu.active .burger-line:nth-child(1) {
+    transform: translateY(10px) rotate(45deg);
+  }
+
+  .burger-menu.active .burger-line:nth-child(2) {
+    opacity: 0;
+  }
+
+  .burger-menu.active .burger-line:nth-child(3) {
+    transform: translateY(-10px) rotate(-45deg);
+  }
+</style>
