@@ -23,11 +23,13 @@ const currentPageUrl = Astro.url.href; // Get the current page URL
 	<head>
 		<BaseHead title={title} description={description} />
 		<style>
+			html {
+				overflow: visible;
+			}
 			main {
 				width: 100%;
 				max-width: 100%;
 				margin: 0;
-				overflow-x: hidden;
 				padding: 0;
 			}
 			.hero-image {
@@ -59,7 +61,7 @@ const currentPageUrl = Astro.url.href; // Get the current page URL
 			.toc-placeholder {
 				margin-top: 0.5rem;
 				width: 100%;
-				order: 1; /* On mobile, TOC appears after content */
+				order: 1;
 			}
 			
 			/* Shared styles for both blog content and regular pages */
@@ -245,6 +247,7 @@ const currentPageUrl = Astro.url.href; // Get the current page URL
 					max-width: 1200px;
 					gap: 2rem;
 					margin: 2rem auto 0;
+					overflow: visible;
 				}
 				
 				.blog-content-wrapper .prose {
@@ -254,6 +257,10 @@ const currentPageUrl = Astro.url.href; // Get the current page URL
 				.toc-placeholder {
 					position: sticky;
 					top: 2rem;
+					height: fit-content;
+					max-height: calc(100vh - 4rem);
+					overflow-y: auto;
+					align-self: start;
 				}
 				
 				.title h1 {

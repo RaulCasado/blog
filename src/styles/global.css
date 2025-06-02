@@ -1,10 +1,8 @@
-/*
-  Global styles for personal website
- */
-
 /* Global box-sizing reset */
 *, *::before, *::after {
 	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
 }
 
 /* Add theme transition for smoother theme switching */
@@ -284,16 +282,12 @@ img {
 	border: 0;
 	padding: 0;
 	margin: 0;
-	position: absolute !important;
+	position: absolute;
 	height: 1px;
 	width: 1px;
 	overflow: hidden;
-	/* IE6, IE7 - a 0 height clip, off to the bottom right of the visible 1px box */
 	clip: rect(1px 1px 1px 1px);
-	/* maybe deprecated but we need to support legacy browsers */
 	clip: rect(1px, 1px, 1px, 1px);
-	/* modern browsers, clip-path works inwards from each corner */
 	clip-path: inset(50%);
-	/* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
 	white-space: nowrap;
 }
