@@ -3,10 +3,11 @@ import BaseHead from '../../components/BaseHead.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
-import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { getLangFromUrl, useTranslations, useTranslatedPath } from '../../i18n/utils';
 
 const lang = 'es';
 const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
 ---
 
 <!doctype html>
@@ -25,8 +26,8 @@ const t = useTranslations(lang);
 							<h1>{t('hero.greeting')}</h1>
 							<p>{t('hero.tagline')}</p>
 							<div class="cta-buttons">
-								<a href="/es/portfolio" class="btn btn-primary">{t('hero.cta.projects')}</a>
-								<a href="/es/about" class="btn btn-outline">{t('hero.cta.about')}</a>
+								<a href={translatePath('portfolio')} class="btn btn-primary">{t('hero.cta.projects')}</a>
+								<a href={translatePath('about')} class="btn btn-outline">{t('hero.cta.about')}</a>
 							</div>
 						</div>
 						<div class="hero-image">
@@ -58,7 +59,7 @@ const t = useTranslations(lang);
 								</div>
 								<h3>{t('card.blog.title')}</h3>
 								<p>{t('card.blog.description')}</p>
-								<a href="/es/blog" class="card-link">{t('card.blog.link')}<span>→</span></a>
+								<a href={translatePath('blog')} class="card-link">{t('card.blog.link')}<span>→</span></a>
 							</div>
 						</div>
 						
@@ -69,7 +70,7 @@ const t = useTranslations(lang);
 								</div>
 								<h3>{t('card.portfolio.title')}</h3>
 								<p>{t('card.portfolio.description')}</p>
-								<a href="/es/portfolio" class="card-link">{t('card.portfolio.link')} <span>→</span></a>
+								<a href={translatePath('portfolio')} class="card-link">{t('card.portfolio.link')} <span>→</span></a>
 							</div>
 						</div>
 						
@@ -80,7 +81,7 @@ const t = useTranslations(lang);
 								</div>
 								<h3>{t('card.about.title')}</h3>
 								<p>{t('card.about.description')}</p>
-								<a href="/es/about" class="card-link">{t('card.about.link')} <span>→</span></a>
+								<a href={translatePath('about')} class="card-link">{t('card.about.link')} <span>→</span></a>
 							</div>
 						</div>
 					</div>
@@ -122,7 +123,7 @@ const t = useTranslations(lang);
 					</div>
 					
 					<div class="view-more-container">
-						<a href="/es/about" class="btn btn-outline view-more-btn">
+						<a href={translatePath('about')} class="btn btn-outline view-more-btn">
 							<span>Ver todo mi stack</span>
 							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
 						</a>

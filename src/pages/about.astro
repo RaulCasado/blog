@@ -1,0 +1,8 @@
+---
+import { defaultLanguage } from '../i18n/ui';
+
+// For static sites, we'll just use the default language
+// This avoids using server-only features like Astro.request.headers
+const lang = defaultLanguage;
+---
+<meta http-equiv="refresh" content={`0;url=/${lang}/about`} />

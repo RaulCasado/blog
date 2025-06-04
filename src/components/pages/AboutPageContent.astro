@@ -6,143 +6,196 @@ const t = useTranslations(lang);
 ---
 
 <div class="about-container">
-    <div class="about-personal-intro">
-        <h2>{t('about.greeting')}</h2>
-        <p class="about-description">
-            {t('about.intro1')}
-        </p>
-        <p class="about-description">
-            {t('about.intro2')}
-        </p>
-        <p class="about-description">
-            {t('about.intro3')}
-        </p>
-        <p class="about-description">
-            {t('about.intro4')}
-        </p>
-        <p class="about-description">
-            {t('about.intro5')}
-        </p>
+    <div class="about-header">
+        <div class="about-header-content">
+            <h1>{t('about.greeting')}</h1>
+        </div>
+    </div>
+    
+    <div class="about-card">
+        <div class="about-card-content">
+            <p class="about-description">
+                {t('about.intro1')}
+            </p>
+            <p class="about-description">
+                {t('about.intro2')}
+            </p>
+            <p class="about-description">
+                {t('about.intro3')}
+            </p>
+            <p class="about-description">
+                {t('about.intro4')}
+            </p>
+            <p class="about-description">
+                {t('about.intro5')}
+            </p>
+        </div>
     </div>
 
-    <div class="about-metrics">
-        <div class="about-metrics-grid">
-            <div class="about-metric-item">
-                <div class="about-metric-value">{t('about.available')}</div>
-                <div class="about-metric-label">{t('about.projects')}</div>
-            </div>
-            <div class="about-metric-item">
-                <div class="about-metric-value">{t('about.hours')}</div>
-                <div class="about-metric-label">{t('about.learning')}</div>
-            </div>
-            <div class="about-metric-item">
-                <div class="about-metric-value">+10</div>
-                <div class="about-metric-label">{t('about.projectsLabel')}</div>
-            </div>
-            <div class="about-metric-item">
-                <div class="about-metric-value">+50</div>
-                <div class="about-metric-label">{t('about.skillsLabel')}</div>
+    <div class="about-card about-metrics-card">
+        <div class="about-card-content">
+            <div class="about-metrics-grid">
+                <div class="about-metric-item">
+                    <div class="about-metric-value">{t('about.available')}</div>
+                    <div class="about-metric-label">{t('about.projects')}</div>
+                </div>
+                <div class="about-metric-item">
+                    <div class="about-metric-value">{t('about.hours')}</div>
+                    <div class="about-metric-label">{t('about.learning')}</div>
+                </div>
+                <div class="about-metric-item">
+                    <div class="about-metric-value">+10</div>
+                    <div class="about-metric-label">{t('about.projectsLabel')}</div>
+                </div>
+                <div class="about-metric-item">
+                    <div class="about-metric-value">+50</div>
+                    <div class="about-metric-label">{t('about.skillsLabel')}</div>
+                </div>
             </div>
         </div>
     </div>
     
-    <div class="about-studying-section">
-        <h3>{t('about.h3')} 🚀</h3>
-        <div class="about-tech-badges">
-            <span class="about-tech-badge">
-                <img src="https://cdn.simpleicons.org/php" alt="PHP" height="16" />
-                <span>PHP</span>
-            </span>
-            <span class="about-tech-badge">
-                <img src="https://cdn.simpleicons.org/laravel" alt="Laravel" height="16" />
-                <span>Laravel</span>
-            </span>
-            <span class="about-tech-badge">
-                <img src="https://cdn.simpleicons.org/mysql" alt="MySQL" height="16" />
-                <span>MySQL</span>
-            </span>
-            <span class="about-tech-badge">
-                <img src="https://cdn.simpleicons.org/typescript" alt="TypeScript" height="16" />
-                <span>TypeScript</span>
-            </span>
-            <span class="about-tech-badge">
-                <img src="https://cdn.simpleicons.org/react" alt="React" height="16" />
-                <span>React</span>
-            </span>
-            <span class="about-tech-badge">
-                <img src="https://cdn.simpleicons.org/python" alt="Python" height="16" />
-                <span>Python</span>
-            </span>
-            <span class="about-tech-badge">
-                <img src="https://cdn.simpleicons.org/c" alt="C" height="16" />
-                <span>C</span>
-            </span>
-            
-            <span class="about-tech-badge">
-                <img src="https://cdn.simpleicons.org/html5" alt="HTML" height="16" />
-                <span>HTML</span>
-            </span>
-            <span class="about-tech-badge">
-                <img src="https://cdn.simpleicons.org/css3" alt="CSS" height="16" />
-                <span>CSS</span>
-            </span>
-            <span class="about-tech-badge">
-                <img src="https://cdn.simpleicons.org/wordpress" alt="WordPress" height="16" />
-                <span>WordPress</span>
-            </span>
-            <span class="about-tech-badge">
-                <img src="https://cdn.simpleicons.org/npm" alt="npm" height="16" />
-                <span>npm</span>
-            </span>
-            <span class="about-tech-badge">
-                <img src="https://cdn.simpleicons.org/git" alt="Git" height="16" />
-                <span>Git</span>
-            </span>
-            <span class="about-tech-badge">
-                <img src="https://cdn.simpleicons.org/fastapi" alt="FastAPI" height="16" />
-                <span>FastAPI</span>
-            </span>
-            <span class="about-tech-badge">
-                <img src="https://cdn.simpleicons.org/flask" alt="Flask" height="16" />
-                <span>Flask</span>
-            </span>
+    <div class="about-card">
+        <div class="about-card-header">
+            <h2 class="about-card-title">{t('about.h3')} 🚀</h2>
+        </div>
+        <div class="about-card-content">
+            <div class="about-tech-badges">
+                <span class="about-tech-badge">
+                    <img src="https://cdn.simpleicons.org/php" alt="PHP" height="40" />
+                    <span>PHP</span>
+                </span>
+                <span class="about-tech-badge">
+                    <img src="https://cdn.simpleicons.org/laravel" alt="Laravel" height="40" />
+                    <span>Laravel</span>
+                </span>
+                <span class="about-tech-badge">
+                    <img src="https://cdn.simpleicons.org/mysql" alt="MySQL" height="40" />
+                    <span>MySQL</span>
+                </span>
+                <span class="about-tech-badge">
+                    <img src="https://cdn.simpleicons.org/typescript" alt="TypeScript" height="40" />
+                    <span>TypeScript</span>
+                </span>
+                <span class="about-tech-badge">
+                    <img src="https://cdn.simpleicons.org/react" alt="React" height="40" />
+                    <span>React</span>
+                </span>
+                <span class="about-tech-badge">
+                    <img src="https://cdn.simpleicons.org/python" alt="Python" height="40" />
+                    <span>Python</span>
+                </span>
+                <span class="about-tech-badge">
+                    <img src="https://cdn.simpleicons.org/c" alt="C" height="40" />
+                    <span>C</span>
+                </span>
+                <span class="about-tech-badge">
+                    <img src="https://cdn.simpleicons.org/html5" alt="HTML" height="40" />
+                    <span>HTML</span>
+                </span>
+                <span class="about-tech-badge">
+                    <img src="https://cdn.simpleicons.org/css3" alt="CSS" height="40" />
+                    <span>CSS</span>
+                </span>
+                <span class="about-tech-badge">
+                    <img src="https://cdn.simpleicons.org/wordpress" alt="WordPress" height="40" />
+                    <span>WordPress</span>
+                </span>
+                <span class="about-tech-badge">
+                    <img src="https://cdn.simpleicons.org/javascript" alt="JavaScript" height="40" />
+                    <span>JavaScript</span>
+                </span>
+                <span class="about-tech-badge">
+                    <img src="https://cdn.simpleicons.org/openjdk" alt="Java" height="40" />
+                    <span>Java</span>
+                </span>
+                <span class="about-tech-badge">
+                    <img src="https://cdn.simpleicons.org/flask" alt="Flask" height="40" />
+                    <span>Flask</span>
+                </span>
+                <span class="about-tech-badge">
+                    <img src="https://cdn.simpleicons.org/gnubash" alt="Bash" height="40" />
+                    <span>Bash</span>
+                </span>
+                <span class="about-tech-badge">
+                    <img src="https://cdn.simpleicons.org/git" alt="Git" height="40" />
+                    <span>Git</span>
+                </span>
+                <span class="about-tech-badge">
+                    <img src="https://cdn.simpleicons.org/github" alt="GitHub" height="40" />
+                    <span>GitHub</span>
+                </span>
+                <span class="about-tech-badge">
+                    <img src="https://cdn.simpleicons.org/cplusplus" alt="C++" height="40" />
+                    <span>C++</span>
+                </span>
+                <span class="about-tech-badge">
+                    <img src="https://cdn.simpleicons.org/mariadb" alt="MariaDB" height="40" />
+                    <span>MariaDB</span>
+                </span>
+                <span class="about-tech-badge">
+                    <img src="https://cdn.simpleicons.org/docker" alt="Docker" height="40" />
+                    <span>Docker</span>
+                </span>
+            </div>
         </div>
     </div>
     
-    <div class="about-philosophy">
-        <h3>{t('about.goalTitle')}</h3>
-        <p class="about-description">
-            {t('about.goalDescription')}
-        </p>
+    <div class="about-card">
+        <div class="about-card-header">
+            <h2 class="about-card-title">{t('about.goalTitle')}</h2>
+        </div>
+        <div class="about-card-content">
+            <p class="about-description">
+                {t('about.goalDescription')}
+            </p>
+        </div>
     </div>
     
-    <div class="about-personal-section">
-        <h3>{t('about.hobbiesTitle')}</h3>
-        <p class="about-description">
-            {t('about.hobbiesDescription')}
-        </p>
+    <div class="about-card">
+        <div class="about-card-header">
+            <h2 class="about-card-title">{t('about.hobbiesTitle')}</h2>
+        </div>
+        <div class="about-card-content">
+            <p class="about-description">
+                {t('about.hobbiesDescription')}
+            </p>
+        </div>
     </div>
     
-    <div class="about-links-section">
-        <h3>{t('about.links')}</h3>
-        <p>
-            GitHub: <a href="https://github.com/RaulCasado" class="about-link">github.com/RaulCasado</a><br />
-            LinkedIn: <a href="https://www.linkedin.com/in/raul-casado-moreno/" class="about-link">linkedin.com/in/raul-casado-moreno</a>
-        </p>
+    <div class="about-card">
+        <div class="about-card-header">
+            <h2 class="about-card-title">{t('about.links')}</h2>
+        </div>
+        <div class="about-card-content">
+            <p>
+                GitHub: <a href="https://github.com/RaulCasado" class="about-link">github.com/RaulCasado</a><br />
+                LinkedIn: <a href="https://www.linkedin.com/in/raul-casado-moreno/" class="about-link">linkedin.com/in/raul-casado-moreno</a>
+            </p>
+        </div>
     </div>
 </div>
 
 <style>
-    /* About page styles */
     .about-container {
-        max-width: 900px;
+        max-width: 1000px;
         margin: 0 auto;
+        padding: 2rem 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
     }
 
-    .about-personal-intro h2 {
+    .about-header {
+        margin-bottom: 1rem;
+    }
+
+    h1 {
         font-size: 2.5rem;
         font-weight: 700;
-        margin-bottom: 1.5rem;
+        line-height: 1.2;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.025em;
         color: hsl(var(--foreground));
     }
 
@@ -152,16 +205,43 @@ const t = useTranslations(lang);
         color: hsl(var(--muted-foreground));
         margin-bottom: 1.5rem;
     }
-    
-    /* Metrics section */
-    .about-metrics {
-        background-color: hsl(var(--card));
-        border-radius: var(--radius);
-        padding: 1.5rem;
-        margin: 2.5rem 0;
-        border: 1px solid hsl(var(--border));
+
+    .about-description:last-child {
+        margin-bottom: 0;
     }
     
+    /* Card styles */
+    .about-card {
+        background-color: hsl(var(--card));
+        border-radius: var(--radius);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        border: 1px solid hsl(var(--border));
+        transition: box-shadow 0.2s ease-in-out;
+    }
+    
+    .about-card:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .about-card-header {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid hsl(var(--border));
+        background-color: hsl(var(--secondary) / 0.3);
+    }
+    
+    .about-card-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin: 0;
+        color: hsl(var(--foreground));
+    }
+    
+    .about-card-content {
+        padding: 1.5rem;
+    }
+    
+    /* Metrics section */
     .about-metrics-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -170,12 +250,20 @@ const t = useTranslations(lang);
     
     .about-metric-item {
         text-align: center;
+        padding: 1rem;
+        background-color: hsl(var(--secondary) / 0.1);
+        border-radius: var(--radius);
+        transition: transform 0.2s ease;
+    }
+    
+    .about-metric-item:hover {
+        transform: translateY(-3px);
     }
     
     .about-metric-value {
         font-size: 2rem;
         font-weight: 700;
-        color: hsl(var(--foreground));
+        color: hsl(var(--primary));
         margin-bottom: 0.25rem;
     }
     
@@ -184,44 +272,48 @@ const t = useTranslations(lang);
         color: hsl(var(--muted-foreground));
     }
     
-    /* Tech badges section */
-    .about-studying-section,
-    .about-philosophy,
-    .about-personal-section,
-    .about-links-section {
-        margin: 2.5rem 0;
-    }
-    
-    .about-studying-section h3,
-    .about-philosophy h3,
-    .about-personal-section h3,
-    .about-links-section h3 {
-        font-size: 1.5rem;
-        font-weight: 600;
-        margin-bottom: 1rem;
-        color: hsl(var(--foreground));
-    }
-    
+    /* Tech badges */
     .about-tech-badges {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.5rem;
-        margin-top: 1rem;
+        gap: 0.75rem;
     }
     
     .about-tech-badge {
-        display: inline-flex;
+        display: flex;
+        flex-direction: column;
         align-items: center;
-        gap: 0.375rem;
-        background-color: hsl(var(--muted)/0.5);
-        color: hsl(var(--foreground));
-        font-size: 0.75rem;
-        padding: 0.375rem 0.75rem;
-        border-radius: 9999px;
-        border: 1px solid hsl(var(--border));
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 1rem;
+        background-color: hsl(var(--secondary) / 0.3);
+        border-radius: var(--radius);
+        font-size: 0.875rem;
+        font-weight: 500;
+        transition: background-color 0.2s ease, transform 0.2s ease;
+        cursor: default;
+        width: calc(33.333% - 0.5rem);
+        min-width: 100px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
     
-    /* Links section */
+    .about-tech-badge:hover {
+        background-color: hsl(var(--secondary) / 0.5);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .about-tech-badge img {
+        height: 2.5rem;
+        width: 2.5rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .about-tech-badge span {
+        color: hsl(var(--foreground));
+    }
+    
+    /* Links */
     .about-link {
         color: hsl(var(--primary));
         font-weight: 500;
@@ -230,18 +322,33 @@ const t = useTranslations(lang);
     }
     
     .about-link:hover {
-        color: hsl(var(--primary-foreground));
         text-decoration: underline;
     }
     
-    /* Responsive design */
+    /* Responsive Design */
     @media (min-width: 768px) {
+        h1 {
+            font-size: 3rem;
+        }
+        
         .about-metrics-grid {
             grid-template-columns: repeat(4, 1fr);
         }
         
-        .about-personal-intro h2 {
-            font-size: 3rem;
+        .about-tech-badge {
+            width: calc(25% - 0.5625rem);
+        }
+    }
+    
+    @media (max-width: 640px) {
+        h1 {
+            font-size: 2rem;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .about-tech-badge {
+            width: calc(50% - 0.375rem);
         }
     }
 </style>

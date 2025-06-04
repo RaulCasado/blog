@@ -115,14 +115,25 @@ const t = useTranslations(lang);
                     <li>{t('cv.madeinmedia.responsibilities4')}</li>
                 </ul>
                 <div class="cv-skills-badges">
-                    <span class="cv-badge cv-badge-outline">
-                        <span>{t('cv.skill.teamwork')}</span>
+                    <span class="cv-tech-badge">
+                        <img src="https://cdn.simpleicons.org/html5" alt="HTML" height="16" />
+                        <span>HTML</span>
                     </span>
-                    <span class="cv-badge cv-badge-outline">
-                        <span>{t('cv.skill.problemsolving')}</span>
+                    <span class="cv-tech-badge">
+                        <img src="https://cdn.simpleicons.org/css3" alt="CSS" height="16" />
+                        <span>CSS</span>
                     </span>
-                    <span class="cv-badge cv-badge-outline">
-                        <span>{t('cv.skill.communication')}</span>
+                    <span class="cv-tech-badge">
+                        <img src="https://cdn.simpleicons.org/javascript" alt="JavaScript" height="16" />
+                        <span>JavaScript</span>
+                    </span>
+                    <span class="cv-tech-badge">
+                        <img src="https://cdn.simpleicons.org/php" alt="PHP" height="16" />
+                        <span>PHP</span>
+                    </span>
+                    <span class="cv-tech-badge">
+                        <img src="https://cdn.simpleicons.org/mysql" alt="MySQL" height="16" />
+                        <span>MySQL</span>
                     </span>
                 </div>
             </div>
@@ -139,10 +150,11 @@ const t = useTranslations(lang);
                 <div class="cv-education-header">
                     <h3>{t('cv.fortytwo.name')}</h3>
                     <div class="cv-badge cv-badge-outline">
+                        <img src="https://cdn.simpleicons.org/42" alt="42" height="16" />
                         <span>{t('cv.fortytwo.current')}</span>
                     </div>
                 </div>
-                <p class="cv-company-title">{t('cv.fortytwo.role')}</p>
+                <p class="cv-institution">{t('cv.fortytwo.role')}</p>
             </div>
 
             <div class="cv-education-item">
@@ -152,7 +164,7 @@ const t = useTranslations(lang);
                         <span>{t('cv.politecnico.year')}</span>
                     </div>
                 </div>
-                <p class="cv-company-title">{t('cv.politecnico.degree')}</p>
+                <p class="cv-institution">{t('cv.politecnico.degree')}</p>
             </div>
         </div>
     </div>
@@ -163,72 +175,83 @@ const t = useTranslations(lang);
             <h2 class="cv-card-title">{t('cv.skills.title')}</h2>
         </div>
         <div class="cv-card-content">
-            <h3 class="cv-section-subtitle">{t('cv.technical.title')}</h3>
             <div class="cv-skills-grid">
-                <div class="cv-skill-box">
-                    <div class="cv-skill-name">HTML/CSS</div>
-                    <div class="cv-skill-bar">
-                        <div class="cv-skill-progress" style="width: 95%;"></div>
+                <div class="cv-skills-column">
+                    <h3>{t('cv.technical.title')}</h3>
+                    <div class="cv-skills-badges">
+                        <span class="cv-badge">
+                            <img src="https://cdn.simpleicons.org/html5" alt="HTML5" height="16" />
+                            <span>HTML5</span>
+                        </span>
+                        <span class="cv-badge">
+                            <img src="https://cdn.simpleicons.org/css3" alt="CSS3" height="16" />
+                            <span>CSS3</span>
+                        </span>
+                        <span class="cv-badge">
+                            <img src="https://cdn.simpleicons.org/javascript" alt="JavaScript" height="16" />
+                            <span>JavaScript</span>
+                        </span>
+                        <span class="cv-badge">
+                            <img src="https://cdn.simpleicons.org/typescript" alt="TypeScript" height="16" />
+                            <span>TypeScript</span>
+                        </span>
+                        <span class="cv-badge">
+                            <img src="https://cdn.simpleicons.org/python" alt="Python" height="16" />
+                            <span>Python</span>
+                        </span>
+                        <span class="cv-badge">
+                            <img src="https://cdn.simpleicons.org/php" alt="PHP" height="16" />
+                            <span>PHP</span>
+                        </span>
+                        <span class="cv-badge">
+                            <img src="https://cdn.simpleicons.org/laravel" alt="Laravel" height="16" />
+                            <span>Laravel</span>
+                        </span>
+                        <span class="cv-badge">
+                            <img src="https://cdn.simpleicons.org/mysql" alt="MySQL" height="16" />
+                            <span>MySQL</span>
+                        </span>
+                        <span class="cv-badge">
+                            <img src="https://cdn.simpleicons.org/wordpress" alt="WordPress" height="16" />
+                            <span>WordPress</span>
+                        </span>
+                        <span class="cv-badge">
+                            <img src="https://cdn.simpleicons.org/c" alt="C" height="16" />
+                            <span>C</span>
+                        </span>
+                        <span class="cv-badge">
+                            <img src="https://cdn.simpleicons.org/openjdk" alt="Java" height="16" />
+                            <span>Java</span>
+                        </span>
+                        <span class="cv-badge">
+                            <img src="https://cdn.simpleicons.org/flask" alt="Flask" height="16" />
+                            <span>Flask</span>
+                        </span>
                     </div>
                 </div>
-                <div class="cv-skill-box">
-                    <div class="cv-skill-name">JavaScript</div>
-                    <div class="cv-skill-bar">
-                        <div class="cv-skill-progress" style="width: 85%;"></div>
-                    </div>
-                </div>
-                <div class="cv-skill-box">
-                    <div class="cv-skill-name">TypeScript</div>
-                    <div class="cv-skill-bar">
-                        <div class="cv-skill-progress" style="width: 80%;"></div>
-                    </div>
-                </div>
-                <div class="cv-skill-box">
-                    <div class="cv-skill-name">React</div>
-                    <div class="cv-skill-bar">
-                        <div class="cv-skill-progress" style="width: 80%;"></div>
-                    </div>
-                </div>
-                <div class="cv-skill-box">
-                    <div class="cv-skill-name">Python</div>
-                    <div class="cv-skill-bar">
-                        <div class="cv-skill-progress" style="width: 75%;"></div>
-                    </div>
-                </div>
-                <div class="cv-skill-box">
-                    <div class="cv-skill-name">PHP</div>
-                    <div class="cv-skill-bar">
-                        <div class="cv-skill-progress" style="width: 70%;"></div>
-                    </div>
-                </div>
-                <div class="cv-skill-box">
-                    <div class="cv-skill-name">C</div>
-                    <div class="cv-skill-bar">
-                        <div class="cv-skill-progress" style="width: 65%;"></div>
-                    </div>
-                </div>
-                <div class="cv-skill-box">
-                    <div class="cv-skill-name">WordPress</div>
-                    <div class="cv-skill-bar">
-                        <div class="cv-skill-progress" style="width: 85%;"></div>
+                
+                <div class="cv-skills-column">
+                    <h3>{t('cv.languages.title')}</h3>
+                    <div class="cv-skills-badges">
+                        <span class="cv-badge cv-badge-outline">
+                            <span>{t('cv.spanish')}</span>
+                        </span>
+                        <span class="cv-badge cv-badge-outline">
+                            <span>{t('cv.english')}</span>
+                        </span>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <h3 class="cv-section-subtitle">{t('cv.languages.title')}</h3>
-            <div class="cv-languages-grid">
-                <div class="cv-language-item">
-                    <span class="cv-language-name">{t('cv.spanish')}</span>
-                    <span class="cv-language-level">Nativo</span>
-                </div>
-                <div class="cv-language-item">
-                    <span class="cv-language-name">{t('cv.english')}</span>
-                    <span class="cv-language-level">B1</span>
-                </div>
-            </div>
-
-            <h3 class="cv-section-subtitle">{t('cv.availability.title')}</h3>
-            <p class="cv-availability-text">
+    <!-- Availability Section -->
+    <div class="cv-card">
+        <div class="cv-card-header">
+            <h2 class="cv-card-title">{t('cv.availability.title')}</h2>
+        </div>
+        <div class="cv-card-content">
+            <p class="cv-description">
                 {t('cv.availability.description')}
             </p>
         </div>
@@ -236,257 +259,268 @@ const t = useTranslations(lang);
 </div>
 
 <style>
-    /* CV page styles */
     .cv-container {
-        max-width: 900px;
+        max-width: 1000px;
         margin: 0 auto;
+        padding: 2rem 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
     }
-
+    
     .cv-header {
         display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        margin-bottom: 2rem;
-        flex-wrap: wrap;
-        gap: 1rem;
+        flex-direction: column;
+        gap: 1.5rem;
+        margin-bottom: 1rem;
     }
-
-    .cv-header h1 {
+    
+    .cv-header-content {
+        flex: 1;
+    }
+    
+    h1 {
         font-size: 2.5rem;
         font-weight: 700;
-        margin: 0 0 0.5rem 0;
+        line-height: 1.2;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.025em;
         color: hsl(var(--foreground));
     }
-
+    
     .cv-subtitle {
+        font-size: 1.25rem;
         color: hsl(var(--muted-foreground));
-        font-size: 1.1rem;
-        margin: 0;
+        max-width: 700px;
+        margin-top: 0;
     }
-
+    
     .cv-download-btn {
         display: inline-flex;
         align-items: center;
+        justify-content: center;
         gap: 0.5rem;
         background-color: hsl(var(--primary));
         color: hsl(var(--primary-foreground));
-        padding: 0.5rem 1rem;
+        padding: 0.75rem 1.5rem;
         border-radius: var(--radius);
         font-weight: 500;
-        cursor: pointer;
         border: none;
-        transition: background-color 0.2s, transform 0.2s;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
         text-decoration: none;
     }
-
+    
     .cv-download-btn:hover {
-        background-color: hsl(var(--primary) / 0.9);
+        opacity: 0.9;
         transform: translateY(-2px);
     }
-
-    /* Cards */
+    
+    .cv-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: hsl(var(--muted-foreground));
+    }
+    
+    .download-icon {
+        color: hsl(var(--primary-foreground));
+    }
+    
     .cv-card {
         background-color: hsl(var(--card));
         border-radius: var(--radius);
-        border: 1px solid hsl(var(--border));
-        margin-bottom: 2rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         overflow: hidden;
+        border: 1px solid hsl(var(--border));
+        transition: box-shadow 0.2s ease-in-out;
     }
-
+    
+    .cv-card:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
     .cv-card-header {
         padding: 1.25rem 1.5rem;
         border-bottom: 1px solid hsl(var(--border));
-        background-color: hsl(var(--muted) / 0.5);
+        background-color: hsl(var(--secondary) / 0.3);
     }
-
+    
     .cv-card-title {
-        margin: 0;
         font-size: 1.25rem;
         font-weight: 600;
+        margin: 0;
         color: hsl(var(--foreground));
     }
-
+    
     .cv-card-content {
         padding: 1.5rem;
     }
-
-    /* Personal info */
+    
     .cv-personal-info {
-        display: flex;
-        flex-wrap: wrap;
+        display: grid;
         gap: 1rem;
+        grid-template-columns: repeat(1, 1fr);
     }
-
+    
     .cv-info-item {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
-        color: hsl(var(--muted-foreground));
+        gap: 0.75rem;
     }
-
-    .cv-icon {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        color: hsl(var(--primary));
-    }
-
-    /* Experience */
+    
     .cv-experience-item, .cv-education-item {
-        padding-bottom: 1.5rem;
-        margin-bottom: 1.5rem;
-        border-bottom: 1px solid hsl(var(--border) / 0.5);
+        padding-bottom: 1.75rem;
+        margin-bottom: 1.75rem;
+        border-bottom: 1px solid hsl(var(--border));
     }
-
+    
     .cv-experience-item:last-child, .cv-education-item:last-child {
         padding-bottom: 0;
         margin-bottom: 0;
         border-bottom: none;
     }
-
+    
     .cv-experience-header, .cv-education-header {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 0.5rem;
-        flex-wrap: wrap;
+        flex-direction: column;
         gap: 0.5rem;
+        margin-bottom: 0.75rem;
     }
-
+    
     .cv-experience-header h3, .cv-education-header h3 {
-        margin: 0;
-        font-size: 1.2rem;
+        font-size: 1.25rem;
         font-weight: 600;
+        margin: 0;
         color: hsl(var(--foreground));
     }
-
-    .cv-company-title {
-        font-size: 1rem;
+    
+    .cv-company-title, .cv-institution {
         font-weight: 500;
-        color: hsl(var(--primary));
-        margin: 0 0 0.75rem 0;
+        margin-bottom: 0.75rem;
+        color: hsl(var(--foreground));
     }
-
-    .cv-description {
-        color: hsl(var(--muted-foreground));
-        margin-bottom: 1rem;
-        line-height: 1.6;
-    }
-
-    .cv-experience-list {
-        margin: 0 0 1rem 1rem;
-        padding: 0;
-        color: hsl(var(--muted-foreground));
-    }
-
-    .cv-experience-list li {
-        margin-bottom: 0.5rem;
-        line-height: 1.6;
-    }
-
-    /* Badges */
-    .cv-skills-badges {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-    }
-
+    
     .cv-badge {
         display: inline-flex;
         align-items: center;
-        gap: 0.25rem;
+        gap: 0.5rem;
         padding: 0.25rem 0.75rem;
+        background-color: hsl(var(--secondary));
+        color: hsl(var(--secondary-foreground));
         border-radius: 9999px;
         font-size: 0.75rem;
         font-weight: 500;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        cursor: default;
     }
-
+    
+    .cv-badge:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+    }
+    
     .cv-badge-outline {
-        background-color: hsl(var(--muted) / 0.3);
+        background-color: transparent;
         border: 1px solid hsl(var(--border));
+        color: hsl(var(--foreground));
+    }
+    
+    .cv-badge img {
+        height: 16px;
+        width: auto;
+    }
+    
+    .cv-description {
+        color: hsl(var(--muted-foreground));
+        margin-bottom: 1.25rem;
+        line-height: 1.6;
+    }
+    
+    .cv-experience-list {
+        margin-top: 0.75rem;
+        margin-bottom: 1.25rem;
+        padding-left: 1.5rem;
+    }
+    
+    .cv-experience-list li {
+        margin-bottom: 0.5rem;
         color: hsl(var(--muted-foreground));
     }
-
-    /* Skills */
-    .cv-section-subtitle {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: hsl(var(--foreground));
-        margin: 1.5rem 0 1rem;
-    }
-
-    .cv-section-subtitle:first-child {
-        margin-top: 0;
-    }
-
+    
     .cv-skills-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 1rem;
-        margin-bottom: 2rem;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
     }
-
-    .cv-skill-box {
-        margin-bottom: 0.75rem;
-    }
-
-    .cv-skill-name {
-        font-weight: 500;
-        margin-bottom: 0.25rem;
+    
+    .cv-skills-column h3 {
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
         color: hsl(var(--foreground));
-        font-size: 0.875rem;
     }
-
-    .cv-skill-bar {
-        height: 6px;
-        background-color: hsl(var(--muted));
-        border-radius: 3px;
-        overflow: hidden;
-    }
-
-    .cv-skill-progress {
-        height: 100%;
-        background-color: hsl(var(--primary));
-    }
-
-    /* Languages */
-    .cv-languages-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1rem;
-        margin-bottom: 1.5rem;
-    }
-
-    .cv-language-item {
+    
+    .cv-skills-badges, .cv-tech-badges {
         display: flex;
-        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .cv-tech-badge {
+        display: inline-flex;
         align-items: center;
-    }
-
-    .cv-language-name {
+        gap: 0.5rem;
+        padding: 0.25rem 0.75rem;
+        background-color: hsl(var(--primary) / 0.15);
+        color: hsl(var(--primary));
+        border-radius: 9999px;
+        font-size: 0.75rem;
         font-weight: 500;
-        color: hsl(var(--foreground));
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        cursor: default;
     }
-
-    .cv-language-level {
-        color: hsl(var(--muted-foreground));
-        font-size: 0.875rem;
+    
+    .cv-tech-badge:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
     }
-
-    .cv-availability-text {
-        color: hsl(var(--muted-foreground));
-        margin: 0;
+    
+    .cv-tech-badge img {
+        height: 16px;
+        width: auto;
     }
-
-    /* Responsive */
-    @media (max-width: 768px) {
+    
+    /* Responsive Design */
+    @media (min-width: 768px) {
         .cv-header {
-            flex-direction: column;
-            align-items: flex-start;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
         }
-
+        
+        .cv-personal-info {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .cv-experience-header, .cv-education-header {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
         .cv-skills-grid {
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    
+    @media (max-width: 640px) {
+        h1 {
+            font-size: 2rem;
+        }
+        
+        .cv-subtitle {
+            font-size: 1.125rem;
         }
     }
 </style>
