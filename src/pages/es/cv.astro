@@ -1,0 +1,584 @@
+---
+import StandardPageLayout from '../../layouts/StandardPageLayout.astro';
+import { useTranslations } from '../../i18n/utils';
+
+const lang = 'es';
+const t = useTranslations(lang);
+---
+
+<StandardPageLayout
+    title={t('cv.title')}
+    description={t('cv.description')}
+>
+    <div class="cv-container">
+        <div class="cv-header">
+            <div class="cv-header-content">
+                <h1>{t('cv.header')}</h1>
+                <p class="cv-subtitle">
+                    {t('cv.subtitle')}
+                </p>
+            </div>
+            <button class="cv-download-btn">
+                <span class="cv-icon download-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                </span>
+                {t('cv.download')}
+            </button>
+        </div>
+
+        <!-- Personal Information -->
+        <div class="cv-card">
+            <div class="cv-card-header">
+                <h2 class="cv-card-title">{t('cv.personal.title')}</h2>
+            </div>
+            <div class="cv-card-content cv-personal-info">
+                <div class="cv-info-item">
+                    <span class="cv-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    </span>
+                    <span>Málaga</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Work Experience -->
+        <div class="cv-card">
+            <div class="cv-card-header">
+                <h2 class="cv-card-title">{t('cv.experience.title')}</h2>
+            </div>
+            <div class="cv-card-content">
+                <div class="cv-experience-item">
+                    <div class="cv-experience-header">
+                        <h3>{t('cv.selectra')}</h3>
+                    </div>
+                    <p class="cv-company-title">{t('cv.teleoperator')}</p>
+                    <p class="cv-description">
+                        {t('cv.selectra.description')}
+                    </p>
+                    <ul class="cv-experience-list">
+                        <li>{t('cv.selectra.responsibilities1')}</li>
+                        <li>{t('cv.selectra.responsibilities2')}</li>
+                    </ul>
+                    <div class="cv-skills-badges">
+                        <span class="cv-badge cv-badge-outline">
+                            
+                            <span>{t('cv.skill.pressure')}</span>
+                        </span>
+                        <span class="cv-badge cv-badge-outline">
+                            
+                            <span>{t('cv.skill.communication')}</span>
+                        </span>
+                        <span class="cv-badge cv-badge-outline">
+                            
+                            <span>{t('cv.skill.listening')}</span>
+                        </span>
+                        <span class="cv-badge cv-badge-outline">
+                           
+                            <span>{t('cv.skill.problemsolving')}</span>
+                        </span>
+                        <span class="cv-badge cv-badge-outline">
+                            
+                            <span>{t('cv.skill.stressmanagement')}</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="cv-experience-item">
+                    <div class="cv-experience-header">
+                        <h3>{t('cv.konecta')}</h3>
+                        <div class="cv-badge cv-badge-outline">
+                            
+                            <span>{t('cv.konecta.date')}</span>
+                        </div>
+                    </div>
+                    <p class="cv-company-title">{t('cv.sales')}</p>
+                    <p class="cv-description">
+                        {t('cv.konecta.description')}
+                    </p>
+                    <div class="cv-skills-badges">
+                        <span class="cv-badge cv-badge-outline">
+                            
+                            <span>{t('cv.skill.goals')}</span>
+                        </span>
+                        <span class="cv-badge cv-badge-outline">
+                            
+                            <span>{t('cv.skill.teamwork')}</span>
+                        </span>
+                        <span class="cv-badge cv-badge-outline">
+                            
+                            <span>{t('cv.skill.coldsales')}</span>
+                        </span>
+                        <span class="cv-badge cv-badge-outline">
+                            
+                            <span>{t('cv.skill.pressure')}</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="cv-experience-item">
+                    <div class="cv-experience-header">
+                        <h3>{t('cv.madeinmedia')}</h3>
+                        <div class="cv-badge cv-badge-outline">
+                            <span>{t('cv.madeinmedia.date')}</span>
+                        </div>
+                    </div>
+                    <p class="cv-company-title">{t('cv.webdeveloper')}</p>
+                    <p class="cv-description">
+                        {t('cv.madeinmedia.description')}
+                    </p>
+                    <ul class="cv-experience-list">
+                        <li>{t('cv.madeinmedia.responsibilities1')}</li>
+                        <li>{t('cv.madeinmedia.responsibilities2')}</li>
+                        <li>{t('cv.madeinmedia.responsibilities3')}</li>
+                        <li>{t('cv.madeinmedia.responsibilities4')}</li>
+                    </ul>
+                    <div class="cv-skills-badges">
+                        <span class="cv-tech-badge">
+                            <img src="https://cdn.simpleicons.org/html5" alt="HTML" height="16" />
+                            <span>HTML</span>
+                        </span>
+                        <span class="cv-tech-badge">
+                            <img src="https://cdn.simpleicons.org/css3" alt="CSS" height="16" />
+                            <span>CSS</span>
+                        </span>
+                        <span class="cv-tech-badge">
+                            <img src="https://cdn.simpleicons.org/javascript" alt="JavaScript" height="16" />
+                            <span>JavaScript</span>
+                        </span>
+                        <span class="cv-tech-badge">
+                            <img src="https://cdn.simpleicons.org/php" alt="PHP" height="16" />
+                            <span>PHP</span>
+                        </span>
+                        <span class="cv-tech-badge">
+                            <img src="https://cdn.simpleicons.org/mysql" alt="MySQL" height="16" />
+                            <span>MySQL</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Education -->
+        <div class="cv-card">
+            <div class="cv-card-header">
+                <h2 class="cv-card-title">{t('cv.education.title')}</h2>
+            </div>
+            <div class="cv-card-content">
+                <div class="cv-education-item">
+                    <div class="cv-education-header">
+                        <h3>{t('cv.fortytwo.name')}</h3>
+                        <div class="cv-badge cv-badge-outline">
+                            <img src="https://cdn.simpleicons.org/42" alt="42" height="16" />
+                            <span>{t('cv.fortytwo.current')}</span>
+                        </div>
+                    </div>
+                    <p class="cv-institution">{t('cv.fortytwo.role')}</p>
+                </div>
+
+                <div class="cv-education-item">
+                    <div class="cv-education-header">
+                        <h3>{t('cv.politecnico.name')}</h3>
+                        <div class="cv-badge cv-badge-outline">        
+                            <span>{t('cv.politecnico.year')}</span>
+                        </div>
+                    </div>
+                    <p class="cv-institution">{t('cv.politecnico.degree')}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Skills -->
+        <div class="cv-card">
+            <div class="cv-card-header">
+                <h2 class="cv-card-title">{t('cv.skills.title')}</h2>
+            </div>
+            <div class="cv-card-content">
+                <div class="cv-skills-grid">
+                    <div class="cv-skills-column">
+                        <h3>{t('cv.technical.title')}</h3>
+                        <div class="cv-skills-badges">
+                            <span class="cv-badge">
+                                <img src="https://cdn.simpleicons.org/css3" alt="CSS3" height="16" />
+                                <span>CSS3</span>
+                            </span>
+                            <span class="cv-badge">
+                                <img src="https://cdn.simpleicons.org/html5" alt="HTML5" height="16" />
+                                <span>HTML5</span>
+                            </span>
+                            <span class="cv-badge">
+                                <img src="https://cdn.simpleicons.org/php" alt="PHP" height="16" />
+                                <span>PHP</span>
+                            </span>
+                            <span class="cv-badge">
+                                <img src="https://cdn.simpleicons.org/javascript" alt="JavaScript" height="16" />
+                                <span>JavaScript</span>
+                            </span>
+                            <span class="cv-badge">
+                                <img src="https://cdn.simpleicons.org/typescript" alt="TypeScript" height="16" />
+                                <span>TypeScript</span>
+                            </span>
+                            <span class="cv-badge">
+                                <img src="https://cdn.simpleicons.org/python" alt="Python" height="16" />
+                                <span>Python</span>
+                            </span>
+                            <span class="cv-badge">
+                                <img src="https://cdn.simpleicons.org/laravel" alt="Laravel" height="16" />
+                                <span>Laravel</span>
+                            </span>                            <span class="cv-badge">
+                                <img src="https://cdn.simpleicons.org/mysql" alt="MySQL" height="16" />
+                                <span>MySQL</span>
+                            </span>
+                            <span class="cv-badge">
+                                <img src="https://cdn.simpleicons.org/wordpress" alt="WordPress" height="16" />
+                                <span>WordPress</span>
+                            </span>
+                            <span class="cv-badge">
+                                <img src="https://cdn.simpleicons.org/c" alt="C" height="16" />
+                                <span>C</span>
+                            </span>
+                            <span class="cv-badge">
+                                <img src="https://cdn.simpleicons.org/openjdk" alt="Java" height="16" />
+                                <span>Java</span>
+                            </span>
+                            <span class="cv-badge">
+                                <img src="https://cdn.simpleicons.org/flask" alt="Flask" height="16" />
+                                <span>Flask</span>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="cv-skills-column">
+                        <h3>{t('cv.languages.title')}</h3>
+                        <div class="cv-skills-badges">
+                            <span class="cv-badge cv-badge-outline">
+                                
+                                <span>{t('cv.english')}</span>
+                            </span>
+                            <span class="cv-badge cv-badge-outline">
+                                
+                                <span>{t('cv.spanish')}</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Availability Section -->
+        <div class="cv-card">
+            <div class="cv-card-header">
+                <h2 class="cv-card-title">{t('cv.availability.title')}</h2>
+            </div>
+            <div class="cv-card-content">
+                <p class="cv-description">
+                    {t('cv.availability.description')}
+                </p>
+            </div>
+        </div>
+    </div>
+</StandardPageLayout>
+
+<style>
+    .cv-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+    
+    .cv-header {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .cv-header-content {
+        flex: 1;
+    }
+    
+    h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        line-height: 1.2;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.025em;
+        color: hsl(var(--foreground));
+    }
+    
+    .cv-subtitle {
+        font-size: 1.25rem;
+        color: hsl(var(--muted-foreground));
+        max-width: 700px;
+        margin-top: 0;
+    }
+    
+    .cv-download-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        background-color: hsl(var(--primary));
+        color: hsl(var(--primary-foreground));
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--radius);
+        font-weight: 500;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+    }
+    
+    .cv-download-btn:hover {
+        opacity: 0.9;
+    }
+    
+    .cv-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: hsl(var(--muted-foreground));
+    }
+    
+    .download-icon {
+        color: hsl(var(--primary-foreground));
+    }
+    
+    .cv-card {
+        background-color: hsl(var(--card));
+        border-radius: var(--radius);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        border: 1px solid hsl(var(--border));
+        transition: box-shadow 0.2s ease-in-out;
+    }
+    
+    .cv-card:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .cv-card-header {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid hsl(var(--border));
+        background-color: hsl(var(--secondary) / 0.3);
+    }
+    
+    .cv-card-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin: 0;
+        color: hsl(var(--foreground));
+    }
+    
+    .cv-card-content {
+        padding: 1.5rem;
+    }
+    
+    .cv-personal-info {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(1, 1fr);
+    }
+    
+    .cv-info-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    
+    .cv-experience-item, .cv-education-item {
+        padding-bottom: 1.75rem;
+        margin-bottom: 1.75rem;
+        border-bottom: 1px solid hsl(var(--border));
+    }
+    
+    .cv-experience-item:last-child, .cv-education-item:last-child {
+        padding-bottom: 0;
+        margin-bottom: 0;
+        border-bottom: none;
+    }
+    
+    .cv-experience-header, .cv-education-header {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .cv-experience-header h3, .cv-education-header h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin: 0;
+        color: hsl(var(--foreground));
+    }
+    
+    .cv-company-title, .cv-institution {
+        font-weight: 500;
+        margin-bottom: 0.75rem;
+        color: hsl(var(--foreground));
+    }
+    
+    .cv-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.25rem 0.75rem;
+        background-color: hsl(var(--secondary));
+        color: hsl(var(--secondary-foreground));
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        cursor: default;
+    }
+    
+    .cv-badge:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .cv-badge-outline {
+        background-color: transparent;
+        border: 1px solid hsl(var(--border));
+        color: hsl(var(--foreground));
+    }
+    
+    .cv-badge img {
+        height: 16px;
+        width: auto;
+    }
+    
+    .cv-description {
+        color: hsl(var(--muted-foreground));
+        margin-bottom: 1.25rem;
+        line-height: 1.6;
+    }
+    
+    .cv-experience-list {
+        margin-top: 0.75rem;
+        margin-bottom: 1.25rem;
+        padding-left: 1.5rem;
+    }
+    
+    .cv-experience-list li {
+        margin-bottom: 0.5rem;
+        color: hsl(var(--muted-foreground));
+    }
+    
+    .cv-skills-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .cv-skills-column h3 {
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: hsl(var(--foreground));
+    }
+    
+    .cv-skills-badges, .cv-tech-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .cv-tech-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.25rem 0.75rem;
+        background-color: hsl(var(--primary) / 0.15);
+        color: hsl(var(--primary));
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        cursor: default;
+    }
+    
+    .cv-tech-badge:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .cv-tech-badge img {
+        height: 16px;
+        width: auto;
+    }
+    
+    .cv-links-section, .cv-availability {
+        margin-top: 2rem;
+    }
+    
+    .cv-links-section h3, .cv-availability h3 {
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        color: hsl(var(--foreground));
+    }
+    
+    .cv-link {
+        color: hsl(var(--primary));
+        text-decoration: none;
+        font-weight: 500;
+    }
+    
+    .cv-link:hover {
+        text-decoration: underline;
+    }
+    
+    /* Responsive Design */
+    @media (min-width: 768px) {
+        .cv-header {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .cv-personal-info {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .cv-experience-header, .cv-education-header {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .cv-skills-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    
+    @media (max-width: 640px) {
+        h1 {
+            font-size: 2rem;
+        }
+        
+        .cv-subtitle {
+            font-size: 1.125rem;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Handle CV download button
+        const downloadBtn = document.querySelector('.cv-download-btn');
+        if (downloadBtn) {
+            downloadBtn.addEventListener('click', () => {
+                // Replace with actual CV download link
+                const cvUrl = '/raul-casado-cv.pdf';
+                const link = document.createElement('a');
+                link.href = cvUrl;
+                link.download = 'raul-casado-cv.pdf';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+        }
+    });
+</script>

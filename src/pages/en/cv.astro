@@ -1,31 +1,35 @@
 ---
-import StandardPageLayout from '../layouts/StandardPageLayout.astro';
+import StandardPageLayout from '../../layouts/StandardPageLayout.astro';
+import { useTranslations } from '../../i18n/utils';
+
+const lang = 'en';
+const t = useTranslations(lang);
 ---
 
 <StandardPageLayout
-    title="Curriculum Vitae"
-    description="CV Raul Casado"
+    title={t('cv.title')}
+    description={t('cv.description')}
 >
     <div class="cv-container">
         <div class="cv-header">
             <div class="cv-header-content">
-                <h1>Curriculum Vitae</h1>
+                <h1>{t('cv.header')}</h1>
                 <p class="cv-subtitle">
-                    Mi experiencia profesional, habilidades y educación.
+                    {t('cv.subtitle')}
                 </p>
             </div>
             <button class="cv-download-btn">
                 <span class="cv-icon download-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                 </span>
-                Descargar CV
+                {t('cv.download')}
             </button>
         </div>
 
         <!-- Personal Information -->
         <div class="cv-card">
             <div class="cv-card-header">
-                <h2 class="cv-card-title">Información Personal</h2>
+                <h2 class="cv-card-title">{t('cv.personal.title')}</h2>
             </div>
             <div class="cv-card-content cv-personal-info">
                 <div class="cv-info-item">
@@ -40,93 +44,93 @@ import StandardPageLayout from '../layouts/StandardPageLayout.astro';
         <!-- Work Experience -->
         <div class="cv-card">
             <div class="cv-card-header">
-                <h2 class="cv-card-title">Experiencia Laboral</h2>
+                <h2 class="cv-card-title">{t('cv.experience.title')}</h2>
             </div>
             <div class="cv-card-content">
                 <div class="cv-experience-item">
                     <div class="cv-experience-header">
-                        <h3>Selectra</h3>
+                        <h3>{t('cv.selectra')}</h3>
                     </div>
-                    <p class="cv-company-title">Teleoperador</p>
+                    <p class="cv-company-title">{t('cv.teleoperator')}</p>
                     <p class="cv-description">
-                        Aprendí a trabajar bajo presión, trabajo en equipo, mejorar comunicación, paciencia, manejo de frustración y estrés, creatividad para resolver problemas, escuchar.
+                        {t('cv.selectra.description')}
                     </p>
                     <ul class="cv-experience-list">
-                        <li>Manejo de cuentas de clientes para reducir los errores.</li>
-                        <li>Partícipe de distintas lecciones para estar actualizado con las últimas novedades del producto.</li>
+                        <li>{t('cv.selectra.responsibilities1')}</li>
+                        <li>{t('cv.selectra.responsibilities2')}</li>
                     </ul>
                     <div class="cv-skills-badges">
                         <span class="cv-badge cv-badge-outline">
                             
-                            <span>Trabajo bajo presión</span>
+                            <span>{t('cv.skill.pressure')}</span>
                         </span>
                         <span class="cv-badge cv-badge-outline">
                             
-                            <span>Comunicación</span>
+                            <span>{t('cv.skill.communication')}</span>
                         </span>
                         <span class="cv-badge cv-badge-outline">
                             
-                            <span>Escucha activa</span>
+                            <span>{t('cv.skill.listening')}</span>
                         </span>
                         <span class="cv-badge cv-badge-outline">
                            
-                            <span>Resolución de problemas</span>
+                            <span>{t('cv.skill.problemsolving')}</span>
                         </span>
                         <span class="cv-badge cv-badge-outline">
                             
-                            <span>Gestión del estrés</span>
+                            <span>{t('cv.skill.stressmanagement')}</span>
                         </span>
                     </div>
                 </div>
 
                 <div class="cv-experience-item">
                     <div class="cv-experience-header">
-                        <h3>Konecta</h3>
+                        <h3>{t('cv.konecta')}</h3>
                         <div class="cv-badge cv-badge-outline">
                             
-                            <span>12/23 - 1/24</span>
+                            <span>{t('cv.konecta.date')}</span>
                         </div>
                     </div>
-                    <p class="cv-company-title">Teleoperador</p>
+                    <p class="cv-company-title">{t('cv.sales')}</p>
                     <p class="cv-description">
-                        Aprendí a trabajar sobre objetivos con límites mensuales, trabajo bajo presión, venta fría, trabajo en equipo.
+                        {t('cv.konecta.description')}
                     </p>
                     <div class="cv-skills-badges">
                         <span class="cv-badge cv-badge-outline">
                             
-                            <span>Orientación a objetivos</span>
+                            <span>{t('cv.skill.goals')}</span>
                         </span>
                         <span class="cv-badge cv-badge-outline">
                             
-                            <span>Trabajo en equipo</span>
+                            <span>{t('cv.skill.teamwork')}</span>
                         </span>
                         <span class="cv-badge cv-badge-outline">
                             
-                            <span>Venta fría</span>
+                            <span>{t('cv.skill.coldsales')}</span>
                         </span>
                         <span class="cv-badge cv-badge-outline">
                             
-                            <span>Trabajo bajo presión</span>
+                            <span>{t('cv.skill.pressure')}</span>
                         </span>
                     </div>
                 </div>
 
                 <div class="cv-experience-item">
                     <div class="cv-experience-header">
-                        <h3>Madein:media</h3>
+                        <h3>{t('cv.madeinmedia')}</h3>
                         <div class="cv-badge cv-badge-outline">
-                            <span>3/23 - 6/23</span>
+                            <span>{t('cv.madeinmedia.date')}</span>
                         </div>
                     </div>
-                    <p class="cv-company-title">Programador Web</p>
+                    <p class="cv-company-title">{t('cv.webdeveloper')}</p>
                     <p class="cv-description">
-                        Trabajo en equipo, solucionar problemas, gestión de la frustración, comunicación con equipo, gestión del tiempo, organización, pensamiento crítico.
+                        {t('cv.madeinmedia.description')}
                     </p>
                     <ul class="cv-experience-list">
-                        <li>Trabajé con Wordpress, HTML, CSS, Javascript, Jquery, PHP, MySQL, montado de la página, diseño de la misma y manejo de los datos.</li>
-                        <li>Colaboré en reuniones para poder aumentar las visitas de la página.</li>
-                        <li>Realicé el despliegue a producción, asegurando una transición sin problemas.</li>
-                        <li>Participé en reuniones con clientes comprendiendo sus necesidades y requisitos.</li>
+                        <li>{t('cv.madeinmedia.responsibilities1')}</li>
+                        <li>{t('cv.madeinmedia.responsibilities2')}</li>
+                        <li>{t('cv.madeinmedia.responsibilities3')}</li>
+                        <li>{t('cv.madeinmedia.responsibilities4')}</li>
                     </ul>
                     <div class="cv-skills-badges">
                         <span class="cv-tech-badge">
@@ -157,28 +161,28 @@ import StandardPageLayout from '../layouts/StandardPageLayout.astro';
         <!-- Education -->
         <div class="cv-card">
             <div class="cv-card-header">
-                <h2 class="cv-card-title">Educación</h2>
+                <h2 class="cv-card-title">{t('cv.education.title')}</h2>
             </div>
             <div class="cv-card-content">
                 <div class="cv-education-item">
                     <div class="cv-education-header">
-                        <h3>42 Málaga (Telefónica)</h3>
+                        <h3>{t('cv.fortytwo.name')}</h3>
                         <div class="cv-badge cv-badge-outline">
                             <img src="https://cdn.simpleicons.org/42" alt="42" height="16" />
-                            <span>Actual</span>
+                            <span>{t('cv.fortytwo.current')}</span>
                         </div>
                     </div>
-                    <p class="cv-institution">Estudiante de 42</p>
+                    <p class="cv-institution">{t('cv.fortytwo.role')}</p>
                 </div>
 
                 <div class="cv-education-item">
                     <div class="cv-education-header">
-                        <h3>I.E.S Politécnico Jesús Marín</h3>
+                        <h3>{t('cv.politecnico.name')}</h3>
                         <div class="cv-badge cv-badge-outline">        
-                            <span>2023</span>
+                            <span>{t('cv.politecnico.year')}</span>
                         </div>
                     </div>
-                    <p class="cv-institution">Desarrollo de aplicaciones web</p>
+                    <p class="cv-institution">{t('cv.politecnico.degree')}</p>
                 </div>
             </div>
         </div>
@@ -186,12 +190,12 @@ import StandardPageLayout from '../layouts/StandardPageLayout.astro';
         <!-- Skills -->
         <div class="cv-card">
             <div class="cv-card-header">
-                <h2 class="cv-card-title">Habilidades</h2>
+                <h2 class="cv-card-title">{t('cv.skills.title')}</h2>
             </div>
             <div class="cv-card-content">
                 <div class="cv-skills-grid">
                     <div class="cv-skills-column">
-                        <h3>Habilidades Técnicas</h3>
+                        <h3>{t('cv.technical.title')}</h3>
                         <div class="cv-skills-badges">
                             <span class="cv-badge">
                                 <img src="https://cdn.simpleicons.org/css3" alt="CSS3" height="16" />
@@ -244,15 +248,15 @@ import StandardPageLayout from '../layouts/StandardPageLayout.astro';
                     </div>
                     
                     <div class="cv-skills-column">
-                        <h3>Idiomas</h3>
+                        <h3>{t('cv.languages.title')}</h3>
                         <div class="cv-skills-badges">
                             <span class="cv-badge cv-badge-outline">
                                 
-                                <span>Inglés</span>
+                                <span>{t('cv.english')}</span>
                             </span>
                             <span class="cv-badge cv-badge-outline">
                                 
-                                <span>Español</span>
+                                <span>{t('cv.spanish')}</span>
                             </span>
                         </div>
                     </div>
@@ -263,11 +267,11 @@ import StandardPageLayout from '../layouts/StandardPageLayout.astro';
         <!-- Availability Section -->
         <div class="cv-card">
             <div class="cv-card-header">
-                <h2 class="cv-card-title">Disponibilidad</h2>
+                <h2 class="cv-card-title">{t('cv.availability.title')}</h2>
             </div>
             <div class="cv-card-content">
                 <p class="cv-description">
-                    Disponibilidad tanto horaria como geográfica.
+                    {t('cv.availability.description')}
                 </p>
             </div>
         </div>

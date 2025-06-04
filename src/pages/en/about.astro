@@ -1,68 +1,62 @@
 ---
-import StandardPageLayout from '../layouts/StandardPageLayout.astro';
+import StandardPageLayout from '../../layouts/StandardPageLayout.astro';
+import { useTranslations } from '../../i18n/utils';
+
+const lang = 'en';
+const t = useTranslations(lang);
 ---
 
 <StandardPageLayout
-	title="Sobre Mí"
-	description="Raúl Casado - Desarrollador Web"
+	title={t('about.title')}
+	description={t('about.description')}
 >
 	<div class="about-container">
 		<div class="about-personal-intro">
-  			<h2>Hola, soy Raúl Casado 👋</h2>
+			<h2>{t('about.greeting')}</h2>
 <p class="about-description">
-    ¡Hola! Soy un desarrollador web, 🖥️
-    Tengo experiencia en crear proyectos o por lo menos lo intento, siempre estoy en la búsqueda
-    de aprender algo nuevo en 42 o por mi cuenta.
+	{t('about.intro1')}
 </p>
 
 <p class="about-description">
-    Actualmente estoy en la búsqueda de una oportunidad que me permita crecer profesionalmente. Me encantaría encontrar un lugar donde pueda avanzar y aprender junto con la empresa.
+	{t('about.intro2')}
 </p>
 
 <p class="about-description">
-    Todo comenzó con el ciclo de grado superior en DAW. Ahí fue donde me picó
-    la curiosidad y las ganas de aprender no me han abandonado, incluso después de terminar,
-    seguí estudiando. Lo siguiente fue Python y otras tecnologías como React y frameworks
-    como Flask, lo que me proporcionó una buena base para crear aplicaciones escalables
-    y eficientes.
+	{t('about.intro3')}
 </p>
 
 <p class="about-description">
-    Lo que me motiva es usar la tecnología para crear soluciones que resuelvan
-    problemas reales. Quiero encontrar proyectos donde pueda combinar mi creatividad con
-    mis habilidades técnicas.
+	{t('about.intro4')}
 </p>
 
 <p class="about-description">
-    De cara al futuro, me gustaría especializarme en el desarrollo de aplicaciones web,
-    especialmente en el backend. Además, quiero seguir aprendiendo, ya que siempre hay algo nuevo.
-    Como otro framework de JS, pero eso ya es otro tema.
+	{t('about.intro5')}
 </p>
 		</div>
 
 		<div class="about-metrics">
 			<div class="about-metrics-grid">
 				<div class="about-metric-item">
-					<div class="about-metric-value">Disponible</div>
-					<div class="about-metric-label">Para nuevos proyectos</div>
+					<div class="about-metric-value">{t('about.available')}</div>
+					<div class="about-metric-label">{t('about.projects')}</div>
 				</div>
 				<div class="about-metric-item">
-					<div class="about-metric-value">+1000</div>
-					<div class="about-metric-label">Horas de estudio</div>
+					<div class="about-metric-value">{t('about.hours')}</div>
+					<div class="about-metric-label">{t('about.learning')}</div>
 				</div>
 				<div class="about-metric-item">
 					<div class="about-metric-value">+10</div>
-					<div class="about-metric-label">Proyectos</div>
+					<div class="about-metric-label">Projects</div>
 				</div>
 				<div class="about-metric-item">
 					<div class="about-metric-value">+50</div>
-					<div class="about-metric-label">Habilidades aprendidas</div>
+					<div class="about-metric-label">Skills learned</div>
 				</div>
 			</div>
 		</div>
 		
 		<div class="about-studying-section">
-			<h3>Estudiando estas tecnologías 🚀</h3>
+			<h3>{t('about.h3')} 🚀</h3>
 			<div class="about-tech-badges">
 				<span class="about-tech-badge">
 					<img src="https://cdn.simpleicons.org/php" alt="PHP" height="16" />
@@ -144,24 +138,24 @@ import StandardPageLayout from '../layouts/StandardPageLayout.astro';
 			</div>
 		</div>
 		<div class="about-philosophy">
-  			<h3>Mi propósito como desarrollador</h3>
-  			<p class="about-description">
-    			Veo la programación como una forma continua de aprender y superarme. Cada proyecto es una oportunidad para descubrir nuevas ideas, reforzar conocimientos previos y resolver desafíos reales. No se trata de reinventar la rueda, sino de entender cómo y por qué funciona, para construir soluciones mejores y más eficientes.
-  			</p>
+			<h3>{t('about.goalTitle')}</h3>
+			<p class="about-description">
+				{t('about.goalDescription')}
+			</p>
 		</div>
 		<div class="about-personal-section">
-  			<h3>Cuando no estoy programando</h3>
+			<h3>{t('about.hobbiesTitle')}</h3>
 			<p class="about-description">
-				Cuando no estoy programando, me gusta desconectar disfrutando de películas, series y videojuegos. Además de entretenerme, muchas veces me inspiran a crear cosas nuevas. Por ejemplo, después de jugar a Pokémon Guesser donde tienes que adivinar el Pokémon a partir de su silueta, decidí desarrollar un juego similar, pero con diferentes pistas como el peso, los colores o la sombra del Pokémon. Me encanta ver cómo otras personas diseñan sus sitios web o aplicaciones, y eso me motiva a seguir aprendiendo y experimentando con mis propias ideas.
-  			</p>
+				{t('about.hobbiesDescription')}
+			</p>
 		</div>
 
 		<div class="about-links-section">
-			<h3>Enlaces y Proyectos</h3>
+			<h3>{t('about.links')}</h3>
 			<p>
-				Pueden ver los proyectos que tengo subidos en mi 
+				You can see the projects I have uploaded on my 
 				<a href="https://github.com/RaulCasado" class="about-link">GitHub</a>. 
-				También pueden contactarme en 
+				You can also contact me on 
 				<a href="https://www.linkedin.com/in/raul-casado-moreno/" class="about-link">LinkedIn</a>.
 			</p>
 		</div>
@@ -309,15 +303,14 @@ import StandardPageLayout from '../layouts/StandardPageLayout.astro';
 
 	.about-personal-section,
 	.about-philosophy {
-  		margin: 1rem 0;
+		margin: 1rem 0;
 	}
 
 	.about-personal-section h3,
 	.about-philosophy h3 {
-  		font-size: 1.25rem;
-  		font-weight: 600;
-  		margin-bottom: 0.75rem;
-  		color: hsl(var(--foreground));
+		font-size: 1.25rem;
+		font-weight: 600;
+		margin-bottom: 0.75rem;
+		color: hsl(var(--foreground));
 	}
 </style>
-</Layout>
