@@ -1,0 +1,283 @@
+---
+import { useTranslations } from '../../i18n/utils';
+
+const { lang = 'en' } = Astro.props;
+const t = useTranslations(lang);
+const username = "RaulCasado";
+
+const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated`);
+const repositories = await response.json();
+
+// Helper function to determine color based on language
+function getLanguageColor(language) {
+  const colors = {
+    JavaScript: '#f0db4f', // Slightly darker yellow for better contrast
+    TypeScript: '#3178c6',
+    HTML: '#e34c26',
+    CSS: '#563d7c',
+    Python: '#3572A5',
+    Java: '#b07219',
+    C: '#555555',
+    'C++': '#f34b7d',
+    PHP: '#4F5D95'
+  };
+  
+  return colors[language] || '#8e8e8e';
+}
+
+// Create language icons
+function getLanguageIcon(language) {
+  if (!language) return '';
+  
+  const icons = {
+    JavaScript: 'JS',
+    TypeScript: 'TS',
+    HTML: 'HTML',
+    CSS: 'CSS',
+    Python: 'PY',
+    Java: 'JV',
+    C: 'C',
+    'C++': 'C++',
+    PHP: 'PHP'
+  };
+  
+  return icons[language] || language.substring(0, 2).toUpperCase();
+}
+
+const projects = repositories
+  .filter(repo => !repo.fork)
+  .map(repo => ({
+    name: repo.name,
+    description: repo.description,
+    url: repo.html_url,
+    language: repo.language,
+    stars: repo.stargazers_count,
+    updatedAt: repo.updated_at // Store the raw date to format it differently in the UI
+  }));
+---
+
+<div class="portfolio-container">
+  <h2>{t('portfolio.header')}</h2>
+  <p class="portfolio-intro">
+    {t('portfolio.subtitle')}
+  </p>
+  
+  <div class="projects-grid">
+    {projects.map(project => (
+      <div class={`project-card ${project.language ? `lang-${project.language.toLowerCase()}` : ''}`}>
+        <div class="project-header">
+          <div class="project-icon">
+            {getLanguageIcon(project.language)}
+          </div>
+          <div class="project-title-container">
+            <h3 class="project-title">{project.name}</h3>
+            {project.language && (
+              <span class="project-language-pill" style={`--lang-color: ${getLanguageColor(project.language)};`}>
+                {project.language}
+              </span>
+            )}
+          </div>
+        </div>
+        
+        <p class="project-description">{project.description || t('portfolio.noDescription')}</p>
+        
+        <div class="project-meta">
+          <div class="project-stats">
+            <span class="project-badge">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              {project.stars}
+            </span>
+            <span class="project-updated" title={project.updatedAt}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              {new Date(project.updatedAt).toLocaleDateString(lang === 'es' ? 'es-ES' : 'en-US', {year: 'numeric', month: 'short'})}
+            </span>
+          </div>
+          
+          <a href={project.url} target="_blank" rel="noopener noreferrer" class="project-link">
+            <span>{t('portfolio.viewOnGithub')}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          </a>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .portfolio-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .portfolio-container h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: hsl(var(--foreground));
+  }
+
+  .portfolio-intro {
+    color: hsl(var(--muted-foreground));
+    margin-bottom: 2.5rem;
+    font-size: 1.1rem;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1.5rem;
+  }
+
+  /* Project Card */
+  .project-card {
+    background-color: hsl(var(--card));
+    border-radius: var(--radius);
+    border: 1px solid hsl(var(--border));
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  }
+
+  .project-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .project-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: hsl(var(--muted));
+    color: hsl(var(--muted-foreground));
+    border-radius: var(--radius);
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+
+  .project-title-container {
+    flex: 1;
+  }
+
+  .project-title {
+    margin: 0 0 0.35rem 0;
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: hsl(var(--foreground));
+  }
+
+  .project-language-pill {
+    display: inline-block;
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 9999px;
+    background-color: var(--lang-color, #8e8e8e);
+    color: white;
+  }
+
+  .project-description {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    flex: 1;
+  }
+
+  .project-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+  }
+
+  .project-stats {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .project-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.825rem;
+  }
+
+  .project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.75rem;
+    background-color: hsl(var(--muted));
+    border-radius: var(--radius);
+    color: hsl(var(--foreground));
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+  }
+
+  .project-link:hover {
+    background-color: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+  }
+
+  /* Language specific styling */
+  .lang-javascript .project-icon {
+    background-color: rgba(240, 219, 79, 0.15);
+    color: #f0db4f;
+  }
+
+  .lang-typescript .project-icon {
+    background-color: rgba(49, 120, 198, 0.15);
+    color: #3178c6;
+  }
+
+  .lang-html .project-icon {
+    background-color: rgba(227, 76, 38, 0.15);
+    color: #e34c26;
+  }
+
+  .lang-css .project-icon {
+    background-color: rgba(86, 61, 124, 0.15);
+    color: #563d7c;
+  }
+
+  .lang-python .project-icon {
+    background-color: rgba(53, 114, 165, 0.15);
+    color: #3572A5;
+  }
+
+  .lang-c .project-icon {
+    background-color: rgba(85, 85, 85, 0.15);
+    color: #555555;
+  }
+
+  .lang-php .project-icon {
+    background-color: rgba(79, 93, 149, 0.15);
+    color: #4F5D95;
+  }
+
+  /* Responsive Design */
+  @media (min-width: 640px) {
+    .projects-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .projects-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

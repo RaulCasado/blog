@@ -3,26 +3,27 @@ import HeaderLink from './HeaderLink.astro';
 import ThemeSwitcher from './ThemeSwitcher.astro';
 import BurgerMenu from './BurgerMenu.astro';
 import { SITE_TITLE } from '../consts';
-import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import { getLangFromUrl, useTranslations, useTranslatedPath } from '../i18n/utils';
 import { languages } from '../i18n/ui';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
 ---
 
 <header>
 	<nav>
 		<div class="logo-container">
-			<h2><a href={`/${lang}/`}>{SITE_TITLE}</a></h2>
+			<h2><a href={translatePath('/')}>{SITE_TITLE}</a></h2>
 			<BurgerMenu />
 		</div>
 		<div class="nav-container">
 			<div class="internal-links">
-				<HeaderLink href={`/${lang}/`}>{t('nav.home')}</HeaderLink>
-				<HeaderLink href={`/${lang}/blog`}>{t('nav.blog')}</HeaderLink>
-				<HeaderLink href={`/${lang}/about`}>{t('nav.about')}</HeaderLink>
-				<HeaderLink href={`/${lang}/portfolio`}>{t('nav.portfolio')}</HeaderLink>
-				<HeaderLink href={`/${lang}/cv`}>{t('nav.cv')}</HeaderLink>
+				<HeaderLink href={translatePath('/')}>{t('nav.home')}</HeaderLink>
+				<HeaderLink href={translatePath('/blog')}>{t('nav.blog')}</HeaderLink>
+				<HeaderLink href={translatePath('/about')}>{t('nav.about')}</HeaderLink>
+				<HeaderLink href={translatePath('/portfolio')}>{t('nav.portfolio')}</HeaderLink>
+				<HeaderLink href={translatePath('/cv')}>{t('nav.cv')}</HeaderLink>
 			</div>
 			<div class="social-links">
 				<div class="language-switcher">

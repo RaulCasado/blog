@@ -14,6 +14,10 @@ export const translations = {
         'nav.portfolio': 'Portfolio',
         'nav.about': 'About Me',
         'nav.cv': 'Resume',
+        
+        // General labels
+        'about.projectsLabel': 'Projects',
+        'about.skillsLabel': 'Skills learned',
 
         // Home page - Hero section
         'hero.greeting': 'Hi, I\'m Raúl Casado',
@@ -119,7 +123,9 @@ export const translations = {
         'portfolio.title': 'Portfolio',
         'portfolio.description': 'Raúl Casado - Projects',
         'portfolio.header': 'My Projects',
-        'portfolio.subtitle': 'Here are some of my GitHub projects.'
+        'portfolio.subtitle': 'Here are some of my GitHub projects.',
+        'portfolio.noDescription': 'No description available',
+        'portfolio.viewOnGithub': 'View on GitHub'
     },
     'es': {
         // Navegación
@@ -128,6 +134,10 @@ export const translations = {
         'nav.portfolio': 'Portfolio',
         'nav.about': 'Sobre Mí',
         'nav.cv': 'Currículum',
+        
+        // General labels
+        'about.projectsLabel': 'Proyectos',
+        'about.skillsLabel': 'Habilidades aprendidas',
 
         // Página de inicio - Sección hero
         'hero.greeting': 'Hola, soy Raúl Casado',
@@ -230,6 +240,8 @@ export const translations = {
         'portfolio.title': 'Portfolio',
         'portfolio.description': 'Raúl Casado - Proyectos',
         'portfolio.header': 'Mis Proyectos',
-        'portfolio.subtitle': 'Aquí hay algunos de mis proyectos de GitHub.'
+        'portfolio.subtitle': 'Aquí hay algunos de mis proyectos de GitHub.',
+        'portfolio.noDescription': 'No hay descripción disponible',
+        'portfolio.viewOnGithub': 'Ver en GitHub'
     }
 } as const;

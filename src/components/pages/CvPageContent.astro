@@ -1,0 +1,492 @@
+---
+import { useTranslations } from '../../i18n/utils';
+
+const { lang = 'en' } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<div class="cv-container">
+    <div class="cv-header">
+        <div class="cv-header-content">
+            <h1>{t('cv.header')}</h1>
+            <p class="cv-subtitle">
+                {t('cv.subtitle')}
+            </p>
+        </div>
+        <a href="/raulcasado_cv.pdf" target="_blank" class="cv-download-btn">
+            <span class="cv-icon download-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            </span>
+            {t('cv.download')}
+        </a>
+    </div>
+
+    <!-- Personal Information -->
+    <div class="cv-card">
+        <div class="cv-card-header">
+            <h2 class="cv-card-title">{t('cv.personal.title')}</h2>
+        </div>
+        <div class="cv-card-content cv-personal-info">
+            <div class="cv-info-item">
+                <span class="cv-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                </span>
+                <span>Málaga</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Work Experience -->
+    <div class="cv-card">
+        <div class="cv-card-header">
+            <h2 class="cv-card-title">{t('cv.experience.title')}</h2>
+        </div>
+        <div class="cv-card-content">
+            <div class="cv-experience-item">
+                <div class="cv-experience-header">
+                    <h3>{t('cv.selectra')}</h3>
+                </div>
+                <p class="cv-company-title">{t('cv.teleoperator')}</p>
+                <p class="cv-description">
+                    {t('cv.selectra.description')}
+                </p>
+                <ul class="cv-experience-list">
+                    <li>{t('cv.selectra.responsibilities1')}</li>
+                    <li>{t('cv.selectra.responsibilities2')}</li>
+                </ul>
+                <div class="cv-skills-badges">
+                    <span class="cv-badge cv-badge-outline">
+                        <span>{t('cv.skill.pressure')}</span>
+                    </span>
+                    <span class="cv-badge cv-badge-outline">
+                        <span>{t('cv.skill.communication')}</span>
+                    </span>
+                    <span class="cv-badge cv-badge-outline">
+                        <span>{t('cv.skill.listening')}</span>
+                    </span>
+                    <span class="cv-badge cv-badge-outline">
+                        <span>{t('cv.skill.problemsolving')}</span>
+                    </span>
+                    <span class="cv-badge cv-badge-outline">
+                        <span>{t('cv.skill.stressmanagement')}</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="cv-experience-item">
+                <div class="cv-experience-header">
+                    <h3>{t('cv.konecta')}</h3>
+                    <div class="cv-badge cv-badge-outline">
+                        <span>{t('cv.konecta.date')}</span>
+                    </div>
+                </div>
+                <p class="cv-company-title">{t('cv.sales')}</p>
+                <p class="cv-description">
+                    {t('cv.konecta.description')}
+                </p>
+                <div class="cv-skills-badges">
+                    <span class="cv-badge cv-badge-outline">
+                        <span>{t('cv.skill.goals')}</span>
+                    </span>
+                    <span class="cv-badge cv-badge-outline">
+                        <span>{t('cv.skill.communication')}</span>
+                    </span>
+                    <span class="cv-badge cv-badge-outline">
+                        <span>{t('cv.skill.coldsales')}</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="cv-experience-item">
+                <div class="cv-experience-header">
+                    <h3>{t('cv.madeinmedia')}</h3>
+                    <div class="cv-badge cv-badge-outline">
+                        <span>{t('cv.madeinmedia.date')}</span>
+                    </div>
+                </div>
+                <p class="cv-company-title">{t('cv.webdeveloper')}</p>
+                <p class="cv-description">
+                    {t('cv.madeinmedia.description')}
+                </p>
+                <ul class="cv-experience-list">
+                    <li>{t('cv.madeinmedia.responsibilities1')}</li>
+                    <li>{t('cv.madeinmedia.responsibilities2')}</li>
+                    <li>{t('cv.madeinmedia.responsibilities3')}</li>
+                    <li>{t('cv.madeinmedia.responsibilities4')}</li>
+                </ul>
+                <div class="cv-skills-badges">
+                    <span class="cv-badge cv-badge-outline">
+                        <span>{t('cv.skill.teamwork')}</span>
+                    </span>
+                    <span class="cv-badge cv-badge-outline">
+                        <span>{t('cv.skill.problemsolving')}</span>
+                    </span>
+                    <span class="cv-badge cv-badge-outline">
+                        <span>{t('cv.skill.communication')}</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Education -->
+    <div class="cv-card">
+        <div class="cv-card-header">
+            <h2 class="cv-card-title">{t('cv.education.title')}</h2>
+        </div>
+        <div class="cv-card-content">
+            <div class="cv-education-item">
+                <div class="cv-education-header">
+                    <h3>{t('cv.fortytwo.name')}</h3>
+                    <div class="cv-badge cv-badge-outline">
+                        <span>{t('cv.fortytwo.current')}</span>
+                    </div>
+                </div>
+                <p class="cv-company-title">{t('cv.fortytwo.role')}</p>
+            </div>
+
+            <div class="cv-education-item">
+                <div class="cv-education-header">
+                    <h3>{t('cv.politecnico.name')}</h3>
+                    <div class="cv-badge cv-badge-outline">
+                        <span>{t('cv.politecnico.year')}</span>
+                    </div>
+                </div>
+                <p class="cv-company-title">{t('cv.politecnico.degree')}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skills -->
+    <div class="cv-card">
+        <div class="cv-card-header">
+            <h2 class="cv-card-title">{t('cv.skills.title')}</h2>
+        </div>
+        <div class="cv-card-content">
+            <h3 class="cv-section-subtitle">{t('cv.technical.title')}</h3>
+            <div class="cv-skills-grid">
+                <div class="cv-skill-box">
+                    <div class="cv-skill-name">HTML/CSS</div>
+                    <div class="cv-skill-bar">
+                        <div class="cv-skill-progress" style="width: 95%;"></div>
+                    </div>
+                </div>
+                <div class="cv-skill-box">
+                    <div class="cv-skill-name">JavaScript</div>
+                    <div class="cv-skill-bar">
+                        <div class="cv-skill-progress" style="width: 85%;"></div>
+                    </div>
+                </div>
+                <div class="cv-skill-box">
+                    <div class="cv-skill-name">TypeScript</div>
+                    <div class="cv-skill-bar">
+                        <div class="cv-skill-progress" style="width: 80%;"></div>
+                    </div>
+                </div>
+                <div class="cv-skill-box">
+                    <div class="cv-skill-name">React</div>
+                    <div class="cv-skill-bar">
+                        <div class="cv-skill-progress" style="width: 80%;"></div>
+                    </div>
+                </div>
+                <div class="cv-skill-box">
+                    <div class="cv-skill-name">Python</div>
+                    <div class="cv-skill-bar">
+                        <div class="cv-skill-progress" style="width: 75%;"></div>
+                    </div>
+                </div>
+                <div class="cv-skill-box">
+                    <div class="cv-skill-name">PHP</div>
+                    <div class="cv-skill-bar">
+                        <div class="cv-skill-progress" style="width: 70%;"></div>
+                    </div>
+                </div>
+                <div class="cv-skill-box">
+                    <div class="cv-skill-name">C</div>
+                    <div class="cv-skill-bar">
+                        <div class="cv-skill-progress" style="width: 65%;"></div>
+                    </div>
+                </div>
+                <div class="cv-skill-box">
+                    <div class="cv-skill-name">WordPress</div>
+                    <div class="cv-skill-bar">
+                        <div class="cv-skill-progress" style="width: 85%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="cv-section-subtitle">{t('cv.languages.title')}</h3>
+            <div class="cv-languages-grid">
+                <div class="cv-language-item">
+                    <span class="cv-language-name">{t('cv.spanish')}</span>
+                    <span class="cv-language-level">Nativo</span>
+                </div>
+                <div class="cv-language-item">
+                    <span class="cv-language-name">{t('cv.english')}</span>
+                    <span class="cv-language-level">B1</span>
+                </div>
+            </div>
+
+            <h3 class="cv-section-subtitle">{t('cv.availability.title')}</h3>
+            <p class="cv-availability-text">
+                {t('cv.availability.description')}
+            </p>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* CV page styles */
+    .cv-container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .cv-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .cv-header h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 0 0 0.5rem 0;
+        color: hsl(var(--foreground));
+    }
+
+    .cv-subtitle {
+        color: hsl(var(--muted-foreground));
+        font-size: 1.1rem;
+        margin: 0;
+    }
+
+    .cv-download-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background-color: hsl(var(--primary));
+        color: hsl(var(--primary-foreground));
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius);
+        font-weight: 500;
+        cursor: pointer;
+        border: none;
+        transition: background-color 0.2s, transform 0.2s;
+        text-decoration: none;
+    }
+
+    .cv-download-btn:hover {
+        background-color: hsl(var(--primary) / 0.9);
+        transform: translateY(-2px);
+    }
+
+    /* Cards */
+    .cv-card {
+        background-color: hsl(var(--card));
+        border-radius: var(--radius);
+        border: 1px solid hsl(var(--border));
+        margin-bottom: 2rem;
+        overflow: hidden;
+    }
+
+    .cv-card-header {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid hsl(var(--border));
+        background-color: hsl(var(--muted) / 0.5);
+    }
+
+    .cv-card-title {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: hsl(var(--foreground));
+    }
+
+    .cv-card-content {
+        padding: 1.5rem;
+    }
+
+    /* Personal info */
+    .cv-personal-info {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .cv-info-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: hsl(var(--muted-foreground));
+    }
+
+    .cv-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: hsl(var(--primary));
+    }
+
+    /* Experience */
+    .cv-experience-item, .cv-education-item {
+        padding-bottom: 1.5rem;
+        margin-bottom: 1.5rem;
+        border-bottom: 1px solid hsl(var(--border) / 0.5);
+    }
+
+    .cv-experience-item:last-child, .cv-education-item:last-child {
+        padding-bottom: 0;
+        margin-bottom: 0;
+        border-bottom: none;
+    }
+
+    .cv-experience-header, .cv-education-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .cv-experience-header h3, .cv-education-header h3 {
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: hsl(var(--foreground));
+    }
+
+    .cv-company-title {
+        font-size: 1rem;
+        font-weight: 500;
+        color: hsl(var(--primary));
+        margin: 0 0 0.75rem 0;
+    }
+
+    .cv-description {
+        color: hsl(var(--muted-foreground));
+        margin-bottom: 1rem;
+        line-height: 1.6;
+    }
+
+    .cv-experience-list {
+        margin: 0 0 1rem 1rem;
+        padding: 0;
+        color: hsl(var(--muted-foreground));
+    }
+
+    .cv-experience-list li {
+        margin-bottom: 0.5rem;
+        line-height: 1.6;
+    }
+
+    /* Badges */
+    .cv-skills-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .cv-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+
+    .cv-badge-outline {
+        background-color: hsl(var(--muted) / 0.3);
+        border: 1px solid hsl(var(--border));
+        color: hsl(var(--muted-foreground));
+    }
+
+    /* Skills */
+    .cv-section-subtitle {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: hsl(var(--foreground));
+        margin: 1.5rem 0 1rem;
+    }
+
+    .cv-section-subtitle:first-child {
+        margin-top: 0;
+    }
+
+    .cv-skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .cv-skill-box {
+        margin-bottom: 0.75rem;
+    }
+
+    .cv-skill-name {
+        font-weight: 500;
+        margin-bottom: 0.25rem;
+        color: hsl(var(--foreground));
+        font-size: 0.875rem;
+    }
+
+    .cv-skill-bar {
+        height: 6px;
+        background-color: hsl(var(--muted));
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .cv-skill-progress {
+        height: 100%;
+        background-color: hsl(var(--primary));
+    }
+
+    /* Languages */
+    .cv-languages-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .cv-language-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .cv-language-name {
+        font-weight: 500;
+        color: hsl(var(--foreground));
+    }
+
+    .cv-language-level {
+        color: hsl(var(--muted-foreground));
+        font-size: 0.875rem;
+    }
+
+    .cv-availability-text {
+        color: hsl(var(--muted-foreground));
+        margin: 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .cv-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .cv-skills-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
