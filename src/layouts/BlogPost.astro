@@ -6,6 +6,7 @@ import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import TableOfContents from '../components/TableOfContents.astro';
 import SocialShare from '../components/SocialShare.astro';
+import { getLangFromUrl } from '../i18n/utils';
 
 type Props = CollectionEntry<'blog'>['data'] & {
   headings?: {
@@ -17,9 +18,10 @@ type Props = CollectionEntry<'blog'>['data'] & {
 
 const { title, description, pubDate, updatedDate, heroImage, headings = [] } = Astro.props;
 const currentPageUrl = Astro.url.href; // Get the current page URL
+const lang = getLangFromUrl(Astro.url);
 ---
 
-<html lang="es">
+<html lang={lang}>
 	<head>
 		<BaseHead title={title} description={description} />
 		<style>

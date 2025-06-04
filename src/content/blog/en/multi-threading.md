@@ -1,10 +1,10 @@
 ---
 title: 'Multithreading'
-description: 'Una exploración filosófica del problema de los filósofos comensales y conceptos de programación concurrente'
+description: 'A philosophical exploration of the dining philosophers problem and concurrent programming concepts'
 pubDate: 'May 13 2025'
 heroImage: '/philo.webp'
-heroImageAlt: 'Una ilustración conceptual de cinco filósofos sentados alrededor de una mesa'
-lang: 'es'
+heroImageAlt: 'A conceptual illustration of five philosophers sitting around a table'
+lang: 'en'
 ---
 
 # Una mirada filosófica al Multithreading
