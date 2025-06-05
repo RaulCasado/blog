@@ -11,7 +11,7 @@ lang: 'es'
 
 ## Introducción
 
-Si estás leyendo esto, da igual que sepas o no lo que es el multithreading. Con este artículo quiero explicar con mis propias palabras qué es el multithreading y cómo funciona. Ya me enfrenté al problema de los filósofos en la escuela de 42 y quiero compartir mi experiencia con vosotros. Espero que os sirva de ayuda y que no os quedéis con dudas. Si tenéis alguna pregunta, no dudéis en dejarla en los comentarios.
+Si estás leyendo esto, da igual que sepas o no lo que es el multithreading. Con este artículo quiero explicar con mis propias palabras qué es el multithreading y cómo funciona. Ya me enfrenté al problema de los filósofos en la escuela de 42 y quiero compartir mi experiencia con vosotros. Espero que os sirva de ayuda y que no os quedéis con dudas. Si tenéis alguna pregunta, no dudéis en contactarme.
 
 ## ¿Qué es el Multithreading?
 
@@ -242,13 +242,13 @@ Si te ha gustado este artículo, compártelo con tus amigos filósofos y program
 
 La programación concurrente es un campo vasto y complejo. Si bien los mutexes y semáforos son fundamentales, existen desafíos y soluciones más avanzadas que los ingenieros de sistemas utilizan para construir software robusto:
 
-### Inversión de Prioridad y Herencia de Prioridad
+#### Inversión de Prioridad y Herencia de Prioridad
 
 En sistemas donde los hilos tienen diferentes prioridades (como sistemas en tiempo real), puede ocurrir un fenómeno llamado inversión de prioridad. Esto sucede cuando un hilo de alta prioridad se ve obligado a esperar a un hilo de baja prioridad que tiene un recurso que necesita, y ese hilo de baja prioridad es a su vez interrumpido por un hilo de prioridad media. 
 
 > **Punto clave**: Para mitigar la inversión de prioridad, algunos mutexes implementan la herencia de prioridad, elevando temporalmente la prioridad del hilo que posee el mutex a la del hilo de mayor prioridad que está esperando por él.
 
-### Tipos Especiales de Mutexes
+#### Tipos Especiales de Mutexes
 
 No todos los mutexes son iguales. Las implementaciones modernas ofrecen variaciones:
 
@@ -257,11 +257,11 @@ No todos los mutexes son iguales. Las implementaciones modernas ofrecen variacio
 - **Timed Mutexes**: Permiten a un hilo intentar adquirir el mutex por un tiempo limitado, sin bloquearse indefinidamente si no lo consigue.
 - **Robust Mutexes**: Diseñados para manejar el fallo inesperado del hilo que los posee. Si el hilo que tiene el mutex muere repentinamente, el robust mutex es liberado y marcado, alertando al siguiente hilo que lo adquiera que el recurso podría estar en un estado inconsistente.
 
-### Compartibilidad entre Procesos
+#### Compartibilidad entre Procesos
 
 Aunque los mutexes suelen usarse entre hilos del mismo proceso, algunos pueden configurarse para ser compartidos y sincronizar el acceso a recursos entre diferentes procesos, lo que resulta útil en arquitecturas de aplicaciones más complejas.
 
-### Spinlocks vs. Mutexes
+#### Spinlocks vs. Mutexes
 
 Mientras que un mutex pone a dormir a un hilo que no puede adquirir el recurso (liberando la CPU), un spinlock hace que el hilo espere en un bucle ocupado (busy-wait).
 
@@ -274,7 +274,7 @@ while (!atomic_compare_exchange(&lock, 0, 1)) {
 
 > **Punto clave**: Los spinlocks son más eficientes solo cuando el bloqueo es extremadamente corto, evitando el coste de cambio de contexto del sistema operativo.
 
-### Futex (Fast Userspace Mutex)
+#### Futex (Fast Userspace Mutex)
 
 Una optimización de bajo nivel (específica de Linux) que permite a los mutexes y semáforos operar en el espacio de usuario la mayor parte del tiempo, recurriendo al kernel solo cuando un hilo realmente necesita ser puesto a dormir o despertado. Esto mejora significativamente el rendimiento en situaciones de baja contención.
 

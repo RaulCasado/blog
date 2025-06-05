@@ -7,58 +7,57 @@ heroImageAlt: 'Astro placeholder'
 lang: 'en'
 ---
 
-# Astro y por qué lo escogí
+# Astro and Why I Chose It
 
-## Introducción
+## Introduction
 
-¡Hola a todos! Como habrán notado, he decidido lanzar mi blog utilizando Astro. Quizás te estés preguntando si esta es la opción correcta para ti, o si deberías considerar otro framework. La elección de una herramienta para un proyecto web personal, como un blog, puede ser compleja, con muchísimas opciones disponibles. Es crucial tomar una decisión informada, sin dejarse llevar solo por las tendencias. Por eso, en este artículo, te explicaré por qué elegí Astro, sus ventajas y desventajas, y cuándo realmente brilla. Espero que esta guía te ayude a decidir si Astro es la herramienta ideal para tu próximo proyecto.
+Hello everyone! As you may have noticed, I've decided to launch my blog using Astro. You might be wondering if this is the right choice for you, or if you should consider another framework. Choosing a tool for a personal web project, such as a blog, can be complex, with so many options available. It is crucial to make an informed decision, without being influenced by trends alone. That's why, in this article, I'll explain why I chose Astro, its advantages and disadvantages, and when it really shines. I hope this guide will help you decide if Astro is the right tool for your next project.
 
-Sin más preámbulos, ¡vamos a ello!
+Let's dive in!
 
-## ¿Qué es Astro?
+## What is Astro?
 
-Para entender mi elección, primero debemos saber qué es Astro. Sí, es otro framework para la web, pero con características únicas que lo hacen especial para ciertos tipos de proyectos. Su filosofía de "islas" es fundamental: imagina que cada componente interactivo de tu página es una pequeña isla de JavaScript, aislada del resto del contenido. Esto permite cargar solo el JavaScript necesario para cada componente, lo que se traduce en un rendimiento impresionante. Disfrutarás de una experiencia de usuario rápida y fluida sin sacrificar la interactividad. Además, Astro es increíblemente rápido y ligero, lo que lo hace perfecto para blogs y sitios web estáticos. En resumen, Astro se enfoca en la velocidad y la eficiencia, priorizando el envío de HTML puro al navegador, lo que lo convierte en una excelente opción donde el rendimiento es primordial.
+To understand why I chose Astro, we first need to know what Astro is. Yeah sure another JS framework anyone surprised? But this one is unique with features that make it special for certain types of projects. Its philosophy of 'islands' is fundamental, imagine that each interactive component of your page is a small island of JavaScript, isolated from the rest of the content. This means only the JavaScript necessary for each component to load, which translates into impressive performance. You'll enjoy a fast and fluid user experience without sacrificing interactivity. In addition, Astro is incredibly fast and lightweight, making it perfect for blogs and static websites. In short, Astro focuses on speed and efficiency, prioritising the delivery of pure HTML to the browser, making it an excellent choice where performance is paramount.
 
-### Diferencias en la Sintaxis de Componentes
+### Component Syntax Differences
 
-Una de las cosas que más me atrajo de Astro es su sintaxis limpia y su enfoque en la estructura. Veamos un ejemplo sencillo para comparar un componente de Astro con uno de React:
+One of the things that most attracted me to Astro is its clean syntax and focus on structure. Let's look at a simple example to compare an Astro component with a React one:
 
-**Componente en Astro:**
+**Astro Component:**
 ```astro
 ---
-// Tu JavaScript/TypeScript va aquí (sección de script)
-const saludo = "Hola Mundo";
+// Your JavaScript/TypeScript goes here (script section)
+const greetings = "Hello World";
 const items = ["Item 1", "Item 2", "Item 3"];
 ---
 
-<!-- Tu HTML/Plantilla va aquí -->
 <div>
-  <h1>{saludo}</h1>
+  <h1>{greetings}</h1>
   <ul>
     {items.map(item => <li>{item}</li>)}
   </ul>
 </div>
 
 <style>
-  /* Tu CSS va aquí - está encapsulado automáticamente */
+  /* Your CSS goes here - it's automatically encapsulated */
   h1 {
     color: blue;
   }
 </style>
 ```
 
-**Mismo componente en React:**
+**Same Component in React:**
 ```jsx
 import React from 'react';
-import './EstilosComponente.css'; // CSS importado por separado
+import './some.css'; // CSS imported separately
 
-function MiComponente() {
-  const saludo = "Hola Mundo";
+function MiComponent() {
+  const greetings = "Hello World";
   const items = ["Item 1", "Item 2", "Item 3"];
 
   return (
     <div>
-      <h1>{saludo}</h1>
+      <h1>{greetings}</h1>
       <ul>
         {items.map((item, index) => <li key={index}>{item}</li>)}
       </ul>
@@ -69,155 +68,156 @@ function MiComponente() {
 export default MiComponente;
 ```
 
-Astro ofrece una clara separación entre el JavaScript, el HTML y el CSS, lo que facilita la lectura y el mantenimiento. Además, el CSS dentro de un componente Astro se encapsula automáticamente, eliminando la necesidad de configuraciones adicionales o librerías de CSS-in-JS.
+Astro provides a clear separation between JavaScript, HTML and CSS, making it easy to read and maintain. In addition, CSS within an Astro component is automatically encapsulated, eliminating the need for additional configuration or CSS-in-JS libraries.
 
-### Markdown (MD) vs. MDX: Contenido más allá del texto
+### Markdown (MD) vs. MDX: Content Beyond Just Text
 
-Para un blog, la forma en que manejas el contenido es fundamental. Astro soporta tanto Markdown (MD) como MDX, y entender la diferencia es clave:
+For a blog, how you handle content is fundamental. Astro supports both Markdown (MD) and MDX, and understanding the difference is key:
 
-**Markdown (.md)**: Es un lenguaje de marcado ligero que te permite formatear texto plano de manera sencilla y legible. Es ideal para contenido basado en texto, como la mayoría de los artículos de un blog. Es fácil de aprender y de escribir, y genera HTML simple.
+**Markdown (.md):** This is a lightweight markup language that lets you format plain text in a simple, readable way. It's ideal for text-based content, like most blog articles. It's easy to learn and write, and it generates simple HTML.
 
 ```markdown
-# Mi Título de Artículo
+# My Article Title
 
-Esto es un párrafo en **negrita** y *cursiva*.
+This is a paragraph in **bold** and *italics*.
 
-- Lista de elementos
-- Otro elemento
+- List item
+- Another item
 ```
 
-**MDX (.mdx)**: MDX es una extensión de Markdown que te permite escribir JSX (JavaScript XML) directamente dentro de tus archivos Markdown. Esto es increíblemente potente porque te permite importar y usar componentes interactivos (de React, Vue, Svelte, etc.) directamente en tu contenido, como si fueran etiquetas HTML personalizadas.
+**MDX (.mdx):** MDX is an extension of Markdown that allows you to write JSX (JavaScript XML) directly within your Markdown files. This is incredibly powerful because it lets you import and use interactive components (from React, Vue, Svelte, etc.) directly in your content, just as if they were custom HTML tags.
 
 ```jsx
 import MyInteractiveComponent from '../components/MyInteractiveComponent.astro';
 import AnotherReactComponent from '../components/AnotherReactComponent.jsx';
 
-# Mi Título con Componentes
+# My Title with Components
 
-Esto es un párrafo. Aquí puedo incluir mi componente de Astro:
+This is a paragraph. Here I can include my Astro component:
 <MyInteractiveComponent client:load />
 
-Y aquí puedo usar un componente de React dentro de mi MDX:
-<AnotherReactComponent greeting="Hola desde React" />
+And here I can use a React component within my MDX:
+<AnotherReactComponent greeting="Hello from React" />
 
-Continúo con el contenido de mi blog.
+I continue with my blog content.
 ```
 
-La flexibilidad de MDX es un cambio de juego para un blog como el mío. Me permite escribir la mayor parte de mi contenido en Markdown simple, pero si necesito una calculadora interactiva, un gráfico dinámico o un carrusel de imágenes personalizado dentro de un artículo, puedo integrar un componente de React (o Vue, Svelte, etc.) justo donde lo necesito, sin tener que construir toda la página con ese framework. Esto mantiene la mayor parte de la página ligera y estática, mientras solo la "isla" interactiva carga su JavaScript.
+The flexibility of MDX is a game-changer for a blog like mine. It allows me to write most of my content in plain Markdown, but if I need an interactive calculator, a dynamic chart, or a custom image carousel within an article, I can integrate a React component (or Vue, Svelte, etc.) right where I need it, without having to build the entire page with that framework. This keeps most of the page light and static, while only the interactive "island" loads its JavaScript.
 
-## Renderizado en el Servidor (SSR) con Astro: Una Perspectiva Única
+## Server-Side Rendering (SSR) with Astro: A Unique Perspective
 
-El Renderizado en el Servidor (SSR) es una técnica donde el contenido de una página web se genera en el servidor y se envía como HTML completo al navegador. Esto tiene ventajas significativas para el SEO y la velocidad de carga inicial, ya que el navegador no tiene que esperar a que se descargue y ejecute JavaScript para ver el contenido.
+Server-Side Rendering (SSR) is a technique where the content of a web page is generated on the server and sent as full HTML to the browser. This has significant advantages for SEO and initial load speed, as the browser does not have to wait for JavaScript to download and run before viewing the content.
 
-Muchos frameworks modernos (como Next.js, Nuxt.js, SvelteKit) ofrecen SSR, pero Astro lo maneja con una perspectiva distintiva:
+Many modern frameworks (such as Next.js, Nuxt.js, SvelteKit) offer SSR, but Astro handles it with a distinctive perspective:
 
-### SSR Tradicional en Otros Frameworks
+### Traditional SSR in Other Frameworks
 
-En frameworks como Next.js, cuando usas SSR, toda la página se "hidrata" (es decir, el JavaScript del cliente se "activa" y toma el control de los elementos interactivos) una vez que el HTML se ha cargado. Esto significa que, incluso si solo una pequeña parte de tu página necesita interactividad, todo el JavaScript de la página se envía y se ejecuta en el cliente, lo que puede ralentizar el inicio y la interactividad.
+In frameworks like Next.js, when you use SSR, the entire page is 'hydrated' (i.e., the client's JavaScript is 'activated' and takes control of the interactive elements) once the HTML has loaded. This means that even if only a small part of your page needs interactivity, all the JavaScript on the page is sent to and executed on the client, which can slow down startup and interactivity.
 
-### SSR y la Arquitectura de "Islas" de Astro
+### SSR and Astro's 'Island' Architecture
 
-Astro también puede generar páginas completamente en el servidor (SSR), pero su verdadera magia radica en cómo maneja la interactividad post-SSR. Después de que el servidor ha generado y enviado el HTML, Astro utiliza su arquitectura de "islas" para "hidratar" solo los componentes interactivos específicos que has marcado para el cliente (client:load, client:visible, etc.).
+Astro can also generate pages entirely on the server (SSR), but its real magic lies in how it handles post-SSR interactivity. After the server has generated and sent the HTML, Astro uses its 'island' architecture to 'hydrate' only the specific interactive components you've marked for the client (client:load, client:visible, etc.).
 
-Esto es lo que hace a Astro tan eficiente:
+This is what makes Astro so efficient:
 
-- **Contenido Instantáneo**: La mayor parte de tu blog (texto, imágenes estáticas) se renderiza en el servidor y se envía como HTML puro, lo que garantiza una carga instantánea y excelente para el SEO.
-- **JavaScript Mínimo y Dirigido**: Solo el JavaScript necesario para los componentes interactivos específicos (tus "islas") se envía al navegador. Si un componente no es interactivo, no se envía ningún JavaScript asociado a él al cliente.
-- **No Hay "Hidratación Global"**: A diferencia de otros frameworks donde toda la aplicación puede necesitar "hidratación", Astro evita este "costo de hidratación" masivo. Esto resulta en una experiencia de usuario más rápida y fluida, ya que la página es interactiva casi de inmediato, sin la sobrecarga de JavaScript.
+- **Instant Content**: Most of your blog (text, static images) is rendered on the server and sent as pure HTML, which guarantees instant loading and excellent SEO.
+- **Minimal and Targeted JavaScript**: Only the JavaScript required for specific interactive components (your 'islands') is sent to the browser. If a component is not interactive, no JavaScript associated with it is sent to the client.
+- **No 'Global Hydration'**: Unlike other frameworks where the entire application may need "hydration', Astro avoids this massive 'hydration cost'. This results in a faster and smoother user experience, as the page is interactive almost immediately, without the JavaScript overhead.
 
-En resumen, Astro toma lo mejor del SSR (velocidad de carga inicial, SEO) y lo combina con un enfoque innovador para la interactividad (las "islas"), minimizando drásticamente la cantidad de JavaScript que se envía al cliente, lo que se traduce en un rendimiento superior para tu blog.
+In short, Astro takes the best of SSR (initial load speed, SEO) and combines it with an innovative approach to interactivity (the 'islands'), drastically minimising the amount of JavaScript sent to the client, resulting in superior performance for your blog.
 
-## ¿Cómo logra Astro esa velocidad?
+## How does Astro achieve that speed?
 
-Una de las claves que hace que Astro sea tan rápido es su filosofía de "Zero JavaScript by Default". Esto hace que se envíe solo el JavaScript necesario para los componentes interactivos, lo que reduce la carga inicial y mejora el rendimiento general. Otros factores incluyen:
+One of the keys that makes Astro so fast is its 'Zero JavaScript by Default' philosophy. This results in only the JavaScript required for interactive components being sent, which reduces the initial load and improves overall performance. Other factors include:
 
-- **Generación de HTML Estático:** Cuando el servidor lo solicita, los componentes se compilan en HTML puro, y el navegador solo recibe el HTML necesario para renderizar la página, sin esperar a que se cargue y ejecute JavaScript innecesario.
-- **Arquitectura de Islas:** Permite que solo los componentes interactivos se "hidraten", aislando este componente del resto de la página. Esto hace que el resto de la página se cargue rápidamente.
-- **Tree-shaking Eficiente:** Astro utiliza un sistema de eliminación de código muerto que elimina el JavaScript no utilizado, enviando solo el código necesario al navegador.
+- **Static HTML Generation:** When requested by the server, components are compiled into pure HTML, and the browser receives only the HTML needed to render the page, without waiting for unnecessary JavaScript to load and execute.
+- **Island architecture:** Allows only the interactive components to be 'hydrated', isolating this component from the rest of the page. This makes the rest of the page load quickly.
+- **Efficient three-shaking:** Astro uses a dead code removal system that removes unused JavaScript, sending only the necessary code to the browser
 
-### Comparación de rendimiento
+### Performance comparison
 
-Para entender mejor la diferencia de rendimiento entre Astro y otros frameworks populares, echemos un vistazo a algunos números aproximados basados en pruebas de sitios web simples similares a un blog:
+To better understand the performance difference between Astro and other popular frameworks, let's take a look at some rough numbers based on tests of simple blog-like websites:
 
-| Framework | Tiempo de carga inicial | Tamaño JS enviado | Tiempo de compilación | Puntuación Lighthouse |
+| Framework | Initial load time | Sent JS size | Compilation tiem | Lighthouse score |
 |-----------|-------------------------|-------------------|------------------------|----------------------|
 | Astro     | ~0.5s                   | ~30KB             | ~1.5s                  | 95-100               |
 | Next.js   | ~1.2s                   | ~90KB             | ~3s                    | 85-95                |
 | Gatsby    | ~1.0s                   | ~120KB            | ~5s                    | 80-95                |
 | Plain HTML| ~0.4s                   | 0KB               | N/A                    | 95-100               |
 
-*Nota: Estos números son aproximados y pueden variar según la complejidad del proyecto, la optimización y el hosting. Basados en pruebas de sitios simples similares a un blog con contenido estático y mínima interactividad.*
+*Note: These numbers are approximate and may vary depending on project complexity, optimisation and hosting. Based on testing of simple blog-like sites with static content and minimal interactivity*.
 
-Como puedes ver, Astro se acerca mucho al rendimiento del HTML puro mientras ofrece muchas más funcionalidades y facilidades para el desarrollo. Esta combinación de rendimiento cercano al HTML puro con la potencia de un framework moderno es lo que lo hace tan atractivo.
+As you can see, Astro comes very close to pure HTML performance while offering much more functionality and ease of development. This combination of close to pure HTML performance with the power of a modern framework is what makes it so attractive.
 
-## Ventajas de usar Astro
+## Advantages of using Astro
 
-Bueno, ahora vamos a lo que nos interesa: ¿por qué elegí Astro para mi blog? Aquí te detallo algunas de las razones clave:
+So, why Astro? Here are some of the key reasons I picked it for my blog:
 
-1. **Rendimiento Superior**: Astro se centra obsesivamente en el rendimiento. Genera sitios estáticos que son increíblemente rápidos y ligeros, lo cual es ideal para un blog donde la velocidad de carga es crucial para la experiencia del usuario. A nadie le gusta esperar a que una página cargue, y menos si es un blog.
+1. **Superior Performance**: Astro focuses on performance. It generates static sites that are incredibly fast and light, which is ideal for a blog where loading speed is crucial to the user experience. Nobody likes to wait for a page to load, especially not a blog.
 
-2. **Flexibilidad de Frameworks**: Astro te permite usar diferentes frameworks de JavaScript (React, Vue, Svelte, etc.) en el mismo proyecto. Esto significa que puedes elegir la mejor herramienta para cada tarea sin estar atado a un solo framework. Sin embargo, ¡cuidado con esto! Si terminas creando un proyecto usando demasiados frameworks, podría volverse más complicado de lo esperado. Si al final vas a usar Astro pero te ves creando la mayoría de tus componentes en React, quizás lo mejor hubiese sido usar React directamente.
+2. **Frameworks flexibility**: Astro allows you to use different JavaScript frameworks (React, Vue, Svelte, etc.) in the same project. This means that you can choose the best tool for each task without being tied to a single framework. However, be careful with this! If you end up creating a project using too many frameworks, it could become more complicated than expected. If you end up using Astro but find yourself creating most of your components in React, maybe it would have been better to use React directly.
 
-3. **Simplicidad**: La configuración de Astro es bastante sencilla y no requiere un gran esfuerzo para empezar. Esto es especialmente útil si solo quieres centrarte en escribir contenido sin preocuparte por la complejidad del framework. Crear blogs es súper sencillo, dándote más tiempo para escribir e investigar sobre tus publicaciones.
+3. **Simplicity**: Astro's setup is pretty straightforward and doesn't require a lot of effort to get started. This is especially useful if you just want to focus on writing content without worrying about the complexity of the framework. Blogging is super simple, giving you more time to write and research your posts.
 
-4. **SEO Robusto**: Al generar HTML estático, Astro es excelente para el SEO. Los motores de búsqueda pueden indexar fácilmente el contenido de tu blog, lo que puede ayudar a mejorar tu visibilidad en línea. Esto es algo que no se puede dejar de lado si quieres que la gente vea tu blog.
+4. **Robust SEO**: By generating static HTML, Astro is great for SEO. Search engines can easily index your blog content, which can help improve your online visibility. This is a must if you want people to see your blog.
 
-5. **Comunidad y Ecosistema Creciente**: Aunque Astro es relativamente nuevo, su comunidad está creciendo rápidamente y hay muchos recursos disponibles. Esto significa que si tienes preguntas o necesitas ayuda, es probable que encuentres respuestas rápidamente.
+5. **Growing Community and Ecosystem**: Although Astro is relatively new, its community is growing rapidly and there are many resources available. This means that if you have questions or need help, you're likely to find answers quickly.
 
-## ¿Cuándo deberías considerar usar Astro?
+## When should you consider using Astro?
 
-Astro brilla en escenarios donde el contenido y la velocidad son la prioridad. Aquí algunos ejemplos:
+Astro shines in scenarios where content and speed are the priority. Here are some examples:
 
-- **Blogs y Sitios de Contenido:** Como este mismo blog.
-- **Sitios Web Corporativos y Landing Pages:** Donde la primera impresión y la velocidad de carga son cruciales.
-- **E-commerce Estáticos:** Con funcionalidades de carrito o checkout manejadas por servicios externos.
-- **Portafolios y Páginas Personales:** Para mostrar tu trabajo de forma rápida y profesional, como el mío.
-- **Documentación y Sitios de Referencia:** Por su énfasis en el contenido.
+- **Blogs and Content Sites:** Like this very blog.
+- **Corporate Websites and Landing Pages:** Where first impressions and loading speed are crucial.
+- **Static E-commerce:** With cart or checkout functionalities handled by external services.
+- **Portfolios and Personal Pages:** To showcase your work quickly and professionally, like mine.
+- **Documentation and Reference Sites:** For their emphasis on content.
 
-Como puedes ver, mi blog cumple con dos de estas categorías (blog y portafolio). Si tu proyecto encaja en alguna de estas, Astro podría ser una excelente opción para ti.
+As you can see, my blog fits two of these categories (blog and portfolio). If your project fits into either of these, Astro could be an excellent choice for you.
 
-## ¿Cuándo deberías evitar Astro?
+## When should you avoid Astro?
 
-Astro es potente, pero no es la solución para todo. Hay escenarios donde otros frameworks podrían ser más adecuados:
+Astro is powerful, but it is not the solution for everything. There are scenarios where other frameworks might better:
 
-- **Aplicaciones Muy Interactivas (SPAs complejas):** Si tu proyecto es una Aplicación de Página Única (SPA) con muchísima interactividad del lado del cliente, gestión de estados complejos y actualizaciones constantes, Astro podría no ser la opción más eficiente.
-- **Dashboards y Herramientas Administrativas:** Para interfaces con muchos gráficos interactivos, tablas dinámicas y entrada de datos constante, un framework más centrado en el cliente podría ser más adecuado.
-- **Proyectos con Requerimientos de Tiempo Real:** Si tu aplicación necesita actualizaciones en tiempo real, como chats o notificaciones instantáneas, Astro no sería la mejor opción.
+- **Highly Interactive Applications (complex SPAs):** If your project is a Single Page Application (SPA) with lots of client-side interactivity, complex state management and constant updates, Astro might not be the most efficient choice.
+- **Dashboards and Administrative Tools:** For interfaces with lots of interactive graphs, pivot tables and constant data entry, a more client-centric framework might be more suitable.
+- **Projects with Real-Time Requirements:** If your application needs real-time updates, such as chats or instant notifications, Astro would not be the best choice.
 
-Básicamente, para proyectos más complejos o que requieren una gran interactividad, es posible que desees considerar otras opciones como React, Vue o Svelte. Aunque Astro puede manejar cierta interactividad, su enfoque principal es la generación de sitios estáticos y no necesariamente la creación de aplicaciones web altamente dinámicas. ¡Y eso está bien! No todas las tecnologías son adecuadas para todos los tipos de proyectos.
+Basically, for more complex projects or projects that require a lot of interactivity, you may want to consider other options such as React, Vue or Svelte. While Astro can handle some interactivity, its main focus is on generating static sites and not necessarily creating highly dynamic web applications and that's fine! Not all technologies are suitable for all types of projects.
 
-## Mi experiencia con Astro
+## My experience with Astro
 
-Construir este blog y portafolio con Astro ha sido una experiencia bastante sencilla y positiva. La documentación es excelente y hay muchísimos ejemplos disponibles, lo que facilita enormemente la curva de aprendizaje. Además, la comunidad es activa y siempre hay alguien dispuesto a ayudar si te encuentras con un problema.
+Building this blog and portfolio with Astro has been a fairly straightforward and positive experience. The documentation is excellent and there are plenty of examples available, which makes the learning curve much easier. Also, the community is active and there is always someone willing to help if you run into a problem.
 
-Lo que más me ha sorprendido ha sido la facilidad para integrar contenido en Markdown, lo que me permite enfocame en la escritura sin preocuparme por aspectos técnicos complicados. El sistema de enrutamiento basado en archivos también fue muy intuitivo - simplemente creé archivos en el directorio de páginas y Astro automáticamente generó las rutas correspondientes.
+What has surprised me the most is the ease of integrating content into Markdown, which allows me to focus on writing without worrying about complicated technical aspects. The file-based routing system was also very intuitive - I simply created files in the pages directory and Astro automatically generated the corresponding paths.
 
-La capacidad de optimización de imágenes integrada en Astro también ha sido fundamental para mejorar el rendimiento, reduciendo dramáticamente el tamaño de las imágenes sin comprometer la calidad visual.
+Astro's built-in image optimisation capability has also been instrumental in improving performance, dramatically reducing image size without compromising visual quality.
 
-Aunque hasta ahora no he incluido ningún plugin o integración compleja, la flexibilidad de Astro me da la confianza de que puedo escalar el proyecto en el futuro si es necesario. Por ahora, estoy muy contento con la decisión de usar Astro.
+Although I haven't included any plugins or complex integrations so far, Astro's flexibility gives me the confidence that I can scale the project in the future if necessary. For now, I'm very happy with my decision to use Astro.
 
-## Consideraciones adicionales: pnpm y la gestión de dependencias
+## Additional considerations: pnpm and dependency management
 
-Aunque no es exclusivo de Astro, mi experiencia al usarlo se ha beneficiado enormemente de pnpm para la gestión de dependencias. ¿Qué es pnpm y por qué es relevante?
+While not unique to Astro, my experience using it has benefited greatly from pnpm for dependency management. What is pnpm and why is it relevant?
 
-pnpm es un gestor de paquetes de Node.js que se destaca por su eficiencia en el espacio en disco y su velocidad. A diferencia de npm o yarn que instalan copias completas de las dependencias en cada node_modules, pnpm utiliza un almacén de contenido direccionable global. Esto significa que:
+pnpm is a Node.js package manager that stands out for its disk space efficiency and speed. Unlike npm or yarn which install full copies of dependencies in each node_modules and yeah you might need to use something like a node_modules cleaner because this could take up several gigabytes on your hard drive, meanwhile pnpm uses a global addressable content store. This means that:
 
-- **Ahorro de Espacio:** Si tienes múltiples proyectos que usan la misma versión de una dependencia, pnpm solo la descarga e instala una vez en ese almacén global y luego crea enlaces simbólicos a ella en el node_modules de cada proyecto. ¡Esto puede ahorrar gigabytes de espacio en tu disco!
-- **Instalaciones Más Rápidas:** Al no tener que descargar la misma dependencia una y otra vez, las instalaciones son significativamente más rápidas, especialmente en proyectos con muchas dependencias o cuando trabajas con múltiples proyectos.
+- **Saves Space:** If you have multiple projects that use the same version of a dependency, pnpm only downloads and installs it once into that global store and then creates symlinks to it in each project's node_modules. This can save gigabytes of space on your disk!
+- **Faster Installations:** By not having to download the same dependency over and over again, installations are significantly faster, especially in projects with many dependencies or when working with multiple projects.
 
-Si bien Astro no te obliga a usar pnpm, la combinación de la eficiencia de pnpm con el rendimiento de Astro crea un flujo de trabajo de desarrollo muy ágil y optimizado. Para mí, ha sido el complemento perfecto para mantener mi entorno de desarrollo ligero y rápido, en línea con la filosofía de Astro.
+While Astro doesn't force you to use pnpm, the combination of pnpm's efficiency with Astro's performance creates a very streamlined and optimised development workflow. For me, it has been the perfect complement to keep my development environment light and fast, in line with Astro's philosophy.
 
-## Conclusión
+## Conclusion
 
-En resumen, elegí Astro para mi blog por su impresionante rendimiento, su increíble flexibilidad para integrar diferentes frameworks de JavaScript, y su simplicidad que me permite centrarme en el contenido. Su enfoque único en el SSR y la arquitectura de "islas", junto con la potencia de MDX, lo convierten en una opción inmejorable para proyectos orientados al contenido donde la velocidad y la experiencia del usuario son primordiales.
+In summary, I chose Astro for my blog because of its impressive performance, its incredible flexibility to integrate different JavaScript frameworks, and its simplicity that allows me to focus on content. Its unique focus on SSR and 'island' architecture, joined with the power of MDX, make it an obvious choice for content-oriented projects where speed and user experience are paramount.
 
-Si estás considerando usar Astro para tu propio proyecto, espero que este artículo te haya proporcionado información útil y te haya ayudado a comprender mejor sus fortalezas y debilidades. Recuerda que cada proyecto es único, y lo que funciona para uno puede no ser la mejor opción para otro. Así que, mi consejo final es: investiga a fondo, prueba diferentes herramientas y elige la que mejor se adapte a tus necesidades específicas y a los objetivos de tu proyecto.
+If you are considering using Astro for your own project, I hope this article has provided you with useful information and helped you better understand its strengths and weaknesses. Remember that every project is unique, and what works for one may not be the best option for another. So, my final advice is: do your research, try out different tools and choose the one that best suits your specific needs and project goals.
 
-¡Espero que este artículo te haya sido muy útil! ¿Qué te parece Astro? ¿Lo has usado o tienes planes de probarlo? ¡Me encantaría leer tus comentarios y experiencias!
+I hope you found this article very useful! What do you think of Astro, have you used it or do you plan to try it out? I'd love to read your comments and experiences!
 
-## Recursos adicionales
+## Additional resources
 
-- [Documentación Oficial de Astro](https://astro.build/docs)
-- [Ejemplos de Proyectos Construidos con Astro](https://astro.build/examples)
-- [Sitio Web Oficial de pnpm](https://pnpm.io/)
-- [Documentación de MDX](https://mdxjs.com/)
+- [Official Astro Documentation](https://astro.build/docs)
+- [Astro Example Projects Built with Astro](https://astro.build/examples)
+- [pnpm Official Website](https://pnpm.io/)
+- [MDX Documentation](https://mdxjs.com/)
+- [i18n Astro](https://docs.astro.build/en/recipes/i18n/)

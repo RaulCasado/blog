@@ -7,43 +7,43 @@ heroImageAlt: 'A conceptual illustration of five philosophers sitting around a t
 lang: 'en'
 ---
 
-# Una mirada filosófica al Multithreading
+## A Philosophical Look at Multithreading
 
-## Introducción
+## Introduction
 
-Si estás leyendo esto, da igual que sepas o no lo que es el multithreading. Con este artículo quiero explicar con mis propias palabras qué es el multithreading y cómo funciona. Ya me enfrenté al problema de los filósofos en la escuela de 42 y quiero compartir mi experiencia con vosotros. Espero que os sirva de ayuda y que no os quedéis con dudas. Si tenéis alguna pregunta, no dudéis en dejarla en los comentarios.
+If you are reading this, it doesn't matter whether you know what multithreading is or not. With this article I want to explain in my own words what multithreading is and how it works. I already faced the problem for philosophers in the school of 42 and I want to share my experience with you. I hope it will help you and that you will not be left with any doubts. If you have any questions, don't hesitate to contact me.
 
-## ¿Qué es el Multithreading?
+## What is Multithreading?
 
-Antes de sumergirnos en el problema filosófico, vamos a entender qué es el multithreading. Imagina que eres un cocinero profesional preparando una cena elaborada. Podrías cocinar cada plato de forma secuencial (un solo hilo), pero eso sería ineficiente. En lugar de eso, podrías tener varios procesos simultáneos: la sopa hirviendo en un fuego, la carne asándose en el horno, y tú cortando verduras.
+Before we dive into the philosophical problem, let's understand what multithreading is. Imagine you are a professional chef preparing an elaborate dinner. You could cook each dish sequentially (a single thread), but that would be inefficient. Instead, you could have several simultaneous processes: the soup boiling on a fire, the meat roasting in the oven, and you chopping vegetables.
 
-En programación, un **thread** o **hilo** es como uno de esos procesos de cocina que puede ejecutarse de forma independiente. El **multithreading** es la capacidad de un programa para ejecutar varios hilos concurrentemente, permitiendo hacer varias tareas "al mismo tiempo".
+In programming, a **thread** is like one of those kitchen processes that can run independently. Multithreading is the ability of a program to run multiple threads concurrently, allowing it to do several tasks 'at the same time'.
 
-Los hilos son la medida más pequeña de ejecución en un programa. Cada hilo tiene su propio flujo de control, pero comparten el mismo espacio de memoria. Esto significa que pueden comunicarse entre sí de manera eficiente, pero también pueden entrar en conflicto si no se gestionan adecuadamente. En el caso de los filósofos, no se comunican directamente entre ellos mediante mensajes explícitos (como pipes o sockets), sino que interactúan indirectamente a través de los recursos compartidos (los tenedores) que residen en esa memoria común.
+Threads are the smallest measure of execution in a program. Each thread has its own control flow, but they share the same memory space. This means that they can communicate with each other efficiently, but they can also conflict if they are not managed properly. In the case of philosophers, they do not communicate directly with each other through explicit messages (such as pipes or sockets), but interact indirectly through the shared resources (the forks) that reside in that common memory.
 
-## ¿Qué es el problema de los filósofos?
+## What is the philosophers' problem?
 
-El problema de los filósofos te va a guiar por todos los problemas que el multithreading puede presentar. Desde deadlocks hasta data races no te preocupes si todavía no entiendes lo que son, al final del artículo tendrás una idea clara de lo que son y cómo evitarlos.
+The philosopher's problem will guide you through all the problems that multithreading can present. From deadlocks to data races, don't worry if you still don't understand what they are, by the end of the article you will have a clear idea of what they are and how to avoid them.
 
-Pero vale cuál es el realmente el problema de los filósofos. En la implementación de 42 hay N filósofos donde N es un número mayor que 0. Cada filósofo tiene un tenedor a su izquierda y otro a su derecha. Para comer, necesita ambos tenedores. Y tú mi querido lector te estarás preguntando, ¿por qué 2 tenedores? No sé además que es un poco antihigiénico. Pero bueno, así es el problema. También tienes otros parámetros como el número de filósofos que ya hemos mencionado pero el número de tenedores es también el mismo número que el de filósofos. Así que si hay 5 filósofos, hay 5 tenedores. Tienes otros argumentos como el tiempo que tardan en morir, el tiempo que tardan en comer, el tiempo que tardan en dormir y por último un parámetro opcional que es la cantidad de veces que tienen que comer siendo este último un número mayor que 0. No lo he comentado pero el tiempo en este ejercicio se mide en milisegundos. Así que si un filósofo tarda 1000ms en comer, significa que tarda 1 segundo.
+But what is really the problem of the philosophers? In the implementation of 42 there are N philosophers where N is a number greater than 0. Each philosopher has a fork on his left and a fork on his right. To eat, he needs both forks. And you my dear reader may be asking yourself, why 2 forks? I don't know, besides it's a bit unhygienic. But well, that's the problem. You also have other parameters like the number of philosophers that we have already mentioned but the number of forks is also the same number as the number of philosophers. So if there are 5 philosophers, there are 5 forks. You have other arguments like the time they take to die, the time they take to eat, the time they take to sleep and finally an optional parameter which is the number of times they have to eat being a number greater than 0. I haven't mentioned it but time in this exercise is measured in milliseconds. So if a philosopher takes 1000ms to eat, it means it takes 1 second.
 
-Todo esto da a lugar a que no todos los filósofos pueden comer al mismo tiempo. Si un filósofo coge el tenedor de su izquierda y el de su derecha, los demás filósofos no pueden comer. Pero claro que pasa si dos filósofos cogen el mismo tenedor a la vez. Pues que tendremos nuestro primer problema que se llama **data racing** que es lo que vamos a ver a continuación.
+All this means that not all philosophers can eat at the same time. If one philosopher takes the fork on his left and the fork on his right, the other philosophers cannot eat. But of course what happens if two philosophers take the same fork at the same time. Well, we will have our first problem which is called **data racing** which is what we are going to see next.
 
-## Conceptos clave en el multithreading
+## Key Concepts in Multithreading
 
-### 1. Recursos compartidos y data racing
+### 1. Shared Resources and Data Racing
 
-Como hemos dicho los tenedores solo pueden ser usados por un filósofo a la vez. Pero claro con varios hilos es muy probable que el filósofo 1 intente usar el tenedor que está usando el filósofo 2 esto no se puede permitir. Entonces como podemos evitar que los hilos accedan a los tenedores al mismo tiempo? Pues la respuesta es con un mutex. Un mutex es un mecanismo de sincronización que permite que solo un hilo acceda a un recurso compartido a la vez. Es como si cada tenedor tuviera un candado y solo el filósofo que lo tiene en la mano puede usarlo.
+As we have said, the forks can only be used by one philosopher at a time. But of course with several threads it is very likely that philosopher 1 tries to use the fork that philosopher 2 is using and this cannot be allowed. So how can we prevent threads from accessing the forks at the same time? Well, the answer is with a mutex. A mutex is a synchronization mechanism that allows only one thread to access a shared resource at a time. It's like each fork had a lock and only the philosopher who has it in his hand can use it.
 
-> **Punto clave**: Un mutex es atómico: solo un hilo puede bloquearlo a la vez, independientemente de cuántos lo intenten simultáneamente.
+> **Key point**: A mutex is atomic: only one thread can lock it at a time, regardless of how many try simultaneously.
 
 ```c
-pthread_mutex_t tenedor_mutex[5];  // Array de mutexes para los tenedores
+pthread_mutex_t fork_mutex[5];  // Array of mutexes for the forks
 ```
 
-En este ejemplo tenemos un array de mutexes que representan 5 filósofos y 5 tenedores. Cada tenedor tiene su propio mutex que se usa para bloquear el acceso al tenedor mientras un filósofo lo está usando. Entonces cuando un filósofo quiere usar un tenedor, primero bloquea el mutex correspondiente y luego lo libera cuando ha terminado de usarlo.
+In this example we have an array of mutexes that represent 5 philosophers and 5 forks. Each fork has its own mutex that is used to block access to the fork while a philosopher is using it. So when a philosopher wants to use a fork, he first locks the corresponding mutex and then unlocks it when he is done using it.
 
-Pero por qué es tan importante los mutex. Bueno te voy a poner un ejemplo muy básico para que lo entiendas y lo puedas ejecutar tú mismo para ver la importancia.
+But why are mutexes so important? Well, I'm going to give you a very basic example so you can understand it and run it yourself to see the importance.
 
 ```c
 #include <stdio.h>
@@ -52,11 +52,11 @@ Pero por qué es tan importante los mutex. Bueno te voy a poner un ejemplo muy b
 #define NUM_THREADS 10
 #define NUM_INCREMENTS 100000
 
-int counter = 0; // variable compartida
+int counter = 0; // shared variable
 
 void* increment(void* arg) {
     for (int i = 0; i < NUM_INCREMENTS; ++i) {
-        counter++; // ⚠️ condición de carrera aquí
+        counter++; // ⚠️ race condition here
     }
     return NULL;
 }
@@ -72,218 +72,218 @@ int main() {
         pthread_join(threads[i], NULL);
     }
 
-    printf("Valor final del contador: %d (esperado: %d)\n", counter, NUM_THREADS * NUM_INCREMENTS);
+    printf("Final counter value: %d (expected: %d)\n", counter, NUM_THREADS * NUM_INCREMENTS);
     return 0;
 }
 ```
-En este ejemplo tenemos un contador que se incrementa 100000 veces por cada hilo. Si compilas y ejecutas el programa verás que el valor final del contador no es lo esperado. Pero por qué pasa esto? Porque al no estar protegido el hilo 1 puede leer el valor del contador antes de que el hilo 2 lo haya incrementado. Entonces el hilo 1 lee el valor del contador y lo incrementa pero el hilo 2 también lo hace al mismo tiempo. Entonces al final el valor del contador no es el esperado. Ya que las operaciones de sumar++ no son atómicas. Bueno Raúl y que significa que no sean atómicas? Si yo veo una línea de código que dice counter++ eso significa que el compilador va a hacer lo siguiente:
+In this example we have a counter that is incremented 100000 times by each thread. If you compile and run the program you will see that the final value of the counter is not what you expected. But why does this happen? Because since it's not protected, thread 1 can read the counter value before thread 2 has incremented it. So thread 1 reads the counter value and increments it but thread 2 also does the same at the same time. So in the end the counter value is not what we expected. Since the ++ operations are not atomic. Well Raul and what does it mean that they are not atomic? If I see a line of code that says counter++ that means the compiler is going to do the following:
 ```c
 counter = counter + 1;
 ```
-Pero aunque tú estés viendo una sola línea de código, el compilador lo ve como varias líneas de código. En realidad lo que hace el compilador es algo como esto (si lo sé podría explicarlo en asembly pero tampoco quiero que te duermas y además no se assembly :D): 
+But even though you are seeing a single line of code, the compiler sees it as several lines of code. Actually what the compiler does is something like this (yes I know I could explain it in assembly but I don't want you to fall asleep and besides I don't know assembly :D): 
 ```c
-int temp = counter; // Lee el valor actual
-temp = temp + 1; // Incrementa el valor
-counter = temp; // Escribe el nuevo valor
+int temp = counter; // Read the current value
+temp = temp + 1; // Increment the value
+counter = temp; // Write the new value
 ```
-Esto significa que el compilador tiene que leer el valor del contador, incrementarlo y luego escribirlo de nuevo. Pero claro si el hilo 1 lee el valor del contador y antes de que el hilo 2 lo haya incrementado, el hilo 2 también lee el valor del contador y lo incrementa. Entonces al final el valor del contador no es el esperado. Todo esto porque el acceso a la variable compartida (el contador) no está protegido entonces los dos hilos pueden acceder a ella al mismo tiempo.
+This means that the compiler has to read the counter value, increment it and then write it back. But of course if thread 1 reads the counter value and before thread 2 has incremented it, thread 2 also reads the counter value and increments it. So in the end the counter value is not what we expected. All this because the access to the shared variable (the counter) is not protected so both threads can access it at the same time.
 
-Si has ido siguiendo al explicación sabras que la solución a este problema es usar un mutex. Pero no tendriamos el mismo problema si el hilo1 y el hilo2 intentan acceder al mismo mutex a la vez?. Pues la respuesta es que no. El mutex es un mecanismo que sí es atómico esto quiere decir que no importa cuántos hilos intenten acceder al mutex al mismo tiempo, solo uno de ellos podrá acceder a él. Entonces si el hilo 1 bloquea el mutex, el hilo 2 tendrá que esperar a que el hilo 1 lo desbloquee antes de poder acceder a él. Lo que nos quita las condiciones de carrera. Bueno pues un problema menos ya solo te queda resolver tu propia vida y el resto del problema :D.
+If you have been following the explanation you will know that the solution to this problem is to use a mutex. But wouldn't we have the same problem if thread1 and thread2 try to access the same mutex at the same time? Well, the answer is no. The mutex is a mechanism that is atomic, which means that no matter how many threads try to access the mutex at the same time, only one of them will be able to access it. So if thread 1 locks the mutex, thread 2 will have to wait for thread 1 to unlock it before it can access it. This eliminates race conditions. Well, one problem less, now you only have to solve your own life and the rest of the problem :D.
 
-> **Solución para data races**: Proteger el acceso a recursos compartidos con mutex garantiza que solo un hilo pueda modificarlo a la vez, evitando condiciones de carrera y asegurando la integridad de los datos.
+> **Solution for data races**: Protecting access to shared resources with mutex ensures that only one thread can modify it at a time, avoiding race conditions and ensuring data integrity.
 
-Para verlo de una forma más visual, he creado estos pequeños gifs que puedes ver aquí:
+To see it in a more visual way, I have created these small gifs that you can see here:
 
-**Sin protección de mutex (data race):**
+**Without mutex protection (data race):**
 
-![Gif de un data race](/philos/data-race.gif)
+![Gif of a data race](/philos/data-race.gif)
 
-Este gif muestra una animación paso a paso de una condición de carrera (data race). Dos hilos (Thread A y Thread B) intentan incrementar el mismo contador al mismo tiempo. Cada uno lee el valor original, lo incrementa y lo escribe de nuevo... pero como lo hacen simultáneamente, uno de los incrementos se pierde.
+This gif shows a step-by-step animation of a race condition (data race). Two threads (Thread A and Thread B) try to increment the same counter at the same time. Each one reads the original value, increments it and writes it back... but since they do it simultaneously, one of the increments is lost.
 
-Aunque esperamos que el contador termine en 2, el valor final es solo 1. Esto muestra por qué counter++ no es una operación atómica y cómo el acceso concurrente sin sincronización puede causar errores impredecibles.
+Although we expect the counter to end at 2, the final value is only 1. This shows why counter++ is not an atomic operation and how concurrent access without synchronization can cause unpredictable errors.
 
-**Con protección de mutex (acceso seguro):**
-![Gif de un data race con mutex](/philos/data-race-mutex.gif)
+**With mutex protection (safe access):**
+![Gif of a data race with mutex](/philos/data-race-mutex.gif)
 
-En este segundo gif, se muestra la misma situación pero usando un mutex para proteger el acceso al contador. Cuando Thread A quiere incrementar el contador, primero bloquea el mutex. Thread B intenta hacer lo mismo, pero debe esperar hasta que Thread A termine y libere el mutex. De esta manera, las operaciones se ejecutan secuencialmente y el contador termina correctamente con el valor 2, evitando así la condición de carrera.
+In this second gif, the same situation is shown but using a mutex to protect access to the counter. When Thread A wants to increment the counter, it first locks the mutex. Thread B tries to do the same, but must wait until Thread A finishes and releases the mutex. This way, the operations are executed sequentially and the counter correctly ends with the value 2, thus avoiding the race condition.
 
-### 1.1. Semáforos: Control de Flujo con Capacidad
+### 1.1. Semaphores: Flow Control with Capacity
 
-Hasta ahora hemos hablado de los mutexes para garantizar que solo un hilo acceda a un recurso a la vez. Pero, ¿qué pasa si tenemos un recurso que puede ser utilizado por un número limitado de hilos simultáneamente? Aquí es donde entran los semáforos.
+So far we have talked about mutexes to ensure that only one thread accesses a resource at a time. But what if we have a resource that can be used by a limited number of threads simultaneously? This is where semaphores come in.
 
-> **Punto clave**: Un semáforo es como un contador de permisos disponibles que pueden adquirir los hilos, permitiendo controlar cuántos hilos concurrentes pueden acceder a un recurso o grupo de recursos.
+> **Key point**: A semaphore is like a counter of available permits that threads can acquire, allowing control of how many concurrent threads can access a resource or group of resources.
 
-Imagina una sala de cine con capacidad limitada. No solo una persona puede entrar (como con un mutex), sino que pueden entrar 50 personas a la vez.
+Imagine a movie theater with limited capacity. Not only one person can enter (as with a mutex), but 50 people can enter at the same time.
 
 ```c
-sem_t cine;
-sem_init(&cine, 0, 50);  // Inicializa el semáforo con 50 permisos
+sem_t cinema;
+sem_init(&cinema, 0, 50);  // Initialize the semaphore with 50 permits
 
-// Cuando un espectador quiere entrar
-sem_wait(&cine);  // Adquiere un permiso, el contador disminuye
-// El espectador ve la película...
-sem_post(&cine);  // Libera el permiso cuando se va, el contador aumenta
+// When a viewer wants to enter
+sem_wait(&cinema);  // Acquire a permit, the counter decreases
+// The viewer watches the movie...
+sem_post(&cinema);  // Release the permit when leaving, the counter increases
 ```
 
-Un semáforo actúa como un contador de permisos. Cuando un hilo quiere usar el recurso, "adquiere" un permiso (con `sem_wait`), y el contador disminuye. Cuando termina, "libera" el permiso (con `sem_post`), y el contador aumenta. Si el contador llega a cero, los nuevos hilos deben esperar hasta que se libere un permiso.
+A semaphore acts as a permit counter. When a thread wants to use the resource, it "acquires" a permit (with `sem_wait`), and the counter decreases. When it finishes, it "releases" the permit (with `sem_post`), and the counter increases. If the counter reaches zero, new threads must wait until a permit is released.
 
-#### Mutex vs. Semáforo
+#### Mutex vs. Semaphore
 
-Un caso especial de semáforo es el semáforo binario, que se inicializa con un valor de 1. ¡Este se comporta exactamente como un mutex! Solo permite que un hilo adquiera el permiso a la vez. Sin embargo, un mutex a menudo ofrece características adicionales que lo hacen más robusto y específico para la exclusión mutua.
+A special case of semaphore is the binary semaphore, which is initialized with a value of 1. This behaves exactly like a mutex! It only allows one thread to acquire the permit at a time. However, a mutex often offers additional features that make it more robust and specific for mutual exclusion.
 
-¿Cuándo usar uno u otro?
+When to use one or the other?
 
-- **Usa un mutex** cuando necesites exclusividad absoluta para un recurso (ej., proteger una variable compartida o una sección crítica de código donde solo un hilo debe operar).
-- **Usa un semáforo** cuando necesites controlar el acceso concurrente a un grupo de recursos limitados (ej., un pool de 10 conexiones a una base de datos o un buffer con capacidad limitada). También son útiles para sincronizar el orden de ejecución entre hilos.
+- **Use a mutex** when you need absolute exclusivity for a resource (e.g., protecting a shared variable or a critical section of code where only one thread should operate).
+- **Use a semaphore** when you need to control concurrent access to a group of limited resources (e.g., a pool of 10 database connections or a buffer with limited capacity). They are also useful for synchronizing the execution order between threads.
 
-Y después de explicarte por encima lo que son los semáforos te estarás preguntando bueno si los semáforos son tan buenos porque no los usamos siempre. Bueno la respuesta es que los semáforos son más complejos de implementar y pueden ser más propensos a errores si no se usan correctamente. Por eso en la mayoría de los casos es mejor usar un mutex. Y más en este caso ya que cada tenedor solo puede ser usado por un filósofo a la vez. Así que no necesitamos un semáforo para controlar el acceso a los tenedores. Y aunque a priori los semáforos parecen más utiles en este caso en concreto no lo son. Por eso coexisten los dos ya que habrá casos en los que un semáforo es más útil que un mutex y viceversa.
+And after explaining what semaphores are, you'll be asking yourself well if semaphores are so good why don't we always use them. Well, the answer is that semaphores are more complex to implement and can be more prone to errors if not used correctly. That's why in most cases it's better to use a mutex. And more in this case since each fork can only be used by one philosopher at a time. So we don't need a semaphore to control access to the forks. And although semaphores may seem more useful at first, in this specific case they are not. That's why both coexist since there will be cases where a semaphore is more useful than a mutex and vice versa.
 
-### 2. Deadlock (Bloqueo mutuo)
+### 2. Deadlock (Mutual Blocking)
 
-Nuestro mayor enemigo. Si cada filósofo toma el tenedor de su izquierda y espera el de la derecha, todos están bloqueados eternamente. Es como cuando quedas con tus amigos para decidir dónde comer y todos dicen "a mí me da igual, decidid vosotros"... y acabáis muriendo de hambre.
+Our greatest enemy. If each philosopher takes the fork on his left and waits for the one on the right, they are all blocked forever. It's like when you meet with your friends to decide where to eat and everyone says "I don't care, you guys decide"... and you all end up dying of hunger.
 
-> **Punto clave**: Un deadlock ocurre cuando dos o más hilos se bloquean eternamente, cada uno esperando por un recurso que otro tiene. En sistemas críticos, un deadlock puede causar fallos graves que requieren reiniciar todo el sistema.
+> **Key point**: A deadlock occurs when two or more threads block eternally, each waiting for a resource that another has. In critical systems, a deadlock can cause serious failures that require restarting the entire system.
 
-Para entender mejor el concepto de deadlock, observa esta imagen:
+To better understand the concept of deadlock, look at this image:
 
-![Diagrama de un deadlock entre filósofos](/philos/deadlock.svg)
+![Diagram of a deadlock between philosophers](/philos/deadlock.svg)
 
-En esta pequeña visualización se puede ver que cada filósofo ha cogido un tenedor (representado con la línea que va al triángulo). Esto crea una situación de bloqueo mutuo, donde cada filósofo está esperando al tenedor que tiene el filósofo a su derecha. Nadie puede comer y todos están atrapados en un ciclo de espera. Tendrías que evitar esta situación a toda costa.
+In this small visualization you can see that each philosopher has taken a fork (represented by the line going to the triangle). This creates a mutual blocking situation, where each philosopher is waiting for the fork that the philosopher on his right has. Nobody can eat and everyone is trapped in a waiting cycle. You would have to avoid this situation at all costs.
 
-Mi solución a este problema es simple aunque lo reconozco que no es la mejor. La solución es que cada filósofo par va a tener un pequeño delay a la hora de empezar a coger los tenedores. De esta manera si el filósofo 1 empieza a comer y el filósofo 2 no ha empezado a comer, el filósofo 2 no podrá coger el tenedor de la izquierda porque el filósofo 1 lo tiene cogido.
+My solution to this problem is simple although I admit it's not the best. The solution is that each even philosopher will have a small delay when starting to take the forks. This way if philosopher 1 starts eating and philosopher 2 hasn't started eating, philosopher 2 won't be able to take the left fork because philosopher 1 has it.
 
-### 3. Liberación de recursos
+### 3. Resource Release
 
-Cuando un filósofo ha terminado de comer, debe soltar ambos tenedores. Esto es como cuando terminas de comer en un restaurante y dejas el plato vacío en la mesa. En programación, esto se traduce en liberar los mutexes que has bloqueado.
+When a philosopher has finished eating, he must drop both forks. This is like when you finish eating in a restaurant and leave the empty plate on the table. In programming, this translates to releasing the mutexes you have locked.
 
 ```c
-void soltar_tenedores() {
-    pthread_mutex_unlock(&tenedor_mutex[id]);  // Suelta el tenedor izquierdo
-    pthread_mutex_unlock(&tenedor_mutex[(id + 1) % 5]);  // Suelta el tenedor derecho
+void release_forks() {
+    pthread_mutex_unlock(&fork_mutex[id]);  // Release the left fork
+    pthread_mutex_unlock(&fork_mutex[(id + 1) % 5]);  // Release the right fork
 }
 ```
 
-> **Punto clave**: Olvidar liberar los recursos es una de las causas más comunes de fugas de memoria y deadlocks en aplicaciones multihilo. Siempre desbloquea un mutex una vez que has terminado con él.
+> **Key point**: Forgetting to release resources is one of the most common causes of memory leaks and deadlocks in multithreaded applications. Always unlock a mutex once you are done with it.
 
-También es importante que se libere toda la memoria asignada dinámicamente (mediante malloc y funciones similares) al final del programa. Pero cuidado con esto ya que si usas Valgrind (una herramienta de detección de fugas de memoria) con un input en el que los filósofos deberían vivir indefinidamente, Valgrind hará que los filósofos mueran. Esto es debido a la ralentización que introduce Valgrind al monitorizar el programa. Así que si usas esta herramienta de depuración, ten en cuenta este comportamiento. De todas formas te recomiendo usarlo para detectar posibles fugas de memoria, pero no te preocupes si ves que los filósofos mueren prematuramente durante el análisis.
+It is also important that all dynamically allocated memory (through malloc and similar functions) is freed at the end of the program. But be careful with this because if you use Valgrind (a memory leak detection tool) with an input where the philosophers should live indefinitely, Valgrind will make the philosophers die. This is due to the slowdown that Valgrind introduces when monitoring the program. So if you use this debugging tool, keep this behavior in mind. Anyway, I recommend using it to detect possible memory leaks, but don't worry if you see that the philosophers die prematurely during the analysis.
 
-Otra solución para detectar problemas de concurrencia es usar la flag `-fsanitize=thread` en el makefile, que incluye la herramienta ThreadSanitizer para detectar data races:
+Another solution to detect concurrency problems is to use the `-fsanitize=thread` flag in the makefile, which includes the ThreadSanitizer tool to detect data races:
 
 ```makefile
 CFLAGS = -Wall -Wextra -Werror -fsanitize=thread
 ```
 
-Esta herramienta de depuración también ralentizará la ejecución del programa, pero está específicamente diseñada para detectar problemas de concurrencia como data races, a diferencia de Valgrind que se enfoca más en problemas de memoria.
+This debugging tool will also slow down the execution of the program, but it is specifically designed to detect concurrency problems like data races, unlike Valgrind which focuses more on memory problems.
 
-Otra cosa importante es el hecho de que el hilo principal del programa no puede morir antes que los demás hilos. Si el hilo principal muere, todos los demás hilos también mueren. Esto es como si el cocinero se va de la cocina y deja a los ayudantes solos. No van a saber qué hacer. Y este hilo principal se va a encargar de recoger a todos los demás hilos para liberar los recursos que han sido asignados.
+Another important thing is the fact that the main thread of the program cannot die before the other threads. If the main thread dies, all other threads also die. This is like if the cook leaves the kitchen and leaves the assistants alone. They won't know what to do. And this main thread will be in charge of collecting all the other threads to free the resources that have been allocated.
 
-## ¿Cómo lo aplicamos en el mundo real?
+## How do we apply it in the real world?
 
-En sistemas modernos, el multithreading está por todas partes:
+In modern systems, multithreading is everywhere:
 
-- **Navegadores web**: Cada pestaña es un proceso con múltiples hilos.
-- **Servidores**: Atienden miles de peticiones concurrentes.
-- **Aplicaciones móviles**: Mantienen la interfaz responsiva mientras hacen tareas en segundo plano.
-- **Bases de datos**: Gestionan transacciones concurrentes mientras mantienen la integridad de los datos.
+- **Web browsers**: Each tab is a process with multiple threads.
+- **Servers**: They serve thousands of concurrent requests.
+- **Mobile applications**: They keep the interface responsive while doing background tasks.
+- **Databases**: They manage concurrent transactions while maintaining data integrity.
 
-### Ejemplo en JavaScript con Web Workers
+### Example in JavaScript with Web Workers
 
-JavaScript tradicionalmente era de un solo hilo, pero con Web Workers podemos ejecutar código en hilos separados:
+JavaScript was traditionally single-threaded, but with Web Workers we can execute code in separate threads:
 
 ```javascript
-// En el hilo principal
-const worker = new Worker('tarea-intensa.js');
+// In the main thread
+const worker = new Worker('intensive-task.js');
 
 worker.onmessage = function(e) {
-    console.log('La tarea ha finalizado con resultado:', e.data);
+    console.log('The task has finished with result:', e.data);
 };
 
-worker.postMessage('Inicia el cálculo');
+worker.postMessage('Start the calculation');
 
-// En tarea-intensa.js (ejecutado en otro hilo)
+// In intensive-task.js (executed in another thread)
 onmessage = function(e) {
-    // Realizar cálculo intensivo...
-    const resultado = 42;  // El sentido de la vida, según Douglas Adams
-    postMessage(resultado);
+    // Perform intensive calculation...
+    const result = 42;  // The meaning of life, according to Douglas Adams
+    postMessage(result);
 };
 ```
 
-### Concurrencia en Bases de Datos
+### Concurrency in Databases
 
-Las bases de datos enfrentan desafíos similares a los filósofos comensales. Cuando varios usuarios intentan modificar los mismos datos simultáneamente, pueden ocurrir problemas como:
+Databases face challenges similar to the dining philosophers. When multiple users try to modify the same data simultaneously, problems can occur such as:
 
-1. **Lecturas sucias**: Un usuario lee datos que otro usuario está modificando pero aún no ha confirmado.
-2. **Actualizaciones perdidas**: Similar a nuestro problema de data race, donde una actualización sobrescribe a otra.
+1. **Dirty reads**: A user reads data that another user is modifying but has not yet confirmed.
+2. **Lost updates**: Similar to our data race problem, where one update overwrites another.
 
-Para solucionarlo, las bases de datos utilizan técnicas como:
+To solve this, databases use techniques like:
 
 ```sql
--- Bloqueo explícito (similar a nuestros mutex)
+-- Explicit locking (similar to our mutexes)
 BEGIN TRANSACTION;
-SELECT * FROM cuentas WHERE id = 123 FOR UPDATE; -- Bloquea la fila
--- Hacer operaciones...
-UPDATE cuentas SET saldo = saldo - 100 WHERE id = 123;
-COMMIT; -- Libera el bloqueo
+SELECT * FROM accounts WHERE id = 123 FOR UPDATE; -- Lock the row
+-- Do operations...
+UPDATE accounts SET balance = balance - 100 WHERE id = 123;
+COMMIT; -- Release the lock
 ```
 
-> **Punto clave**: Los sistemas de gestión de bases de datos implementan niveles de aislamiento de transacciones para evitar condiciones de carrera y deadlocks, permitiendo millones de operaciones concurrentes de forma segura.
+> **Key point**: Database management systems implement transaction isolation levels to avoid race conditions and deadlocks, allowing millions of concurrent operations safely.
 
-## Conclusión
+## Conclusion
 
-El multithreading es como una orquesta donde cada músico (hilo) debe coordinarse perfectamente con los demás. Un solo error y toda la sinfonía puede derrumbarse. Y creeme que lo hará.
+Multithreading is like an orchestra where each musician (thread) must coordinate perfectly with the others. A single error and the entire symphony can collapse. And believe me, it will.
 
-> **Reflexión final**: La programación concurrente nos enseña que el verdadero desafío no está en ejecutar muchas tareas a la vez, sino en coordinarlas de manera que trabajen juntas sin interferirse. Como en la vida, el equilibrio es clave.
+> **Final reflection**: Concurrent programming teaches us that the real challenge is not in executing many tasks at once, but in coordinating them so that they work together without interfering with each other. As in life, balance is key.
 
-El problema de los filósofos nos enseña lecciones fundamentales sobre cómo diseñar sistemas concurrentes robustos.
+The philosophers' problem teaches us fundamental lessons about how to design robust concurrent systems.
 
-Si te ha gustado este artículo, compártelo con tus amigos filósofos y programadores o con cualquiera que necesite leerlo. ¡Hasta la próxima!
+If you liked this article, share it with your philosopher and programmer friends or with anyone who needs to read it. Until next time!
 
-## Más Allá de lo Básico: Un Vistazo Rápido a Conceptos Avanzados
+## Beyond the Basics: A Quick Look at Advanced Concepts
 
-La programación concurrente es un campo vasto y complejo. Si bien los mutexes y semáforos son fundamentales, existen desafíos y soluciones más avanzadas que los ingenieros de sistemas utilizan para construir software robusto:
+Concurrent programming is a vast and complex field. While mutexes and semaphores are fundamental, there are more advanced challenges and solutions that systems engineers use to build robust software:
 
-### Inversión de Prioridad y Herencia de Prioridad
+#### Priority Inversion and Priority Inheritance
 
-En sistemas donde los hilos tienen diferentes prioridades (como sistemas en tiempo real), puede ocurrir un fenómeno llamado inversión de prioridad. Esto sucede cuando un hilo de alta prioridad se ve obligado a esperar a un hilo de baja prioridad que tiene un recurso que necesita, y ese hilo de baja prioridad es a su vez interrumpido por un hilo de prioridad media. 
+In systems where threads have different priorities (like real-time systems), a phenomenon called priority inversion can occur. This happens when a high-priority thread is forced to wait for a low-priority thread that has a resource it needs, and that low-priority thread is in turn interrupted by a medium-priority thread.
 
-> **Punto clave**: Para mitigar la inversión de prioridad, algunos mutexes implementan la herencia de prioridad, elevando temporalmente la prioridad del hilo que posee el mutex a la del hilo de mayor prioridad que está esperando por él.
+> **Key point**: To mitigate priority inversion, some mutexes implement priority inheritance, temporarily raising the priority of the thread that owns the mutex to that of the highest priority thread waiting for it.
 
-### Tipos Especiales de Mutexes
+#### Special Types of Mutexes
 
-No todos los mutexes son iguales. Las implementaciones modernas ofrecen variaciones:
+Not all mutexes are equal. Modern implementations offer variations:
 
-- **Errorcheck Mutexes**: Útiles para depuración, detectan y reportan errores si un hilo intenta desbloquear un mutex que no posee o si intenta bloquear un mutex que ya tiene.
-- **Recursive Mutexes**: Permiten que el mismo hilo bloquee el mutex varias veces. El mutex solo se libera completamente cuando se desbloquea el mismo número de veces que se bloqueó.
-- **Timed Mutexes**: Permiten a un hilo intentar adquirir el mutex por un tiempo limitado, sin bloquearse indefinidamente si no lo consigue.
-- **Robust Mutexes**: Diseñados para manejar el fallo inesperado del hilo que los posee. Si el hilo que tiene el mutex muere repentinamente, el robust mutex es liberado y marcado, alertando al siguiente hilo que lo adquiera que el recurso podría estar en un estado inconsistente.
+- **Errorcheck Mutexes**: Useful for debugging, they detect and report errors if a thread tries to unlock a mutex it doesn't own or if it tries to lock a mutex it already has.
+- **Recursive Mutexes**: Allow the same thread to lock the mutex multiple times. The mutex is only completely released when it is unlocked the same number of times it was locked.
+- **Timed Mutexes**: Allow a thread to try to acquire the mutex for a limited time, without blocking indefinitely if it doesn't get it.
+- **Robust Mutexes**: Designed to handle the unexpected failure of the thread that owns them. If the thread that has the mutex dies suddenly, the robust mutex is released and marked, alerting the next thread that acquires it that the resource might be in an inconsistent state.
 
-### Compartibilidad entre Procesos
+#### Shareability between Processes
 
-Aunque los mutexes suelen usarse entre hilos del mismo proceso, algunos pueden configurarse para ser compartidos y sincronizar el acceso a recursos entre diferentes procesos, lo que resulta útil en arquitecturas de aplicaciones más complejas.
+Although mutexes are usually used between threads of the same process, some can be configured to be shared and synchronize access to resources between different processes, which is useful in more complex application architectures.
 
-### Spinlocks vs. Mutexes
+#### Spinlocks vs. Mutexes
 
-Mientras que un mutex pone a dormir a un hilo que no puede adquirir el recurso (liberando la CPU), un spinlock hace que el hilo espere en un bucle ocupado (busy-wait).
+While a mutex puts a thread to sleep that cannot acquire the resource (freeing the CPU), a spinlock makes the thread wait in a busy loop (busy-wait).
 
 ```c
-// Ejemplo simplificado de un spinlock
+// Simplified example of a spinlock
 while (!atomic_compare_exchange(&lock, 0, 1)) {
-    // Sigue intentando hasta conseguir el bloqueo
+    // Keep trying until getting the lock
 }
 ```
 
-> **Punto clave**: Los spinlocks son más eficientes solo cuando el bloqueo es extremadamente corto, evitando el coste de cambio de contexto del sistema operativo.
+> **Key point**: Spinlocks are more efficient only when the lock is extremely short, avoiding the cost of operating system context switching.
 
-### Futex (Fast Userspace Mutex)
+#### Futex (Fast Userspace Mutex)
 
-Una optimización de bajo nivel (específica de Linux) que permite a los mutexes y semáforos operar en el espacio de usuario la mayor parte del tiempo, recurriendo al kernel solo cuando un hilo realmente necesita ser puesto a dormir o despertado. Esto mejora significativamente el rendimiento en situaciones de baja contención.
+A low-level optimization (specific to Linux) that allows mutexes and semaphores to operate in user space most of the time, resorting to the kernel only when a thread actually needs to be put to sleep or woken up. This significantly improves performance in low contention situations.
 
-Bueno y ahora sí que sí me despido. Espero que hayas disfrutado de este artículo y que hayas aprendido algo nuevo sobre el multithreading y el problema de los filósofos. Si tienes alguna pregunta o comentario, no dudes en ponerte en contacto conmigo. Por último te invito a que sigas investigando sobre el tema y que sigas aprendiendo. La programación concurrente es un campo fascinante y muy útil en la actualidad. Así que no dudes en seguir explorando y aprendiendo más sobre este tema.
+Well, and now I really say goodbye. I hope you enjoyed this article and learned something new about multithreading and the philosophers' problem. If you have any questions or comments, don't hesitate to contact me. Finally, I invite you to keep researching the topic and keep learning. Concurrent programming is a fascinating and very useful field nowadays. So don't hesitate to keep exploring and learning more about this topic.
 
-## Recursos adicionales
+## Additional Resources
 
-- [Philosophers Visualizer](https://nafuka11.github.io/philosophers-visualizer/) - Una herramienta interactiva para visualizar el problema de los filósofos comensales y entender mejor cómo funcionan los algoritmos de sincronización.
+- [Philosophers Visualizer](https://nafuka11.github.io/philosophers-visualizer/) - An interactive tool to visualize the dining philosophers problem and better understand how synchronization algorithms work.
 
-- [Wikipedia: Dining Philosophers Problem](https://en.wikipedia.org/wiki/Dining_philosophers_problem) - El artículo de Wikipedia sobre el clásico problema de los filósofos comensales, con explicaciones detalladas y visualizaciones.
+- [Wikipedia: Dining Philosophers Problem](https://en.wikipedia.org/wiki/Dining_philosophers_problem) - The Wikipedia article about the classic dining philosophers problem, with detailed explanations and visualizations.
 
-- [Thread Functions in C/C++](https://www.geeksforgeeks.org/thread-functions-in-c-c/) - Una guía completa sobre las funciones de hilos en C/C++, ideal para entender la implementación técnica de los conceptos discutidos en este artículo.
+- [Thread Functions in C/C++](https://www.geeksforgeeks.org/thread-functions-in-c-c/) - A complete guide on thread functions in C/C++, ideal for understanding the technical implementation of the concepts discussed in this article.

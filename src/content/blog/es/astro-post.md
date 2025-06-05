@@ -154,7 +154,7 @@ Como puedes ver, Astro se acerca mucho al rendimiento del HTML puro mientras ofr
 
 Bueno, ahora vamos a lo que nos interesa: ¿por qué elegí Astro para mi blog? Aquí te detallo algunas de las razones clave:
 
-1. **Rendimiento Superior**: Astro se centra obsesivamente en el rendimiento. Genera sitios estáticos que son increíblemente rápidos y ligeros, lo cual es ideal para un blog donde la velocidad de carga es crucial para la experiencia del usuario. A nadie le gusta esperar a que una página cargue, y menos si es un blog.
+1. **Rendimiento Superior**: Astro se centra en el rendimiento. Genera sitios estáticos que son increíblemente rápidos y ligeros, lo cual es ideal para un blog donde la velocidad de carga es crucial para la experiencia del usuario. A nadie le gusta esperar a que una página cargue, y menos si es un blog.
 
 2. **Flexibilidad de Frameworks**: Astro te permite usar diferentes frameworks de JavaScript (React, Vue, Svelte, etc.) en el mismo proyecto. Esto significa que puedes elegir la mejor herramienta para cada tarea sin estar atado a un solo framework. Sin embargo, ¡cuidado con esto! Si terminas creando un proyecto usando demasiados frameworks, podría volverse más complicado de lo esperado. Si al final vas a usar Astro pero te ves creando la mayoría de tus componentes en React, quizás lo mejor hubiese sido usar React directamente.
 
