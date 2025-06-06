@@ -17,6 +17,8 @@ export function useTranslations(lang: keyof typeof translations) {
 // Create a utility for creating language-aware paths
 export function useTranslatedPath(lang: keyof typeof translations) {
   return function translatePath(path: string, targetLang: string = lang) {
+    // Always include the language prefix for consistency
+    // This ensures all blog and page routes have proper language prefixes
     return `/${targetLang}${path.startsWith('/') ? path : `/${path}`}`;
   };
 }
