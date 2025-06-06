@@ -1,10 +1,10 @@
 ---
 import HeaderLink from './HeaderLink.astro';
 import ThemeSwitcher from './ThemeSwitcher.astro';
+import LanguageSwitcher from './LanguageSwitcher.astro';
 import BurgerMenu from './BurgerMenu.astro';
 import { SITE_TITLE } from '../consts';
 import { getLangFromUrl, useTranslations, useTranslatedPath } from '../i18n/utils';
-import { languages } from '../i18n/ui';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -26,28 +26,7 @@ const translatePath = useTranslatedPath(lang);
 				<HeaderLink href={translatePath('/cv')}>{t('nav.cv')}</HeaderLink>
 			</div>
 			<div class="social-links">
-				<div class="language-switcher">
-					{Object.entries(languages).map(([langCode, langName]) => {
-						const path = Astro.url.pathname;
-						// Handle different URL patterns
-						let targetPath;
-						if (path.includes(`/${lang}/`)) {
-							// Normal language-prefixed path
-							targetPath = path.replace(`/${lang}/`, `/${langCode}/`);
-						} else if (path === '/') {
-							// Root path
-							targetPath = `/${langCode}/`;
-						} else {
-							// Fallback - just add the language code to the beginning
-							targetPath = `/${langCode}/`;
-						}
-						return (
-							<a href={targetPath} class={langCode === lang ? 'active' : ''}>
-								{langName}
-							</a>
-						);
-					})}
-				</div>
+				<LanguageSwitcher />
 				<ThemeSwitcher />
 				<a href="https://github.com/RaulCasado" target="_blank">
 					<span class="sr-only">Ir al perfil de GitHub</span>
