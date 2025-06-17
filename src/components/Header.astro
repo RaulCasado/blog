@@ -113,23 +113,22 @@ const translatePath = useTranslatedPath(lang);
 	.nav-container {
 		display: flex;
 		align-items: center;
-		justify-content: center;
+		justify-content: space-between;
 		flex-grow: 1;
-		position: relative;
+		max-width: 100%;
 	}
 	
 	.internal-links {
 		display: flex;
 		align-items: center;
-		position: absolute;
-		left: 50%;
-		transform: translateX(-50%);
+		flex-grow: 1;
+		justify-content: center;
 	}
 	
 	.social-links {
 		display: flex;
 		align-items: center;
-		margin-left: auto;
+		flex-shrink: 0;
 	}
 	
 	nav a {
@@ -235,8 +234,6 @@ const translatePath = useTranslatedPath(lang);
 			align-items: center;
 			gap: 1rem;
 			width: 100%;
-			position: static;
-			transform: none;
 		}
 		
 		.internal-links a {
