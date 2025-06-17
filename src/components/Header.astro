@@ -99,7 +99,7 @@ const translatePath = useTranslatedPath(lang);
 		align-items: center;
 		justify-content: space-between;
 		position: relative;
-		gap: 35rem;
+		gap: 1rem;
 	}
 	
 	.logo-container {
@@ -107,13 +107,29 @@ const translatePath = useTranslatedPath(lang);
 		align-items: center;
 		justify-content: space-between;
 		width: auto;
+		flex-shrink: 0;
 	}
 	
 	.nav-container {
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
+		justify-content: center;
 		flex-grow: 1;
+		position: relative;
+	}
+	
+	.internal-links {
+		display: flex;
+		align-items: center;
+		position: absolute;
+		left: 50%;
+		transform: translateX(-50%);
+	}
+	
+	.social-links {
+		display: flex;
+		align-items: center;
+		margin-left: auto;
 	}
 	
 	nav a {
@@ -139,33 +155,6 @@ const translatePath = useTranslatedPath(lang);
 		align-items: center;
 	}
 	
-	.language-switcher {
-		display: flex;
-		gap: 0.5rem;
-		align-items: center;
-		margin-right: 0.75rem;
-	}
-	
-	.language-switcher a {
-		padding: 0.25rem 0.5rem;
-		border-radius: 4px;
-		font-size: 0.9rem;
-		color: var(--text-color);
-		text-decoration: none;
-		transition: background-color 0.2s ease;
-	}
-	
-	.language-switcher a:hover {
-		background-color: hsl(var(--accent));
-		color: hsl(var(--accent-fg));
-	}
-	
-	.language-switcher a.active {
-		background-color: hsl(var(--accent));
-		color: hsl(var(--accent-fg));
-		font-weight: bold;
-	}
-	
 	.social-links > * {
 		display: flex;
 		align-items: center;
@@ -173,6 +162,44 @@ const translatePath = useTranslatedPath(lang);
 	
 	body.menu-open {
 		overflow: hidden;
+	}
+	
+	/* Medium screen adjustments */
+	@media (max-width: 1400px) {
+		.internal-links {
+			gap: 0.5rem;
+		}
+		
+		.internal-links a {
+			padding: 1em 0.3em;
+			font-size: 0.9rem;
+		}
+	}
+	
+	@media (max-width: 1200px) {
+		header {
+			padding: 0 0.5em;
+		}
+		
+		.internal-links {
+			gap: 0.25rem;
+		}
+		
+		.internal-links a {
+			padding: 1em 0.25em;
+			font-size: 0.85rem;
+		}
+		
+		.social-links {
+			gap: 0.25rem;
+		}
+	}
+	
+	@media (max-width: 1000px) {
+		.internal-links a {
+			padding: 1em 0.15em;
+			font-size: 0.8rem;
+		}
 	}
 	
 	@media (max-width: 768px) {
@@ -208,6 +235,8 @@ const translatePath = useTranslatedPath(lang);
 			align-items: center;
 			gap: 1rem;
 			width: 100%;
+			position: static;
+			transform: none;
 		}
 		
 		.internal-links a {
