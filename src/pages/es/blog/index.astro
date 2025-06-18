@@ -2,6 +2,7 @@
 import BaseHead from '../../../components/BaseHead.astro';
 import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
+import { Image } from 'astro:assets';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../../consts';
 import { getCollection } from 'astro:content';
 import FormattedDate from '../../../components/FormattedDate.astro';
@@ -53,7 +54,15 @@ function getReadingTime(post) {
 									<div class={`blog-card ${index === 0 ? 'featured' : ''}`}>
 										<a href={`/es/blog/${post.id.replace('es/', '')}/`}>
 											<div class="blog-card-image">
-												<img width={720} height={360} src={post.data.heroImage} alt="" />
+													<Image 
+														width={720} 
+														height={360} 
+														src={post.data.heroImage} 
+														alt={post.data.heroImageAlt || post.data.title}
+														format="webp"
+														quality={80}
+														loading={index === 0 ? "eager" : "lazy"}
+													/>
 												{index === 0 && <div class="featured-badge">Destacado</div>}
 											</div>
 											<div class="blog-card-content">

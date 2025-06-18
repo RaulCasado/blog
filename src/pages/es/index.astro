@@ -4,7 +4,7 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
 import { getLangFromUrl, useTranslations, useTranslatedPath } from '../../i18n/utils';
-
+import { Image } from 'astro:assets';
 const lang = 'es';
 const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);
@@ -31,12 +31,14 @@ const translatePath = useTranslatedPath(lang);
 							</div>
 						</div>
 						<div class="hero-image">
-							<img 
+							<Image 
 								src="/raul.jpeg" 
 								alt="Raúl Casado - Desarrollador Web" 
-								width="400" 
-								height="400"
-								loading="eager" 
+								width={400} 
+								height={400}
+								loading="eager"
+								format="webp"
+								quality={85}
 							/>
 						</div>
 					</div>
