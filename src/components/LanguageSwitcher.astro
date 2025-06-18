@@ -50,6 +50,11 @@ const flagIcons = {
     'en': '🇬🇧'
 };
 
+const languageAbbreviations = {
+    'es': 'ES',
+    'en': 'EN'
+};
+
 const languageNames = {
     'es': t('lang.spanish'),
     'en': t('lang.english')
@@ -66,6 +71,7 @@ const languageNames = {
     >
         {Object.entries(languages).map(([langCode, langName]) => {
             const flag = flagIcons[langCode as keyof typeof flagIcons];
+            const abbr = languageAbbreviations[langCode as keyof typeof languageAbbreviations];
             const translatedName = languageNames[langCode as keyof typeof languageNames];
             return (
                 <option 
@@ -73,7 +79,7 @@ const languageNames = {
                     selected={langCode === lang}
                     data-path={getLanguagePath(langCode)}
                 >
-                    {flag} {translatedName}
+                    {flag} {abbr}
                 </option>
             );
         })}
@@ -115,7 +121,7 @@ const languageNames = {
         color: hsl(var(--foreground));
         cursor: pointer;
         transition: all 0.2s ease;
-        min-width: 120px;
+        min-width: 110px;
         background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
         background-position: right 0.5rem center;
         background-repeat: no-repeat;
