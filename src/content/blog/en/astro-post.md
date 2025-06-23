@@ -17,7 +17,7 @@ Let's dive in!
 
 ## What is Astro?
 
-To understand why I chose Astro, we first need to know what Astro is. Yeah sure another JS framework anyone surprised? But this one is unique with features that make it special for certain types of projects. Its philosophy of 'islands' is fundamental, imagine that each interactive component of your page is a small island of JavaScript, isolated from the rest of the content. This means only the JavaScript necessary for each component to load, which translates into impressive performance. You'll enjoy a fast and fluid user experience without sacrificing interactivity. In addition, Astro is incredibly fast and lightweight, making it perfect for blogs and static websites. In short, Astro focuses on speed and efficiency, prioritising the delivery of pure HTML to the browser, making it an excellent choice where performance is paramount.
+To understand why I chose Astro, we first need to know what Astro is. Yeah sure another JS framework anyone surprised? But this one is unique with features that make it special for certain types of projects. Its philosophy of 'islands' is fundamental, imagine that each interactive component of your page is a small island of JavaScript, isolated from the rest of the content. This means only the JavaScript necessary for each component to load, which translates into impressive performance. You'll enjoy a fast and fluid user experience without sacrificing interactivity. In addition, Astro is incredibly fast and lightweight, making it perfect for blogs and static websites. In short, Astro focuses on speed and efficiency, prioritising the delivery of pure HTML to the browser, making it an excellent choice where performance matter most.
 
 ### Component Syntax Differences
 
@@ -138,12 +138,13 @@ One of the keys that makes Astro so fast is its 'Zero JavaScript by Default' phi
 
 To better understand the performance difference between Astro and other popular frameworks, let's take a look at some rough numbers based on tests of simple blog-like websites:
 
-| Framework | Initial load time | Sent JS size | Compilation tiem | Lighthouse score |
-|-----------|-------------------------|-------------------|------------------------|----------------------|
-| Astro     | ~0.5s                   | ~30KB             | ~1.5s                  | 95-100               |
-| Next.js   | ~1.2s                   | ~90KB             | ~3s                    | 85-95                |
-| Gatsby    | ~1.0s                   | ~120KB            | ~5s                    | 80-95                |
-| Plain HTML| ~0.4s                   | 0KB               | N/A                    | 95-100               |
+| Framework | Initial load time | Sent JS size | Compilation time | Lighthouse score |
+|-----------|-------------------|--------------|------------------|------------------|
+| Astro     | ~0.5s             | ~30KB        | ~1.5s            | 95-100           |
+| Next.js   | ~1.2s             | ~90KB        | ~3s              | 85-95            |
+| Gatsby    | ~1.0s             | ~120KB       | ~5s              | 80-95            |
+| Hugo      | ~0.3s             | ~0-10KB     | ~0.8s            | 95-100           |
+| Plain HTML| ~0.4s             | 0KB          | N/A              | 95-100           |
 
 *Note: These numbers are approximate and may vary depending on project complexity, optimisation and hosting. Based on testing of simple blog-like sites with static content and minimal interactivity*.
 
@@ -153,7 +154,7 @@ As you can see, Astro comes very close to pure HTML performance while offering m
 
 So, why Astro? Here are some of the key reasons I picked it for my blog:
 
-1. **Superior Performance**: Astro focuses on performance. It generates static sites that are incredibly fast and light, which is ideal for a blog where loading speed is crucial to the user experience. Nobody likes to wait for a page to load, especially not a blog.
+1. **Superior Performance**: Astro focuses on performance. It generates static sites that are incredibly fast and light, which is ideal for a blog where loading speed is crucial to the user experience. Nobody likes to wait for a page to load.
 
 2. **Frameworks flexibility**: Astro allows you to use different JavaScript frameworks (React, Vue, Svelte, etc.) in the same project. This means that you can choose the best tool for each task without being tied to a single framework. However, be careful with this! If you end up creating a project using too many frameworks, it could become more complicated than expected. If you end up using Astro but find yourself creating most of your components in React, maybe it would have been better to use React directly.
 
