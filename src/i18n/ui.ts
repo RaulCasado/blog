@@ -107,7 +107,7 @@ export const translations = {
         'cv.fortytwo.current': 'Current',
         'cv.fortytwo.role': '42 Student',
         'cv.politecnico.name': 'I.E.S Politécnico Jesús Marín',
-        'cv.politecnico.year': '2023',
+        'cv.politecnico.year': '2021-2023',
         'cv.politecnico.degree': 'Web Application Development',
         
         // Soft skills and badges
@@ -222,11 +222,12 @@ export const translations = {
         'cv.availability.description': 'Disponibilidad tanto horaria como geográfica.',
         
         // Sección de educación
+        'cv.education.title': 'Educación',
         'cv.fortytwo.name': '42 Málaga (Telefónica)',
         'cv.fortytwo.current': 'Actual',
         'cv.fortytwo.role': 'Estudiante de 42',
         'cv.politecnico.name': 'I.E.S Politécnico Jesús Marín',
-        'cv.politecnico.year': '2023',
+        'cv.politecnico.year': '2021-2023',
         'cv.politecnico.degree': 'Desarrollo de aplicaciones web',
         
         // Habilidades blandas y etiquetas
