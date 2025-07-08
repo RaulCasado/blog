@@ -11,7 +11,7 @@ export interface Props {
 const { headings, title = "Tabla de Contenidos" } = Astro.props;
 
 // Filter to only include h2 and h3 headings (depth 2 and 3)
-const filteredHeadings = headings.filter((heading) => heading.depth >= 2 && heading.depth <= 3);
+const filteredHeadings = headings.filter((heading) => heading.depth === 2);
 ---
 
 <nav class="toc-container">
