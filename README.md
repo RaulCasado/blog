@@ -2,6 +2,8 @@
 
 This is my personal blog and portfolio, built with [Astro](https://astro.build/). It's designed to be fast, content-focused, and easily maintainable.
 
+[Leer en Español](README_es.md)
+
 ## ✨ Features
 
 -   ✅ Minimal styling (make it your own!)
