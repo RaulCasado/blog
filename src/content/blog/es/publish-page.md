@@ -136,7 +136,7 @@ Vamos paso a paso a ver qué pasa cuando escribes un dominio en tu navegador.
 5. **Conexión al servidor web**: Con la dirección IP en mano, el navegador establece una conexión con el servidor web. Esto implica enviar una solicitud HTTP (o HTTPS) al servidor para obtener los archivos del sitio web. El servidor web recibe la solicitud y responde enviando los archivos necesarios para mostrar la página web en el navegador del usuario.
 6. **Renderizado de la página**: Finalmente, el navegador recibe los archivos del servidor y los procesa para mostrar la página web al usuario. Esto incluye interpretar el HTML, aplicar estilos CSS y ejecutar cualquier código JavaScript necesario para que la página funcione correctamente.
 
-## Hosting ¿donde vive mi web?
+## Hosting: ¿dónde vive mi web?
 
 Vale, ya que eres un pro en dominios, ahora vamos a hablar de hosting. El hosting es el servicio que te permite alojar tu sitio web en un servidor para que sea accesible en Internet. Es como el lugar donde vive tu sitio web. Existen diferentes tipos de hosting, y cada uno tiene sus propias características y ventajas.
 
@@ -219,6 +219,8 @@ dist/
    ```
 5. **¡Deploy automático!** En 2-3 minutos tienes tu URL temporal: `zealous-curie-123abc.netlify.app`
 
+![Configuración final en Netlify](/deploy/netlify-final-conf.png)
+
 **¡Mi sitio ya está online!** Pero con una URL fea. Hora de conectar mi dominio.
 
 #### 3. Conectando mi dominio con Netlify
@@ -228,6 +230,10 @@ dist/
 2. "Add custom domain" → escribo `raulcasado.com`
 3. Netlify verifica que poseo el dominio (puede pedir un TXT record temporal)
 4. **Netlify configura todo automáticamente**
+
+Aquí puedes ver una captura de cómo queda la configuración final en Netlify una vez que has añadido tu dominio personalizado:
+
+![Configuración final del dominio en Netlify](/deploy/netlify-final-conf.png)
 
 **Nota:** No necesitas cambiar nameservers manualmente como antes. Netlify se encarga de configurar los DNS records necesarios.
 
@@ -239,6 +245,11 @@ dist/
 - En mi caso, tardó unas 2 horas
 
 **Cómo verificar la propagación:**
+Puedes usar herramientas online como [whatsmydns.net](https://whatsmydns.net) para ver cómo se propaga tu dominio por el mundo. Verás algo así, con marcas de verificación verdes a medida que los servidores se actualizan:
+
+![Verificación de la propagación DNS en whatsmydns.net](/deploy/what-my-dns.png)
+
+O también puedes usar la terminal:
 ```bash
 # Verificar desde terminal
 dig raulcasado.com
@@ -258,7 +269,11 @@ En unos minutos, `https://raulcasado.com` funcionaba perfectamente.
 
 ### Mi configuración DNS final
 
-Después de todo el proceso, así quedó mi configuración DNS real:
+Después de todo el proceso, así quedó mi configuración DNS real en mi registrador de dominios (Namecheap en mi caso):
+
+![Configuración de los DNS en Namecheap para apuntar a Netlify](/deploy/dns-final-namecheap.png)
+
+Como puedes ver en la imagen, la configuración principal es un registro CNAME que apunta `www` a la URL de Netlify.
 
 ```
 # Mi CNAME específico (desde Namecheap)
@@ -298,7 +313,7 @@ El proceso es prácticamente idéntico:
 4. Esperar propagación
 5. ¡Listo!
 
-## Como tener un email profesional
+## Cómo tener un email profesional
 
 Una de las cosas que más me llamó la atención cuando empecé a publicar mi web fue la posibilidad de tener un email profesional con mi propio dominio. Esto no solo le da un toque más profesional a tu presencia en línea, sino que también te permite gestionar tus correos electrónicos de manera más efectiva.
 
@@ -324,7 +339,11 @@ Obviamente Zoho te pedirá verificar que eres el propietario del dominio. Para e
 
 #### 2. Configurar los registros MX
 
-Esta es la parte más importante. Los registros MX le dicen al mundo "los emails para este dominio van a estos servidores". En mi proveedor de dominios (yo uso Namecheap), añadí:
+Esta es la parte más importante. Los registros MX le dicen al mundo "los emails para este dominio van a estos servidores". En mi proveedor de dominios (yo uso Namecheap), añadí los registros que me proporcionó Zoho. La configuración final se ve así:
+
+![Configuración de los registros MX en Namecheap para Zoho Mail](/deploy/mx-record-final.png)
+
+Estos son los valores que usé yo, pero recuerda que podrían variar según el proveedor de correo que elijas, así que asegúrate de seguir las instrucciones específicas de Zoho Mail o del proveedor que estés utilizando.
 
 ```
 Tipo: MX  | Nombre: @  | Valor: mx.zoho.eu     | Prioridad: 10
@@ -376,7 +395,7 @@ Cabe recalcar que los registros DMARC son opcionales, pero altamente recomendado
 
 #### 6. Verificar la configuración
 
-Una vez que hayas añadido todo tendrás que esperar un tiempo a que los cambios se propaguen. No te preocupes una vez que hayas configurado todo, ve pulsando verificar en Zoho Mail y te dirá si todo está correcto. Si ves algún error, revisa los registros que has añadido y asegúrate de que están configurados correctamente. Puedes usar herramientas como [MXToolbox](https://mxtoolbox.com/) para verificar la configuración de tus registros DNS. Si te salen errores, revisa que todo esté funcionando correctamente. Trata de enviar un correo electrónico a ti mismo o a un amigo para asegurarte de que todo está funcionando correctamente. Si recibes el correo sin problemas, ¡enhorabuena! Tu correo electrónico profesional está configurado y listo para usar. Ya que esta herramienta es bastante perfeccionista y te avisa de todos los errores o posibles errores por ejemplo el DMARC que he puesto te va a dar un warning ya que no has puesto una política de rechazo o cuarentena. Pero si quieres puedes ignorarlo y seguir adelante, ya que al principio es mejor tenerlo en modo `none` para asegurarte de que todo funciona correctamente antes de aplicar políticas más estrictas.
+Una vez que hayas añadido todo tendrás que esperar un tiempo a que los cambios se propaguen. No te preocupes una vez que hayas configurado todo, ve pulsando verificar en Zoho Mail y te dirá si todo está correcto. Si ves algún error, revisa los registros que has añadido y asegúrate de que están configurados correctamente. Puedes usar herramientas como [MXToolbox](https://mxtoolbox.com/) para verificar la configuración de tus registros DNS. Si te salen errores, revisa que todo esté funcionando correctamente. Trata de enviar un correo electrónico a ti mismo o a un amigo para asegurarte de que todo está funcionando correctamente. Si recibes el correo sin problemas, tu correo electrónico profesional está configurado y listo para usar. Ya que esta herramienta es bastante perfeccionista y te avisa de todos los errores o posibles errores por ejemplo, con la configuración DMARC que he puesto te va a dar un warning ya que no has puesto una política de rechazo o cuarentena. Pero si quieres puedes ignorarlo y seguir adelante, ya que al principio es mejor tenerlo en modo `none` para asegurarte de que todo funciona correctamente antes de aplicar políticas más estrictas.
 
 ## Más allá de publicar: ¿qué más puedo hacer?
 
@@ -386,7 +405,7 @@ Si pensabas que después de todo lo que habías pasado ya podías descansar, ¡t
 
 - **Seguridad**: Implementa medidas de seguridad para proteger tu sitio web de ataques. Esto incluye usar HTTPS, mantener tu software actualizado y hacer copias de seguridad regulares. También puedes considerar usar un firewall o un servicio de protección contra DDoS. Si al final usas Netlify, te recomiendo que uses su certificado SSL gratuito para asegurar tu sitio web. Si usas otro proveedor de hosting, asegúrate de que ofrezca opciones de seguridad y certificados SSL o lo configures tú mismo. Si usas un VPS, puedes configurar tu propio certificado SSL usando Let's Encrypt o comprar uno de una autoridad certificadora.
 
-- **Analítica web**: Configura herramientas de analítica web como Google Analytics para rastrear el tráfico de tu sitio y entender cómo los usuarios interactúan con él. Esto te ayudará a tomar decisiones informadas sobre cómo mejorar tu sitio y atraer más visitantes.Personalmente no recomiendo mucho Google Analytics ya que recopila muchos datos y es un poco invasivo, pero si quieres usarlo, adelante. Una alternativa si quieres ver el rendimiento de tu web sería light house o pagespeed, que es una herramienta de Google que te permite analizar el rendimiento de tu sitio web y obtener recomendaciones para mejorarlo. También puedes usar herramientas como Matomo o Plausible, que son alternativas más respetuosas con la privacidad
+- **Analítica web**: Configura herramientas de analítica web como Google Analytics para rastrear el tráfico de tu sitio y entender cómo los usuarios interactúan con él. Esto te ayudará a tomar decisiones informadas sobre cómo mejorar tu sitio y atraer más visitantes.Personalmente no recomiendo mucho Google Analytics ya que recopila muchos datos y es un poco invasivo, pero si quieres usarlo, adelante. Una alternativa si quieres ver el rendimiento de tu web sería Lighthouse o PageSpeed Insights, que son herramientas de Google que te permite analizar el rendimiento de tu sitio web y obtener recomendaciones para mejorarlo. También puedes usar herramientas como Matomo o Plausible, que son alternativas más respetuosas con la privacidad
 
 - **Hacer que aparezca en Google**: Si quieres que tu sitio web aparezca en los resultados de búsqueda de Google, asegúrate de que esté indexado. Puedes hacer esto enviando un sitemap a Google Search Console y asegurándote de que tu sitio cumpla con las directrices de Google para webmasters. También puedes considerar crear un perfil en Google My Business si tienes un negocio local, lo que te ayudará a aparecer en los resultados de búsqueda locales. Simplemente sigue los pasos que te indican en la misma página de Google, si tienes dudas, puedes buscar tutoriales en YouTube o me puedes preguntar a mí, que estaré encantado de ayudarte.
 
