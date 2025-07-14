@@ -1,12 +1,11 @@
 ---
 title: 'De localhost a producción: una guía para publicar tu página web'
 description: 'Aprende a llevar tu sitio web desde el entorno local hasta la web pública con esta guía paso a paso.'
-pubDate: 'June 07 2025'
-heroImage: '/philo.webp'
+pubDate: 'Julio 07 2025'
+heroImage: '/deploy/pexels-spacex-586066.jpg'
 lang: 'es'
 ---
 
-# THIS IS WORK IN PROGRESS PLEASE BE PATIENT :D
 # De localhost a producción: una guía para publicar tu página web
 
 Publicar una página web puede parecer algo complejo, y es cierto que hay muchos pasos que se deben seguir. Pero teniendo una guía es algo más sencillo. En este artículo, te voy a explicar cómo publicar tu web y todas las preguntas que me surgieron a mí cuando lo hice por primera vez.
@@ -219,7 +218,7 @@ dist/
    ```
 5. **¡Deploy automático!** En 2-3 minutos tienes tu URL temporal: `zealous-curie-123abc.netlify.app`
 
-![Configuración final en Netlify](/deploy/netlify-final-conf.png)
+![Configuración final en Netlify](/deploy/netlify-domain-config.png)
 
 **¡Mi sitio ya está online!** Pero con una URL fea. Hora de conectar mi dominio.
 

@@ -1,7 +1,7 @@
 ---
 title: 'Astro y por qué lo escogí'
 description: 'Explorando por qué elegí Astro para mi blog, sus ventajas, cuándo brilla y sus consideraciones frente a otros frameworks.'
-pubDate: 'May 21 2025'
+pubDate: 'Junio 21 2025'
 heroImage: '/blog-placeholder-1.jpg'
 heroImageAlt: 'Astro placeholder'
 lang: 'es'
