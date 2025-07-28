@@ -68,9 +68,7 @@ const projects = repositories
   </p>
   
   <FilterProject 
-    selectedLanguage={selectedLanguage}
     lang={lang}
-    basePath={Astro.url.pathname}
   />
   <div class="projects-grid">
     {projects.map(project => (
@@ -120,11 +118,8 @@ const projects = repositories
     updateActiveFilter(currentFilter);
 
     document.addEventListener('click', function(e) {
-      if (e.target.matches('.filter-link') || e.target.closest('.filter-link')) {
-        e.preventDefault();
-        const link = e.target.matches('.filter-link') ? e.target : e.target.closest('.filter-link');
-        const url = new URL(link.href);
-        const language = url.searchParams.get('language') || 'all';
+      if (e.target.matches('.filter-link')) {
+        const language = e.target.getAttribute('data-language');
         
         filterProjects(language);
         updateActiveFilter(language);
@@ -158,8 +153,7 @@ const projects = repositories
       const filterLinks = document.querySelectorAll('.filter-link');
       
       filterLinks.forEach(link => {
-        const url = new URL(link.href);
-        const linkLanguage = url.searchParams.get('language') || 'all';
+        const linkLanguage = link.getAttribute('data-language');
         
         if (linkLanguage === activeLanguage) {
           link.classList.add('active');

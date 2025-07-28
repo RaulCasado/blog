@@ -1,38 +1,27 @@
 ---
 import { useTranslations } from '../i18n/utils';
-const {selectedLanguage = 'all', lang='en', basePath} = Astro.props;
+const { lang = 'en' } = Astro.props;
 const t = useTranslations(lang);
-
-function createFilterUrl(language: string) {
-    if (language === 'all') {
-        return basePath;
-    }
-    return `${basePath}?language=${encodeURIComponent(language)}`;
-}
 
 const languages = ['JavaScript', 'TypeScript', 'Astro', 'HTML', 'Python', 'C', 'C++'];
 ---
 
 <div class="filter-project" role="tablist" aria-label="Filter projects by language">
-    <a 
-        href={createFilterUrl('all')} 
-        class={`filter-link ${selectedLanguage === 'all' ? 'active' : ''}`}
-        role="tab"
-        aria-selected={selectedLanguage === 'all'}
+    <button 
+        class="filter-link active"
         data-language="all"
+        type="button"
     >
         {t('portfolio.filter.all')}
-    </a>
+    </button>
     {languages.map(language => (
-        <a 
-            href={createFilterUrl(language)} 
-            class={`filter-link ${selectedLanguage === language ? 'active' : ''}`}
-            role="tab"
-            aria-selected={selectedLanguage === language}
+        <button 
+            class="filter-link"
             data-language={language}
+            type="button"
         >
             {language}
-        </a>
+        </button>
     ))}
 </div>
 
@@ -52,16 +41,13 @@ const languages = ['JavaScript', 'TypeScript', 'Astro', 'HTML', 'Python', 'C', '
         color: hsl(var(--foreground));
         font-size: 0.875rem;
         font-weight: 500;
-        text-decoration: none;
         transition: all 0.2s ease;
-        display: inline-block;
         cursor: pointer;
     }
     
     .filter-link:hover {
         background-color: hsl(var(--muted));
         border-color: hsl(var(--primary));
-        text-decoration: none;
     }
     
     .filter-link.active {
