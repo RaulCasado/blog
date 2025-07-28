@@ -134,6 +134,12 @@ const projects = repositories
       }
     });
 
+    window.addEventListener('popstate', () => {
+      const language = new URLSearchParams(window.location.search).get('language') || 'all';
+      filterProjects(language);
+      updateActiveFilter(language);
+    });
+
     function filterProjects(language) {
       const projects = document.querySelectorAll('.project-card');
       
