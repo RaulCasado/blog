@@ -5,7 +5,6 @@ pubDate: '2025-05-13'
 heroImage: '/philo.webp'
 heroImageAlt: 'Una ilustración conceptual de cinco filósofos sentados alrededor de una mesa'
 tags: ['42-school', 'programming']
-hola: 'hola'
 lang: 'es'
 ---
 

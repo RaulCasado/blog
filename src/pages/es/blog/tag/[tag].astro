@@ -1,14 +1,13 @@
 ---
 import { getCollection } from 'astro:content';
 import StandardPageLayout from '../../../../layouts/StandardPageLayout.astro';
+import TagFilter from '../../../../components/TagFilter.astro';
 
 export async function getStaticPaths() {
   const allPosts = await getCollection('blog', ({ id }) => {
     return id.startsWith('es/');
   });
-  const allTags = [...new Set(allPosts.flatMap(post => post.data.tags || []))];
-  console.log('All tags:', allTags);
-  console.log(allPosts.map(post => post.data));
+
   return allTags.map(tag => ({
     params: { tag },
     props: { tag }
@@ -21,6 +20,8 @@ const allPosts = await getCollection('blog', ({ id, data }) => {
   return id.startsWith('es/') && (data.tags || []).includes(tag);
 });
 
+const allTags = [...new Set(allPosts.flatMap(post => post.data.tags || []))];
+
 const sortedPosts = allPosts.sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
@@ -28,12 +29,14 @@ const sortedPosts = allPosts.sort(
 <StandardPageLayout title={`Posts etiquetados con "${tag}"`} description={`Posts relacionados con el tag "${tag}"`} lang="es">
   <div class="blog-container">
     <h1>Posts etiquetados con "#{tag}"</h1>
+
     <a href="/es/blog" class="back-link">← Volver a todos los posts</a>
-    
+    <TagFilter tags={allTags} activeTag={tag} language="es" />
+
     <div class="posts-grid">
       {sortedPosts.map(post => (
         <article class="post-card">
-          <h2><a href={`/es/blog/${post.slug.replace('es/', '')}`}>{post.data.title}</a></h2>
+            <h2><a href={`/es/blog/${post.slug.replace('es/', '')}.md`}>{post.data.title}</a></h2>
           <p>{post.data.description}</p>
           <div class="post-meta">
             <time>{post.data.pubDate.toLocaleDateString('es-ES')}</time>

@@ -9,8 +9,7 @@ const blogCollection = defineCollection({
     heroImageAlt: z.string().optional(),
     author: z.string().optional().default('Raúl Casado'),
     lang: z.enum(['es', 'en']).optional(),
-    tags : z.array(z.string()),
-    hola : z.string().optional(),
+    tags : z.array(z.string())
   })
 });
 

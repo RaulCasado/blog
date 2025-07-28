@@ -6,6 +6,7 @@ import { Image } from 'astro:assets';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../../consts';
 import { getCollection } from 'astro:content';
 import FormattedDate from '../../../components/FormattedDate.astro';
+import TagFilter from '../../../components/TagFilter.astro';
 import { useTranslations } from '../../../i18n/utils';
 
 const lang = 'es';
@@ -15,6 +16,8 @@ const allPosts = await getCollection('blog');
 const posts = allPosts
   .filter(post => post.id.startsWith('es/'))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const allTags = [...new Set(allPosts.flatMap(post => post.data.tags || []))];
 
 function getReadingTime(post) {
 	const wordsPerMinute = 200;
@@ -41,6 +44,7 @@ function getReadingTime(post) {
 					<div class="section-header">
 						<h2>Blog</h2>
 						<p>Pensamientos, ideas y reflexiones sobre desarrollo web y programación</p>
+						<TagFilter tags={allTags} activeTag={undefined} language="es" />
 					</div>
 					
 					<div class="blog-grid">

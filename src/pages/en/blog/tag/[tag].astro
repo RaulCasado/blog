@@ -1,14 +1,13 @@
 ---
 import { getCollection } from 'astro:content';
+import TagFilter from '../../../../components/TagFilter.astro';
 import StandardPageLayout from '../../../../layouts/StandardPageLayout.astro';
 
 export async function getStaticPaths() {
   const allPosts = await getCollection('blog', ({ id }) => {
     return id.startsWith('en/');
   });
-  
-  const allTags = [...new Set(allPosts.flatMap(post => post.data.tags || []))];
-  console.log('All tags:', allTags);
+
   return allTags.map(tag => ({
     params: { tag },
     props: { tag }
@@ -21,6 +20,8 @@ const allPosts = await getCollection('blog', ({ id, data }) => {
   return id.startsWith('en/') && (data.tags || []).includes(tag);
 });
 
+const allTags = [...new Set(allPosts.flatMap(post => post.data.tags || []))];
+
 const sortedPosts = allPosts.sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
@@ -29,6 +30,7 @@ const sortedPosts = allPosts.sort(
   <div class="blog-container">
     <h1>Posts etiquetados con "#{tag}"</h1>
     <a href="/en/blog" class="back-link">← Back to all posts</a>
+    <TagFilter tags={allTags} activeTag={tag} language="en" />
 
     <div class="posts-grid">
       {sortedPosts.map(post => (

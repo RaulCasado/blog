@@ -5,7 +5,6 @@ pubDate: '2025-05-13'
 heroImage: '/philo.webp'
 heroImageAlt: 'A conceptual illustration of five philosophers sitting around a table'
 tags: ['42-school']
-hola: 'hola'
 lang: 'en'
 ---
 

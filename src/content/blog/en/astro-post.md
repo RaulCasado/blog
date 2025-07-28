@@ -5,7 +5,6 @@ pubDate: '2025-06-04'
 heroImage: '/blog-placeholder-1.jpg'
 heroImageAlt: 'Astro placeholder'
 tags: ['astro','web development']
-hola: 'hola'
 lang: 'en'
 ---
 

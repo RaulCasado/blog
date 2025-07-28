@@ -5,7 +5,6 @@ pubDate: '2025-07-10'
 heroImage: '/deploy/pexels-spacex-586066.jpg'
 heroImageAlt: 'A rocket launching into space, symbolizing the journey of publishing a website.'
 tags: ['web development', 'publishing']
-hola: 'hola'
 lang: 'en'
 ---
 

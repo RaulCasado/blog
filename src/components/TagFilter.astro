@@ -1,0 +1,18 @@
+---
+const { tags, activeTag = 'all',language } = Astro.props;
+---
+
+<nav class="tag-filter">
+    <a 
+        href="/blog" 
+    >
+        Todos
+    </a>
+    {tags.map(tag => (
+        <a
+            href={`/${language}/blog/tag/${tag}`}
+        >
+            #{tag}
+        </a>
+    ))}
+</nav>
