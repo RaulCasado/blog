@@ -1,8 +1,11 @@
 ---
 title: 'De localhost a producción: una guía para publicar tu página web'
 description: 'Aprende a llevar tu sitio web desde el entorno local hasta la web pública con esta guía paso a paso.'
-pubDate: 'Julio 07 2025'
+pubDate: '2025-07-10'
 heroImage: '/deploy/pexels-spacex-586066.jpg'
+heroImageAlt: 'Un cohete despegando al espacio, simbolizando el viaje de publicar un sitio web.'
+tags: ['web developer', 'publish']
+hola: 'hola'
 lang: 'es'
 ---
 

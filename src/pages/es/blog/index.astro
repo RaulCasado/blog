@@ -11,20 +11,17 @@ import { useTranslations } from '../../../i18n/utils';
 const lang = 'es';
 const t = useTranslations(lang);
 
-// Get all posts and filter for Spanish ones
 const allPosts = await getCollection('blog');
 const posts = allPosts
   .filter(post => post.id.startsWith('es/'))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-// Calculate estimated reading time for each post (placeholder - would need actual content)
 function getReadingTime(post) {
-	const wordsPerMinute = 200; // Average reading speed
+	const wordsPerMinute = 200;
 	
-	// Check if post.body exists before trying to split it
-	if (!post.body) return 1; // Default to 1 minute if no content is available
-	
-	const words = post.body.split(/\s+/).length; // Split by whitespace
+	if (!post.body) return 1;
+
+	const words = post.body.split(/\s+/).length;
 	const minutes = Math.ceil(words / wordsPerMinute);
 	return minutes;
 }

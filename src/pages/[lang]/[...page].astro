@@ -3,36 +3,29 @@ import StandardPageLayout from '../../layouts/StandardPageLayout.astro';
 import { useTranslations, useTranslatedPath, defaultLanguage } from '../../i18n/utils';
 import { languages } from '../../i18n/ui';
 
-// Import the page content components
 import AboutPageContent from '../../components/pages/AboutPageContent.astro';
 import CvPageContent from '../../components/pages/CvPageContent.astro';
 import PortfolioPageContent from '../../components/pages/PortfolioPageContent.astro';
 
-// Define the pages that we want to translate directly in the function
-// to avoid any scope issues
 export async function getStaticPaths() {
-  // Define the pages array inside getStaticPaths to ensure it's in scope
   const pagesToTranslate = [
     { name: 'about', component: AboutPageContent },
     { name: 'cv', component: CvPageContent },
     { name: 'portfolio', component: PortfolioPageContent },
-    // Add more here if you have other static pages like 'contact', 'legal', etc.
   ];
 
   const paths = [];
 
-  // For each supported language
   for (const langKey of Object.keys(languages)) {
-    // And for each page we want to translate
     for (const page of pagesToTranslate) {
       paths.push({
         params: {
           lang: langKey,
-          page: page.name // The page slug (e.g., 'about', 'cv')
+          page: page.name
         },
         props: {
           pageName: page.name,
-          component: page.component // Pass the actual component to render it
+          component: page.component
         }
       });
     }
@@ -46,11 +39,9 @@ const { pageName, component: PageContentComponent } = Astro.props;
 const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);
 
-// Get page title and description from translations
-const pageTitleKey = `${pageName}.title`; // e.g., 'about.title', 'cv.title'
-const pageDescriptionKey = `${pageName}.description`; // e.g., 'about.description', 'cv.description'
+const pageTitleKey = `${pageName}.title`;
+const pageDescriptionKey = `${pageName}.description`;
 
-// Set the page's html lang attribute based on the URL
 const htmlLang = lang || defaultLanguage;
 ---
 

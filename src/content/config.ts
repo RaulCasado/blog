@@ -5,14 +5,15 @@ const blogCollection = defineCollection({
     title: z.string(),
     description: z.string().optional(),
     pubDate: z.coerce.date(),
-    updatedDate: z.coerce.date().optional(),
     heroImage: z.string().optional(),
     heroImageAlt: z.string().optional(),
     author: z.string().optional().default('Raúl Casado'),
-    lang: z.enum(['es', 'en']).optional()
+    lang: z.enum(['es', 'en']).optional(),
+    tags : z.array(z.string()),
+    hola : z.string().optional(),
   })
 });
 
 export const collections = {
-  'blog': blogCollection
+  blog: blogCollection
 };

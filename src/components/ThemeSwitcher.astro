@@ -3,7 +3,6 @@
 
 <div class="theme-switcher">
   <button id="theme-toggle" aria-label="Cambiar tema">
-    <!-- Sun icon for dark mode (shown when in dark mode) -->
     <svg xmlns="http://www.w3.org/2000/svg" id="sun-icon" class="icon sun-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <circle cx="12" cy="12" r="5"></circle>
       <line x1="12" y1="1" x2="12" y2="3"></line>
@@ -16,7 +15,6 @@
       <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
     </svg>
     
-    <!-- Moon icon for light mode (shown when in light mode) -->
     <svg xmlns="http://www.w3.org/2000/svg" id="moon-icon" class="icon moon-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
     </svg>
@@ -24,19 +22,16 @@
 </div>
 
 <script>
-  // Get saved theme from localStorage or use user preference
   const getPreferredTheme = () => {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) return savedTheme;
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   };
 
-  // Apply theme to document
   const applyTheme = (theme) => {
     document.documentElement.classList.remove('light', 'dark');
     document.documentElement.classList.add(theme);
     
-    // Update button icons visibility based on current theme
     const sunIcon = document.getElementById('sun-icon');
     const moonIcon = document.getElementById('moon-icon');
     
@@ -51,7 +46,6 @@
     }
   };
 
-  // Toggle between light and dark
   const toggleTheme = () => {
     const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
@@ -60,19 +54,15 @@
     applyTheme(newTheme);
   };
 
-  // Initialize theme
   document.addEventListener('DOMContentLoaded', () => {
-    // Apply initial theme
     applyTheme(getPreferredTheme());
     
-    // Set up button click event
     const themeToggle = document.getElementById('theme-toggle');
     if (themeToggle) {
       themeToggle.addEventListener('click', toggleTheme);
     }
   });
 
-  // Apply theme immediately to avoid FOUC (Flash Of Unstyled Content)
   applyTheme(getPreferredTheme());
 </script>
 

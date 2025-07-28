@@ -49,7 +49,6 @@ const translatePath = useTranslatedPath(lang);
 </header>
 
 <script>
-	// Mobile menu toggle functionality
 	document.addEventListener('DOMContentLoaded', () => {
 		const burgerMenu = document.getElementById('burger-menu-toggle');
 		const navContainer = document.querySelector('.nav-container');
@@ -58,11 +57,9 @@ const translatePath = useTranslatedPath(lang);
 			burgerMenu.addEventListener('click', () => {
 				burgerMenu.classList.toggle('active');
 				navContainer.classList.toggle('active');
-				// Prevent scrolling when menu is open
 				document.body.classList.toggle('menu-open');
 			});
 			
-			// Close menu when clicking on links
 			const navLinks = document.querySelectorAll('.internal-links a');
 			navLinks.forEach(link => {
 				link.addEventListener('click', () => {

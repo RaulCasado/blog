@@ -5,42 +5,32 @@ import { languages } from '../i18n/ui';
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-// Function to get the correct path for language switching
 function getLanguagePath(targetLang: string) {
     const path = Astro.url.pathname;
     
-    // If it's the root path
     if (path === '/') {
         return targetLang === 'es' ? '/' : `/${targetLang}/`;
     }
     
-    // If it's already a language-prefixed path (like /en/blog or /es/blog)
     if (path.startsWith('/en/') || path.startsWith('/es/')) {
-        const pathWithoutLang = path.substring(3); // Remove /xx from the beginning
+        const pathWithoutLang = path.substring(3);
         if (targetLang === 'es') {
-            // For Spanish (default language), we need to redirect to the proper Spanish route
-            // For blog routes, redirect to /es/blog instead of just /blog
             if (pathWithoutLang.startsWith('/blog')) {
                 return `/es${pathWithoutLang}`;
             }
-            // For other routes, keep the path without language prefix only if it's the root
+
             return pathWithoutLang === '' ? '/' : `/es${pathWithoutLang}`;
         } else {
-            // Add the target language prefix
             return `/${targetLang}${pathWithoutLang}`;
         }
     }
     
-    // For paths without language prefix (default Spanish paths)
-    // These are already Spanish routes, so we need to add the es prefix for consistency
     if (targetLang === 'es') {
-        // For Spanish routes that don't have language prefix, add /es prefix
         if (path.startsWith('/blog') || path.startsWith('/about') || path.startsWith('/cv') || path.startsWith('/portfolio')) {
             return `/es${path}`;
         }
         return path;
     } else {
-        // Add English prefix
         return `/${targetLang}${path}`;
     }
 }

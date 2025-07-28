@@ -1,9 +1,11 @@
 ---
 title: 'Astro and Why I Chose It'
 description: 'Exploring why I chose Astro for my blog, its advantages, when it shines, and considerations compared to other frameworks.'
-pubDate: 'May 21 2025'
+pubDate: '2025-06-04'
 heroImage: '/blog-placeholder-1.jpg'
 heroImageAlt: 'Astro placeholder'
+tags: ['astro','web development']
+hola: 'hola'
 lang: 'en'
 ---
 
