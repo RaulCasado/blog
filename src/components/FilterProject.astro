@@ -1,0 +1,72 @@
+---
+import { useTranslations } from '../i18n/utils';
+const {selectedLanguage = 'all', lang='en', basePath} = Astro.props;
+const t = useTranslations(lang);
+
+function createFilterUrl(language: string) {
+    if (language === 'all') {
+        return basePath;
+    }
+    return `${basePath}?language=${encodeURIComponent(language)}`;
+}
+
+const languages = ['JavaScript', 'TypeScript', 'Astro', 'HTML', 'Python', 'C', 'C++'];
+---
+
+<div class="filter-project" role="tablist" aria-label="Filter projects by language">
+    <a 
+        href={createFilterUrl('all')} 
+        class={`filter-link ${selectedLanguage === 'all' ? 'active' : ''}`}
+        role="tab"
+        aria-selected={selectedLanguage === 'all'}
+        data-language="all"
+    >
+        {t('portfolio.filter.all')}
+    </a>
+    {languages.map(language => (
+        <a 
+            href={createFilterUrl(language)} 
+            class={`filter-link ${selectedLanguage === language ? 'active' : ''}`}
+            role="tab"
+            aria-selected={selectedLanguage === language}
+            data-language={language}
+        >
+            {language}
+        </a>
+    ))}
+</div>
+
+<style>
+    .filter-project {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 2rem;
+    }
+    
+    .filter-link {
+        padding: 8px 16px;
+        border: 1px solid hsl(var(--border));
+        border-radius: var(--radius);
+        background-color: hsl(var(--background));
+        color: hsl(var(--foreground));
+        font-size: 0.875rem;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        display: inline-block;
+        cursor: pointer;
+    }
+    
+    .filter-link:hover {
+        background-color: hsl(var(--muted));
+        border-color: hsl(var(--primary));
+        text-decoration: none;
+    }
+    
+    .filter-link.active {
+        background-color: hsl(var(--primary));
+        color: hsl(var(--primary-foreground));
+        border-color: hsl(var(--primary));
+    }
+</style>

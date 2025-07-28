@@ -126,7 +126,10 @@ export const translations = {
         'portfolio.header': 'My Projects',
         'portfolio.subtitle': 'Here are some of my GitHub projects.',
         'portfolio.noDescription': 'No description available',
-        'portfolio.viewOnGithub': 'View on GitHub'
+        'portfolio.viewOnGithub': 'View on GitHub',
+
+        // Portfolio Filter
+        'portfolio.filter.all' : 'All'
     },
     'es': {
         // Navegación
@@ -246,6 +249,9 @@ export const translations = {
         'portfolio.header': 'Mis Proyectos',
         'portfolio.subtitle': 'Aquí hay algunos de mis proyectos de GitHub.',
         'portfolio.noDescription': 'No hay descripción disponible',
-        'portfolio.viewOnGithub': 'Ver en GitHub'
+        'portfolio.viewOnGithub': 'Ver en GitHub',
+
+        // Filtro de Portfolio
+        'portfolio.filter.all' : 'Todos'
     }
 } as const;
