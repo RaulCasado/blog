@@ -129,7 +129,15 @@ export const translations = {
         'portfolio.viewOnGithub': 'View on GitHub',
 
         // Portfolio Filter
-        'portfolio.filter.all' : 'All'
+        'portfolio.filter.all' : 'All',
+
+        //blog page
+        'blog.header' : 'Blog',
+        'blog.subtitle' : 'Thoughts, ideas and reflections on web development and programming',
+        'blog.featured': 'Featured',
+        'blog.readingTime': 'min read',
+        'blog.featuredDescription': 'Check out this featured article about web development, programming, and technology.'
+
     },
     'es': {
         // Navegación
@@ -252,6 +260,13 @@ export const translations = {
         'portfolio.viewOnGithub': 'Ver en GitHub',
 
         // Filtro de Portfolio
-        'portfolio.filter.all' : 'Todos'
+        'portfolio.filter.all' : 'Todos',
+
+        // blog
+        'blog.header' : 'Blog',
+        'blog.subtitle' : 'Pensamientos, ideas y reflexiones sobre desarrollo web y programación',
+        'blog.featured': 'Destacado',
+        'blog.readingTime': 'min lectura',
+        'blog.featuredDescription': 'Descubre este artículo destacado sobre desarrollo web, programación y tecnología.'
     }
 } as const;
