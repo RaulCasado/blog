@@ -4,7 +4,7 @@ description: 'Una exploración filosófica del problema de los filósofos comens
 pubDate: '2025-05-13'
 heroImage: '/philo.webp'
 heroImageAlt: 'Una ilustración conceptual de cinco filósofos sentados alrededor de una mesa'
-tags: ['42-school', 'programming']
+tags: ['42-school']
 lang: 'es'
 ---
 

@@ -4,7 +4,7 @@ description: 'Aprende a llevar tu sitio web desde el entorno local hasta la web 
 pubDate: '2025-07-10'
 heroImage: '/deploy/pexels-spacex-586066.jpg'
 heroImageAlt: 'Un cohete despegando al espacio, simbolizando el viaje de publicar un sitio web.'
-tags: ['web developer', 'publish']
+tags: ['web_development', 'publishing']
 lang: 'es'
 ---
 

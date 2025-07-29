@@ -4,7 +4,7 @@ description: 'Explorando por qué elegí Astro para mi blog, sus ventajas, cuán
 pubDate: '2025-06-04'
 heroImage: '/blog-placeholder-1.jpg'
 heroImageAlt: 'Astro placeholder'
-tags: ['astro', 'web development']
+tags: ['astro', 'web_development']
 lang: 'es'
 ---
 
