@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import FormattedDate from '../FormattedDate.astro';
+import TagFilter from '../TagFilter.astro';
 
 const { lang, posts, allTags, t } = Astro.props;
 
@@ -19,11 +20,15 @@ function getReadingTime(post) {
       <h2>{t('blog.header')}</h2>
       <p>{t('blog.subtitle')}</p>
     </div>
+	<TagFilter tags={allTags} />
     <div class="blog-grid">
       {posts.map((post, index) => {
         const readingTime = getReadingTime(post);
         return (
-          <div class={`blog-card${index === 0 ? ' featured' : ''}`}>
+          <div 
+		  	class={`blog-card${index === 0 ? ' featured' : ''}`}
+		  	data-tags={post.data.tags?.join(',') || ''}
+		  >
             <div class="blog-card-image">
               <a href={`/${lang}/blog/${post.id.replace(`${lang}/`, '')}/`}>
                 <Image
@@ -78,6 +83,39 @@ function getReadingTime(post) {
     </div>
   </div>
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+	const filterBtns = document.querySelectorAll('.tag-filter-btn');
+	const cards = document.querySelectorAll('.blog-card');
+
+	let activeTags = [];
+
+	filterBtns.forEach(btn => {
+		btn.addEventListener('click', () => {
+			const tag = btn.dataset.tag;
+
+			if (activeTags.includes(tag)) {
+				activeTags = activeTags.filter(t => t !== tag);
+				btn.classList.remove('active');
+			} else {
+				activeTags.push(tag);
+				btn.classList.add('active');
+			}
+
+			cards.forEach(card => {
+				const cardTags = card.dataset.tags.split(',');
+				if (activeTags.length === 0) {
+					card.style.display = '';
+				} else {
+					const hasTag = activeTags.some(tag => cardTags.includes(tag));
+					card.style.display = hasTag ? '' : 'none';
+				}
+			});
+		});
+	});
+});
+</script>
 
 <style>
 	main {

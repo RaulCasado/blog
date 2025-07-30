@@ -1,0 +1,39 @@
+---
+const { tags = [], selectedTags = [] } = Astro.props;
+---
+
+<div class="tag-filter">
+  {tags.map(tag => (
+    <button
+      class={`tag-filter-btn${selectedTags.includes(tag) ? ' active' : ''}`}
+      type="button"
+      data-tag={tag}
+      aria-pressed={selectedTags.includes(tag)}
+    >
+      #{tag}
+    </button>
+  ))}
+</div>
+
+<style>
+  .tag-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+  .tag-filter-btn {
+    padding: 0.18rem 0.7rem;
+    border-radius: 999px;
+    background: hsl(var(--muted));
+    color: hsl(var(--foreground));
+    border: 1px solid hsl(var(--border));
+    cursor: pointer;
+  }
+  .tag-filter-btn.active,
+  .tag-filter-btn:active {
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    border-color: hsl(var(--primary));
+  }
+</style>

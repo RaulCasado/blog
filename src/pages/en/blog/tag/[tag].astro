@@ -1,6 +1,5 @@
 ---
 import { getCollection } from 'astro:content';
-import TagFilter from '../../../../components/TagFilter.astro';
 import StandardPageLayout from '../../../../layouts/StandardPageLayout.astro';
 
 export async function getStaticPaths() {
@@ -36,15 +35,26 @@ const sortedPosts = allPosts.sort(
   <div class="blog-container">
     <h1>Posts etiquetados con "#{tag}"</h1>
     <a href="/en/blog" class="back-link">← Back to all posts</a>
-    <TagFilter tags={allTags} activeTag={tag} language="en" />
 
     <div class="posts-grid">
       {sortedPosts.map(post => (
         <article class="post-card">
-          <h2><a href={`/en/blog/${post.slug.replace('en/', '')}`}>{post.data.title}</a></h2>
-          <p>{post.data.description}</p>
-          <div class="post-meta">
-            <time>{post.data.pubDate.toLocaleDateString('en-US')}</time>
+          <a href={`/en/blog/${post.slug.replace('en/', '')}`} class="post-image-link">
+            <img
+              src={post.data.heroImage || "/blog-placeholder-1.jpg"}
+              alt={post.data.heroImageAlt || post.data.title}
+              class="post-image"
+              loading="lazy"
+            />
+          </a>
+          <div class="post-card-content">
+            <h2>
+              <a href={`/en/blog/${post.slug.replace('en/', '')}`}>{post.data.title}</a>
+            </h2>
+            <p>{post.data.description}</p>
+            <div class="post-meta">
+              <time>{post.data.pubDate.toLocaleDateString('en-US')}</time>
+            </div>
           </div>
         </article>
       ))}
@@ -52,3 +62,83 @@ const sortedPosts = allPosts.sort(
   </div>
 </StandardPageLayout>
 
+<style>
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.post-card {
+  background: hsl(var(--background));
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 16px 0 rgba(0,0,0,0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.2s;
+}
+
+.post-card:hover {
+  box-shadow: 0 4px 32px 0 rgba(0,0,0,0.13);
+}
+
+.post-image-link {
+  display: block;
+  overflow: hidden;
+}
+
+.post-image {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  transition: transform 0.3s;
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.post-card:hover .post-image {
+  transform: scale(1.04);
+}
+
+.post-card-content {
+  padding: 1.2rem 1.5rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.post-card-content h2 {
+  font-size: 1.25rem;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.2;
+}
+
+.post-card-content p {
+  color: hsl(var(--muted-foreground));
+  margin-bottom: 1rem;
+  flex: 1;
+}
+
+.post-meta {
+  font-size: 0.95rem;
+  color: hsl(var(--muted-foreground));
+  margin-top: auto;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  color: hsl(var(--primary));
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.back-link:hover {
+  color: hsl(var(--primary-foreground));
+}
+</style>
