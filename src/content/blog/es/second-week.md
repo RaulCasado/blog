@@ -10,7 +10,7 @@ Esta semana ha sido una montaña rusa de emociones y aprendizaje. Empezó con un
 
 Aquí os dejo mi diario de a bordo.
 
-### Lunes: A toda máquina con CS50 y Kaggle
+## Lunes: A toda máquina con CS50 y Kaggle
 
 El lunes fue un día increíblemente productivo. Por la mañana, me centré en el material de CS50 y completé dos unidades enteras:
 
@@ -22,7 +22,7 @@ Por la tarde, di mis primeros pasos en el mundo del Deep Learning con un curso d
 
 Terminé el día con la sensación de haber aprovechado cada minuto.
 
-### Martes: La recta final de CS50 y mi "pelea" con las Regex
+## Martes: La recta final de CS50 y mi "pelea" con las Regex
 
 El martes decidí aparcar Kaggle para dar el empujón final a CS50. Me enfrenté a los dos últimos módulos teóricos:
 
@@ -31,13 +31,13 @@ El martes decidí aparcar Kaggle para dar el empujón final a CS50. Me enfrenté
 
 Con esto, ¡solo quedaba el proyecto final!
 
-### Miércoles: Planificando el "Game of Life"
+## Miércoles: Planificando el "Game of Life"
 
 Con la teoría finiquitada, el miércoles lo dediqué a la planificación. Tras barajar varias ideas, me decidí por un clásico: el **Juego de la Vida de Conway**.
 
 Mi plan era hacerlo "bien", aplicando una arquitectura **MVC (Modelo-Vista-Controlador)**. Dediqué el día a diseñar las clases, las funciones, la estructura de ficheros y a montar el esqueleto del proyecto. La idea era usar `tkinter` para la interfaz gráfica.
 
-### Jueves: A programar
+## Jueves: A programar
 
 El jueves fue el día de la implementación. Fue una jornada de código puro en la que conseguí implementar casi toda la funcionalidad que había planeado:
 
@@ -48,13 +48,13 @@ El jueves fue el día de la implementación. Fue una jornada de código puro en 
 
 Al final del día, el proyecto estaba prácticamente listo. Solo quedaba refactorizar, hacer los tests y grabar el vídeo para la entrega.
 
-### Viernes: La dura lección del "Over-engineering"
+## Viernes: La dura lección del "Over-engineering"
 
 El viernes, con la moral por las nubes, entré en la comunidad de Discord de CS50 para compartir mi avance. La respuesta fue un jarro de agua fría: el proyecto estaba **"over-engineered"**. Estaba bien hecho, sí, pero era mucho más complejo de lo que el curso pedía.
 
 Fue un golpe duro. Después de todo el trabajo, me di cuenta de que había fallado en entender el alcance real del proyecto. Decidí subir el **Juego de la Vida a mi GitHub** como un proyecto personal, pero no lo presentaría para CS50. Tenía que empezar de cero.
 
-### Reflexión final de la semana
+## Reflexión final de la semana
 
 Este fin de semana ha sido de autocrítica. ¿Por qué esta semana no fue tan productiva como la anterior?
 

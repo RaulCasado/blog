@@ -10,7 +10,7 @@ This week has been a roller coaster of emotions and learning. It started with ov
 
 Here is my logbook.
 
-### Monday: Full Steam Ahead with CS50 and Kaggle
+## Monday: Full Steam Ahead with CS50 and Kaggle
 
 Monday was an incredibly productive day. In the morning, I focused on the CS50 material and completed two entire units:
 
@@ -22,7 +22,7 @@ In the afternoon, I took my first steps into the world of Deep Learning with a *
 
 I ended the day feeling like I had made the most of every minute.
 
-### Tuesday: The Final Stretch of CS50 and My "Fight" with Regex
+## Tuesday: The Final Stretch of CS50 and My "Fight" with Regex
 
 On Tuesday, I decided to set Kaggle aside to give CS50 the final push. I tackled the last two theoretical modules:
 
@@ -31,13 +31,13 @@ On Tuesday, I decided to set Kaggle aside to give CS50 the final push. I tackled
 
 With that, only the final project remained!
 
-### Wednesday: Planning the "Game of Life"
+## Wednesday: Planning the "Game of Life"
 
 With the theory out of the way, I dedicated Wednesday to planning. After considering several ideas, I decided on a classic: **Conway's Game of Life**.
 
 My plan was to do it "right," applying an **MVC (Model-View-Controller)** architecture. I spent the day designing the classes, functions, file structure, and setting up the project skeleton. The idea was to use `tkinter` for the graphical interface.
 
-### Thursday: Time to Code
+## Thursday: Time to Code
 
 Thursday was implementation day. It was a day of pure coding where I managed to implement almost all the functionality I had planned:
 
@@ -48,13 +48,13 @@ Thursday was implementation day. It was a day of pure coding where I managed to 
 
 By the end of the day, the project was practically ready. All that was left was to refactor, write tests, and record the video for submission.
 
-### Friday: The Hard Lesson of "Over-engineering"
+## Friday: The Hard Lesson of "Over-engineering"
 
 On Friday, with my morale high, I went to the CS50 Discord community to share my progress. The response was a bucket of cold water: the project was **"over-engineered."** It was well-made, yes, but it was much more complex than what the course required.
 
 It was a tough blow. After all the work, I realized I had failed to understand the actual scope of the project. I decided to upload the **Game of Life to my GitHub** as a personal project, but I wouldn't submit it for CS50. I had to start from scratch.
 
-### Final Reflection of the Week
+## Final Reflection of the Week
 
 This weekend has been one of self-criticism. Why wasn't this week as productive as the last one?
 
