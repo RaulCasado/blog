@@ -1,8 +1,10 @@
 ---
 title: "Third Week: Neural Networks, Reinstallations, and New Projects"
 description: "A summary of my third week: a Kaggle course on convolutional neural networks, technical challenges, a fresh Ubuntu installation, and the start of an exciting personal project."
-pubDate: "2024-05-20"
+pubDate: "2025-08-17"
 tags: ["python", "weekly","kaggle"]
+heroImage: '/weekly/rusa.jpg'
+heroImageAlt: 'A roller coaster symbolizing the ups and downs of learning'
 ---
 
 Hello everyone! This week has been a rollercoaster of learning and development. From diving into the world of computer vision with a Kaggle course to starting a new personal project, including a necessary tune-up of my operating system.

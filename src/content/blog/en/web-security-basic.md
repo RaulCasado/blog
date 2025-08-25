@@ -3,7 +3,7 @@ title: "Web Security: The Basics"
 description: "An introduction to the fundamental concepts of web security, including common threats, best practices, and essential tools."
 pubDate: "2025-08-12"
 heroImage: "/cibersecurity-basic/logo.jpg"
-tags: ["web-security"]
+tags: ["web_development"]
 ---
 
 ## 1. Introduction
