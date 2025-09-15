@@ -17,7 +17,7 @@ type Props = CollectionEntry<'blog'>['data'] & {
 };
 
 const { title, description, pubDate, updatedDate, heroImage, headings = [] } = Astro.props;
-const currentPageUrl = Astro.url.href; // Get the current page URL
+const currentPageUrl = Astro.url.href;
 const lang = getLangFromUrl(Astro.url);
 ---
 
@@ -66,7 +66,6 @@ const lang = getLangFromUrl(Astro.url);
 				order: 1;
 			}
 			
-			/* Shared styles for both blog content and regular pages */
 			.prose {
 				width: 100%;
 				color: hsl(var(--foreground));
@@ -75,19 +74,17 @@ const lang = getLangFromUrl(Astro.url);
 				overflow-x: hidden;
 				word-wrap: break-word;
 				hyphens: auto;
-				order: 0; /* On mobile, content appears first */
+				order: 0;
 			}
 			
-			/* Blog-specific prose style */
 			.blog-content-wrapper .prose {
 				max-width: 100%;
 				margin: auto;
 				padding: 0.5rem;
 			}
 			
-			/* Standard page style (base container for non-blog pages) */
 			.standard-page {
-				max-width: 100%; /* Allow child containers to define their own max-width */
+				max-width: 100%;
 				margin: 0 auto;
 				padding: 0 0.75rem;
 			}
@@ -113,7 +110,6 @@ const lang = getLangFromUrl(Astro.url);
 				font-style: italic;
 			}
 			
-			/* Style adjustments for code blocks, tables and content */
 			.prose :global(pre) {
 				overflow-x: auto;
 				border-radius: 0.375rem;
@@ -167,7 +163,6 @@ const lang = getLangFromUrl(Astro.url);
 				font-style: italic;
 			}
 			
-			/* Better table support on mobile */
 			.prose :global(table) {
 				display: block;
 				overflow-x: auto;
@@ -175,7 +170,6 @@ const lang = getLangFromUrl(Astro.url);
 				-webkit-overflow-scrolling: touch;
 			}
 			
-			/* Responsive adjustments */
 			@media (min-width: 480px) {
 				.title h1 {
 					font-size: 1.75rem;
@@ -234,11 +228,11 @@ const lang = getLangFromUrl(Astro.url);
 				}
 				
 				.toc-placeholder {
-					order: 0; /* Reset order for larger screens */
+					order: 0;
 				}
 				
 				.prose {
-					order: 1; /* Reset order for larger screens */
+					order: 1;
 				}
 			}
 			
@@ -280,7 +274,6 @@ const lang = getLangFromUrl(Astro.url);
 					{heroImage && <img width={1020} height={510} src={heroImage} alt={title} />}
 				</div>
 				
-				{/* Check if headings exist - use blog layout with TOC sidebar */}
 				{headings && headings.length > 0 ? (
 					<div class="blog-content-wrapper">
 						<div class="toc-placeholder">
@@ -303,12 +296,10 @@ const lang = getLangFromUrl(Astro.url);
 							</div>
 							<slot />
                             
-                            {/* Add SocialShare component */}
                             <SocialShare url={currentPageUrl} title={title} description={description} />
 						</div>
 					</div>
 				) : (
-					/* Standard layout for pages without headings (about, portfolio, etc.) */
 					<div class="prose standard-page">
 						<div class="title">
 							{pubDate && (
@@ -327,7 +318,6 @@ const lang = getLangFromUrl(Astro.url);
 							{title && <hr />}
 						</div>
 						<slot />
-                        {/* No SocialShare for non-blog pages */}
 					</div>
 				)}
 			</article>

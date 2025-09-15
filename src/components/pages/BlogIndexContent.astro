@@ -58,7 +58,6 @@ function getReadingTime(post) {
 		</div>
 		
 		<div class="blog-grid" id="blog-grid">
-			{/* ✅ PRIMERO: Posts featured */}
 			{featuredPosts.map((post, index) => {
 				const readingTime = getReadingTime(post);
 				const isWeekly = post.data.tags?.includes('weekly');
@@ -121,7 +120,6 @@ function getReadingTime(post) {
 				);
 			})}
 
-			{/* ✅ DESPUÉS: Posts regulares */}
 			{regularPosts.map((post, index) => {
 				const readingTime = getReadingTime(post);
 				const isWeekly = post.data.tags?.includes('weekly');
