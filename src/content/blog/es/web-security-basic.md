@@ -4,6 +4,7 @@ description: "Una introducción a los conceptos fundamentales de la cibersegurid
 pubDate: "2025-08-12"
 heroImage: "/cibersecurity-basic/logo.jpg"
 tags: ["web_development"]
+featured: true
 ---
 
 ## 1. Introducción
