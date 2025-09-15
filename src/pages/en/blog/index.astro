@@ -17,7 +17,7 @@ const posts = allPosts
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 
-const allTags = [...new Set(allPosts.flatMap(post => post.data.tags || []))];
+const allTags = [...new Set(posts.flatMap(post => post.data.tags || []))];
 
 ---
 

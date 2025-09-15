@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import FormattedDate from '../FormattedDate.astro';
 import TagFilter from '../TagFilter.astro';
 
+
 const { lang, posts, allTags, t } = Astro.props;
 
 function getReadingTime(post) {
@@ -16,19 +17,57 @@ function getReadingTime(post) {
 
 <section class="blog-section">
   <div class="container">
-    <div class="section-header">
+	<div class="section-header">
       <h2>{t('blog.header')}</h2>
       <p>{t('blog.subtitle')}</p>
     </div>
+
+    <div class="blog-controls">
+      <div class="search-container">
+        <input 
+          type="text" 
+          id="search-input" 
+          placeholder={t('blog.searchPlaceholder')}
+          class="search-input"
+        />
+        <span class="search-icon">🔍</span>
+      </div>
+
+      <label class="weekly-toggle">
+        <input 
+          type="checkbox" 
+          id="hide-weekly-posts"
+          class="weekly-checkbox"
+        />
+        <span>{t('blog.hideWeekly')}</span>
+      </label>
+    </div>
 	<TagFilter tags={allTags} />
-    <div class="blog-grid">
+
+    <div class="no-results-message" id="no-results" style="display: none;">
+      <div class="no-results-content">
+        <span class="no-results-icon">🔍</span>
+        <h3>{t('blog.noResults')}</h3>
+        <p>{t('blog.noResultsDescription')}</p>
+        <button class="clear-search-btn" id="clear-search">
+          {t('blog.clearSearch')}
+        </button>
+      </div>
+    </div>
+    
+    <div class="blog-grid" id="blog-grid">
       {posts.map((post, index) => {
         const readingTime = getReadingTime(post);
+		const isWeekly = post.data.tags?.includes('weekly');
         return (
           <div 
-		  	class={`blog-card${index === 0 ? ' featured' : ''}`}
-		  	data-tags={post.data.tags?.join(',') || ''}
-		  >
+            class={`blog-card${index === 0 ? ' featured' : ''}`}
+            data-tags={post.data.tags?.join(',') || ''}
+            data-title={post.data.title.toLowerCase()}
+            data-description={post.data.description?.toLowerCase() || ''}
+            data-content={post.body?.toLowerCase() || ''}
+            data-is-weekly={isWeekly}
+          >
             <div class="blog-card-image">
               <a href={`/${lang}/blog/${post.id.replace(`${lang}/`, '')}/`}>
                 <Image
@@ -86,34 +125,91 @@ function getReadingTime(post) {
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-	const filterBtns = document.querySelectorAll('.tag-filter-btn');
-	const cards = document.querySelectorAll('.blog-card');
+  const searchInput = document.getElementById('search-input');
+  const weeklyToggle = document.getElementById('hide-weekly-posts');
+  const tagBtns = document.querySelectorAll('.tag-filter-btn');
+  const cards = document.querySelectorAll('.blog-card');
+  const noResultsMessage = document.getElementById('no-results');
+  const blogGrid = document.getElementById('blog-grid');
+  const clearSearchBtn = document.getElementById('clear-search');
 
-	let activeTags = [];
+  let activeTags = [];
+  let searchTerm = '';
+  let hideWeekly = false;
 
-	filterBtns.forEach(btn => {
-		btn.addEventListener('click', () => {
-			const tag = btn.dataset.tag;
+  function filterPosts() {
+    let visibleCount = 0;
+    
+    cards.forEach(card => {
+      const cardTags = card.dataset.tags.split(',').filter(tag => tag.trim());
+      const cardTitle = card.dataset.title || '';
+      const cardDescription = card.dataset.description || '';
+      const cardContent = card.dataset.content || '';
+      const isWeekly = card.dataset.isWeekly === 'true';
 
-			if (activeTags.includes(tag)) {
-				activeTags = activeTags.filter(t => t !== tag);
-				btn.classList.remove('active');
-			} else {
-				activeTags.push(tag);
-				btn.classList.add('active');
-			}
+      const matchesSearch = searchTerm === '' || 
+        cardTitle.includes(searchTerm) || 
+        cardDescription.includes(searchTerm) ||
+        cardContent.includes(searchTerm);
+      
+      const matchesTags = activeTags.length === 0 || 
+        activeTags.some(tag => cardTags.includes(tag));
+      
+      const shouldHideWeekly = hideWeekly && isWeekly;
+      const shouldShow = matchesSearch && matchesTags && !shouldHideWeekly;
+      
+      card.style.display = shouldShow ? '' : 'none';
+      
+      if (shouldShow) {
+        visibleCount++;
+      }
+    });
 
-			cards.forEach(card => {
-				const cardTags = card.dataset.tags.split(',');
-				if (activeTags.length === 0) {
-					card.style.display = '';
-				} else {
-					const hasTag = activeTags.some(tag => cardTags.includes(tag));
-					card.style.display = hasTag ? '' : 'none';
-				}
-			});
-		});
-	});
+    if (visibleCount === 0) {
+      noResultsMessage.style.display = 'flex';
+      blogGrid.style.display = 'none';
+    } else {
+      noResultsMessage.style.display = 'none';
+      blogGrid.style.display = 'grid';
+    }
+  }
+
+  searchInput?.addEventListener('input', (e) => {
+    searchTerm = (e.target as HTMLInputElement).value.toLowerCase();
+    filterPosts();
+  });
+
+  weeklyToggle?.addEventListener('change', (e) => {
+    hideWeekly = (e.target as HTMLInputElement).checked;
+    filterPosts();
+  });
+
+  clearSearchBtn?.addEventListener('click', () => {
+    if (searchInput) {
+      (searchInput as HTMLInputElement).value = '';
+      searchTerm = '';
+      filterPosts();
+      searchInput.focus();
+    }
+  });
+
+  tagBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tag = (btn as HTMLElement).dataset.tag;
+
+      if (tag) {
+        if (activeTags.includes(tag)) {
+          activeTags = activeTags.filter(t => t !== tag);
+          btn.classList.remove('active');
+        } else {
+          activeTags.push(tag);
+          btn.classList.add('active');
+        }
+
+        filterPosts();
+      }
+    });
+  });
 });
 </script>
 
@@ -318,6 +414,119 @@ document.addEventListener('DOMContentLoaded', () => {
 		color: hsl(var(--primary-foreground));
 	}
 
+		/* Filter controls */
+	.blog-controls {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	margin-bottom: 2rem;
+	padding: 1.5rem;
+	background-color: hsl(var(--card));
+	border-radius: var(--radius);
+	border: 1px solid hsl(var(--border));
+	}
+
+	.search-container {
+	position: relative;
+	max-width: 400px;
+	}
+
+	.search-input {
+	width: 100%;
+	padding: 0.75rem 2.5rem 0.75rem 1rem;
+	border: 1px solid hsl(var(--border));
+	border-radius: var(--radius);
+	background-color: hsl(var(--background));
+	color: hsl(var(--foreground));
+	font-size: 0.9rem;
+	}
+
+	.search-input:focus {
+	outline: none;
+	border-color: hsl(var(--primary));
+	box-shadow: 0 0 0 2px hsl(var(--primary) / 0.2);
+	}
+
+	.search-icon {
+	position: absolute;
+	right: 0.75rem;
+	top: 50%;
+	transform: translateY(-50%);
+	color: hsl(var(--muted-foreground));
+	}
+
+	.weekly-toggle {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	cursor: pointer;
+	font-size: 0.9rem;
+	}
+
+	.weekly-checkbox {
+	width: 1rem;
+	height: 1rem;
+	}
+
+	/* No results message */
+	.no-results-message {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		min-height: 300px;
+		padding: 2rem;
+		background-color: hsl(var(--card));
+		border-radius: var(--radius);
+		border: 1px solid hsl(var(--border));
+		margin-bottom: 2rem;
+	}
+
+	.no-results-content {
+		text-align: center;
+		max-width: 400px;
+	}
+
+	.no-results-icon {
+		font-size: 3rem;
+		display: block;
+		margin-bottom: 1rem;
+		opacity: 0.7;
+	}
+
+	.no-results-content h3 {
+		font-size: 1.25rem;
+		font-weight: 600;
+		margin: 0 0 0.5rem;
+		color: hsl(var(--foreground));
+	}
+
+	.no-results-content p {
+		color: hsl(var(--muted-foreground));
+		margin: 0 0 1.5rem;
+		line-height: 1.6;
+	}
+
+	.clear-search-btn {
+		background-color: hsl(var(--primary));
+		color: hsl(var(--primary-foreground));
+		border: none;
+		padding: 0.5rem 1rem;
+		border-radius: var(--radius);
+		font-size: 0.875rem;
+		font-weight: 500;
+		cursor: pointer;
+		transition: background-color 0.2s ease;
+	}
+
+	.clear-search-btn:hover {
+		background-color: hsl(var(--primary) / 0.9);
+	}
+
+	.clear-search-btn:focus {
+		outline: none;
+		box-shadow: 0 0 0 2px hsl(var(--primary) / 0.2);
+	}
+
 	/* Responsive Design */
 	@media (min-width: 480px) {
 		.container {
@@ -336,6 +545,12 @@ document.addEventListener('DOMContentLoaded', () => {
 		
 		.blog-card.featured {
 			grid-column: 1 / -1;
+		}
+
+		.blog-controls {
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
 		}
 	}
 

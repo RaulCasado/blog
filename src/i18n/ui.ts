@@ -136,7 +136,12 @@ export const translations = {
         'blog.subtitle' : 'Thoughts, ideas and reflections on web development and programming',
         'blog.featured': 'Featured',
         'blog.readingTime': 'min read',
-        'blog.featuredDescription': 'Check out this featured article about web development, programming, and technology.'
+        'blog.featuredDescription': 'Check out this featured article about web development, programming, and technology.',
+        'blog.hideWeekly': 'Hide weekly articles',
+        'blog.searchPlaceholder': 'Search articles...',
+        'blog.noResults': 'No articles found',
+        'blog.noResultsDescription': 'There are no articles matching your search. Try different terms.',
+        'blog.clearSearch': 'Clear search',
 
     },
     'es': {
@@ -267,6 +272,12 @@ export const translations = {
         'blog.subtitle' : 'Pensamientos, ideas y reflexiones sobre desarrollo web y programación',
         'blog.featured': 'Destacado',
         'blog.readingTime': 'min lectura',
-        'blog.featuredDescription': 'Descubre este artículo destacado sobre desarrollo web, programación y tecnología.'
+        'blog.featuredDescription': 'Descubre este artículo destacado sobre desarrollo web, programación y tecnología.',
+        'blog.hideWeekly': 'Ocultar artículos semanales',
+        'blog.searchPlaceholder': 'Buscar artículos...',
+        'blog.noResults': 'No se encontraron artículos',
+        'blog.noResultsDescription': 'No hay artículos que coincidan con tu búsqueda. Intenta con otros términos.',
+        'blog.clearSearch': 'Limpiar búsqueda',
+
     }
 } as const;
