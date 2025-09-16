@@ -73,8 +73,10 @@ function getLanguageIcon(language) {
   
   <FilterProject 
     lang={lang}
+    allProjects={projectsForFilter}
   />
-  <div class="projects-grid">
+  
+  <div class="projects-grid" id="projects-grid">
     {projects.map(project => (
       <div class={`project-card ${project.language ? `lang-${project.language.toLowerCase()}` : ''}`} data-language={project.language || 'none'}>
         <div class="project-header">
@@ -115,7 +117,7 @@ function getLanguageIcon(language) {
   </div>
 
   {page && page.lastPage > 1 && (
-    <nav class="pagination">
+    <nav class="pagination" id="pagination-nav">
       {page.url.prev && (
         <a href={page.url.prev} class="pagination-link">
           ← {lang === 'es' ? 'Anterior' : 'Previous'}
@@ -135,21 +137,33 @@ function getLanguageIcon(language) {
   )}
 </div>
 
-<script>
+<script define:vars={{ 
+  allProjects: projectsForFilter, 
+  currentPageProjects: projects,
+  lang,
+  translations: {
+    noDescription: t('portfolio.noDescription'),
+    viewOnGithub: t('portfolio.viewOnGithub')
+  }
+}}>
   document.addEventListener('DOMContentLoaded', () => {
+    const projectsGrid = document.getElementById('projects-grid');
+    const paginationNav = document.getElementById('pagination-nav');
+    
     const urlParams = new URLSearchParams(window.location.search);
     const currentFilter = urlParams.get('language') || 'all';
     filterProjects(currentFilter);
     updateActiveFilter(currentFilter);
 
     document.addEventListener('click', function(e) {
-      if (e.target.matches('.filter-link')) {
+      if (e.target && e.target.matches && e.target.matches('.filter-link')) {
+        e.preventDefault();
         const language = e.target.getAttribute('data-language');
         
         filterProjects(language);
         updateActiveFilter(language);
         
-        const newUrl = new URL(window.location);
+        const newUrl = new URL(window.location.href);
         if (language === 'all') {
           newUrl.searchParams.delete('language');
         } else {
@@ -166,21 +180,62 @@ function getLanguageIcon(language) {
     });
 
     function filterProjects(language) {
-      const projects = document.querySelectorAll('.project-card');
+      let projectsToShow;
       
-      projects.forEach(project => {
-        const projectLanguage = project.getAttribute('data-language');
-        
-        if (language === 'all' || projectLanguage === language) {
-          project.style.display = 'flex';
-          project.style.animation = 'fadeIn 0.3s ease-in';
-        } else {
-          project.style.display = 'none';
-        }
-      });
+      if (language === 'all') {
+        projectsToShow = currentPageProjects;
+        if (paginationNav) paginationNav.style.display = 'flex';
+      } else {
+        projectsToShow = allProjects.filter(project => 
+          project.language === language
+        );
+        if (paginationNav) paginationNav.style.display = 'none';
+      }
+      
+      renderProjects(projectsToShow);
     }
 
-    function updateActiveFilter(activeLanguage) {
+    function renderProjects(projects) {
+      projectsGrid.innerHTML = projects.map(project => {
+        const iconResult = getLanguageIcon(project.language);
+        const isUrl = iconResult.startsWith('http');
+        
+        return `<div class="project-card ${project.language ? `lang-${project.language.toLowerCase()}` : ''}" data-language="${project.language || 'none'}">
+  <div class="project-header">
+    <div class="project-icon">
+      ${isUrl 
+        ? `<img src="${iconResult}" alt="${project.language}" width="24" height="24" />`
+        : iconResult
+      }
+    </div>
+    <div class="project-title-container">
+      <h3 class="project-title">${project.name}</h3>
+      ${project.language ? `<span class="project-language-pill" style="--lang-color: ${getLanguageColor(project.language)};">${project.language}</span>` : ''}
+    </div>
+  </div>
+  
+  <p class="project-description">${project.description || translations.noDescription}</p>
+  
+  <div class="project-meta">
+    <div class="project-stats">
+      <span class="project-badge">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        ${project.stars}
+      </span>
+      <span class="project-updated" title="${project.updatedAt}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        ${new Date(project.updatedAt).toLocaleDateString(lang === 'es' ? 'es-ES' : 'en-US', {year: 'numeric', month: 'short'})}
+      </span>
+    </div>
+    
+    <a href="${project.url}" target="_blank" rel="noopener noreferrer" class="project-link">
+      <span>${translations.viewOnGithub}</span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+    </a>
+  </div>
+</div>`;
+      }).join('');
+    }    function updateActiveFilter(activeLanguage) {
       const filterLinks = document.querySelectorAll('.filter-link');
       
       filterLinks.forEach(link => {
@@ -193,10 +248,45 @@ function getLanguageIcon(language) {
         }
       });
     }
+
+    function getLanguageColor(language) {
+      const colors = {
+        JavaScript: '#f0db4f',
+        TypeScript: '#3178c6',
+        Astro: '#ff5c00',
+        HTML: '#e34c26',
+        CSS: '#563d7c',
+        Python: '#3572A5',
+        C: '#555555',
+        'C++': '#f34b7d',
+        PHP: '#4F5D95'
+      };
+      return colors[language] || '#8e8e8e';
+    }
+
+    function getLanguageIcon(language) {
+      if ((!language) || language === null || language === undefined) {
+        return 'https://cdn.simpleicons.org/markdown';
+      }
+      
+      const icons = {
+        JavaScript: 'https://cdn.simpleicons.org/javascript',
+        TypeScript: 'https://cdn.simpleicons.org/typescript',
+        HTML: 'https://cdn.simpleicons.org/html5',
+        Astro: 'https://cdn.simpleicons.org/astro',
+        CSS: 'https://cdn.simpleicons.org/css',
+        Python: 'https://cdn.simpleicons.org/python',
+        C: 'https://cdn.simpleicons.org/c',
+        'C++': 'https://cdn.simpleicons.org/cplusplus',
+        PHP: 'https://cdn.simpleicons.org/php'
+      };
+      
+      return icons[language] || language.substring(0, 2).toUpperCase();
+    }
   });
 </script>
 
-<style>
+<style is:global>
   .portfolio-container {
     max-width: 1200px;
     margin: 0 auto;

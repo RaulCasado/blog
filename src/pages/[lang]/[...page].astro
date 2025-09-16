@@ -54,6 +54,7 @@ export async function getStaticPaths({ paginate }) {
       props: {
         pageName: 'portfolio',
         component: PortfolioPageContent,
+        allProjects: projects,
         page: {
           data: projects.slice(0, 8),
           url: {
@@ -106,7 +107,7 @@ export async function getStaticPaths({ paginate }) {
 }
 
 const { lang, page } = Astro.params;
-const { pageName, component: PageContentComponent, page: pageData } = Astro.props;
+const { pageName, component: PageContentComponent, page: pageData, allProjects } = Astro.props;
 
 const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);
@@ -122,5 +123,5 @@ const htmlLang = lang || defaultLanguage;
   description={t(pageDescriptionKey)}
   lang={htmlLang}
 >
-  <PageContentComponent lang={lang} page={pageData} />
+  <PageContentComponent lang={lang} page={pageData} allProjects={allProjects} />
 </StandardPageLayout>

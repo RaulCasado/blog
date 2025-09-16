@@ -1,9 +1,13 @@
 ---
 import { useTranslations } from '../i18n/utils';
-const { lang = 'en' } = Astro.props;
+const { lang = 'en', allProjects = [] } = Astro.props;
 const t = useTranslations(lang);
 
-const languages = ['JavaScript', 'TypeScript', 'Astro', 'HTML', 'Python', 'C', 'C++'];
+const availableLanguages = [...new Set(
+  allProjects
+    .map(project => project.language)
+    .filter(lang => lang !== null && lang !== undefined)
+)].sort();
 ---
 
 <div class="filter-project" role="tablist" aria-label="Filter projects by language">
@@ -14,7 +18,7 @@ const languages = ['JavaScript', 'TypeScript', 'Astro', 'HTML', 'Python', 'C', '
     >
         {t('portfolio.filter.all')}
     </button>
-    {languages.map(language => (
+    {availableLanguages.map(language => (
         <button 
             class="filter-link"
             data-language={language}
