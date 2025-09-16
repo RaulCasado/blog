@@ -7,11 +7,10 @@ import AboutPageContent from '../../components/pages/AboutPageContent.astro';
 import CvPageContent from '../../components/pages/CvPageContent.astro';
 import PortfolioPageContent from '../../components/pages/PortfolioPageContent.astro';
 
-export async function getStaticPaths() {
+export async function getStaticPaths({ paginate }) {
   const pagesToTranslate = [
     { name: 'about', component: AboutPageContent },
     { name: 'cv', component: CvPageContent },
-    { name: 'portfolio', component: PortfolioPageContent },
   ];
 
   const paths = [];
@@ -30,11 +29,84 @@ export async function getStaticPaths() {
       });
     }
   }
+
+  const username = "RaulCasado";
+  const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated`);
+  const repositories = await response.json();
+
+  const projects = repositories
+    .filter(repo => !repo.fork)
+    .map(repo => ({
+      name: repo.name,
+      description: repo.description,
+      url: repo.html_url,
+      language: repo.language,
+      stars: repo.stargazers_count,
+      updatedAt: repo.updated_at
+    }));
+
+  for (const langKey of Object.keys(languages)) {
+    paths.push({
+      params: {
+        lang: langKey,
+        page: 'portfolio'
+      },
+      props: {
+        pageName: 'portfolio',
+        component: PortfolioPageContent,
+        page: {
+          data: projects.slice(0, 8),
+          url: {
+            current: `/${langKey}/portfolio`,
+            next: projects.length > 8 ? `/${langKey}/portfolio/2` : undefined,
+            prev: undefined
+          },
+          currentPage: 1,
+          lastPage: Math.ceil(projects.length / 8),
+          size: 8,
+          total: projects.length
+        }
+      }
+    });
+
+    const pageSize = 8;
+    const totalPages = Math.ceil(projects.length / pageSize);
+    
+    for (let pageNumber = 2; pageNumber <= totalPages; pageNumber++) {
+      const startIndex = (pageNumber - 1) * pageSize;
+      const endIndex = startIndex + pageSize;
+      
+      paths.push({
+        params: {
+          lang: langKey,
+          page: `portfolio/${pageNumber}`
+        },
+        props: {
+          pageName: 'portfolio',
+          component: PortfolioPageContent,
+          allProjects: projects,
+          page: {
+            data: projects.slice(startIndex, endIndex),
+            url: {
+              current: `/${langKey}/portfolio/${pageNumber}`,
+              next: pageNumber < totalPages ? `/${langKey}/portfolio/${pageNumber + 1}` : undefined,
+              prev: pageNumber > 2 ? `/${langKey}/portfolio/${pageNumber - 1}` : `/${langKey}/portfolio`
+            },
+            currentPage: pageNumber,
+            lastPage: totalPages,
+            size: pageSize,
+            total: projects.length
+          }
+        }
+      });
+    }
+  }
+
   return paths;
 }
 
 const { lang, page } = Astro.params;
-const { pageName, component: PageContentComponent } = Astro.props;
+const { pageName, component: PageContentComponent, page: pageData } = Astro.props;
 
 const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);
@@ -50,5 +122,5 @@ const htmlLang = lang || defaultLanguage;
   description={t(pageDescriptionKey)}
   lang={htmlLang}
 >
-  <PageContentComponent lang={lang} />
+  <PageContentComponent lang={lang} page={pageData} />
 </StandardPageLayout>
