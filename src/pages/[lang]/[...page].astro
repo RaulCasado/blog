@@ -1,13 +1,13 @@
 ---
 import StandardPageLayout from '../../layouts/StandardPageLayout.astro';
-import { useTranslations, useTranslatedPath, defaultLanguage } from '../../i18n/utils';
+import { useTranslations, defaultLanguage } from '../../i18n/utils';
 import { languages } from '../../i18n/ui';
 
 import AboutPageContent from '../../components/pages/AboutPageContent.astro';
 import CvPageContent from '../../components/pages/CvPageContent.astro';
 import PortfolioPageContent from '../../components/pages/PortfolioPageContent.astro';
 
-export async function getStaticPaths({ paginate }) {
+export async function getStaticPaths() {
   const pagesToTranslate = [
     { name: 'about', component: AboutPageContent },
     { name: 'cv', component: CvPageContent },
@@ -110,7 +110,6 @@ const { lang, page } = Astro.params;
 const { pageName, component: PageContentComponent, page: pageData, allProjects } = Astro.props;
 
 const t = useTranslations(lang);
-const translatePath = useTranslatedPath(lang);
 
 const pageTitleKey = `${pageName}.title`;
 const pageDescriptionKey = `${pageName}.description`;

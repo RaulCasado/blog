@@ -295,8 +295,28 @@ const lang = getLangFromUrl(Astro.url);
 								<hr />
 							</div>
 							<slot />
-                            
+
                             <SocialShare url={currentPageUrl} title={title} description={description} />
+
+                            <!-- Comments section -->
+                            <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid hsl(var(--border));">
+                                <script src="https://giscus.app/client.js"
+                                        data-repo="RaulCasado/blog"
+                                        data-repo-id="R_kgDOOseBOw"
+                                        data-category="General"
+                                        data-category-id="DIC_kwDOOseBO84CvjDa"
+                                        data-mapping="pathname"
+                                        data-strict="0"
+                                        data-reactions-enabled="1"
+                                        data-emit-metadata="0"
+                                        data-input-position="bottom"
+                                        data-theme="preferred_color_scheme"
+                                        data-lang="es"
+                                        data-loading="lazy"
+                                        crossorigin="anonymous"
+                                        async>
+                                </script>
+                            </div>
 						</div>
 					</div>
 				) : (
@@ -318,6 +338,26 @@ const lang = getLangFromUrl(Astro.url);
 							{title && <hr />}
 						</div>
 						<slot />
+
+                        <!-- Comments section -->
+                        <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid hsl(var(--border));">
+                            <script src="https://giscus.app/client.js"
+                                    data-repo="RaulCasado/blog"
+                                    data-repo-id="R_kgDOOseBOw"
+                                    data-category="General"
+                                    data-category-id="DIC_kwDOOseBO84CvjDa"
+                                    data-mapping="pathname"
+                                    data-strict="0"
+                                    data-reactions-enabled="1"
+                                    data-emit-metadata="0"
+                                    data-input-position="bottom"
+                                    data-theme="preferred_color_scheme"
+                                    data-lang="es"
+                                    data-loading="lazy"
+                                    crossorigin="anonymous"
+                                    async>
+                            </script>
+                        </div>
 					</div>
 				)}
 			</article>
