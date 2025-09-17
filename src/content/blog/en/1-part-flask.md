@@ -448,3 +448,7 @@ It's important to follow good naming practices when defining resource URIs. Some
 - Use plural nouns for resource names (e.g., `/tasks` instead of `/task`).
 - Use hyphens to separate words in URIs (e.g., `/completed-tasks` instead of `/completedtasks`).
 - Avoid using verbs in URIs, as the HTTP method (GET, POST, PUT, DELETE) already indicates the action to be performed on the resource.
+
+And that's all for today! In the next post in the series, we'll dive deeper into more advanced topics such as data validation, error handling, and authentication. If you have any questions or suggestions, don't hesitate to leave a comment. See you next time!
+By the way, before I forget, here's the link to the GitHub repository with all the code we've written today plus some extra goodies so you can test it directly. Tests included.
+[GitHub Repository](https://github.com/RaulCasado/flask-blog-init)

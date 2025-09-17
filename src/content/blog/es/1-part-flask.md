@@ -447,3 +447,7 @@ Es importante seguir buenas prácticas de naming al definir las URIs de los recu
 - Utilizar sustantivos en plural para los nombres de los recursos (por ejemplo, `/tareas` en lugar de `/tarea`).
 - Utilizar guiones bajos o guiones para separar palabras en las URIs (por ejemplo, `/tareas/completadas` en lugar de `/tareascompletadas`).
 - Evitar el uso de verbos en las URIs, ya que el método HTTP (GET, POST, PUT, DELETE) ya indica la acción a realizar sobre el recurso.
+
+Y eso fue todo por hoy. En el próximo post de la serie, profundizaremos en temas más avanzados como la validación de datos, manejo de errores y autenticación. Si tienes alguna pregunta o sugerencia, no dudes en dejar un comentario. ¡Hasta la próxima! Por cierto antes de que se me olvide, aquí tienes el link al repositorio de GitHub con todo el código que hemos hecho hoy más algunas cosillas extras para que puedas probarlo directamente. Incluidos tests.
+
+[Repositorio de GitHub](https://github.com/RaulCasado/flask-blog-init)
