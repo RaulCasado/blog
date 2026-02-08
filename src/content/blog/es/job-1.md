@@ -2,7 +2,7 @@
 title: 'Mis Primeros 3 Meses como Desarrollador: De Cero a Gestionar 5 Proyectos en Producción'
 description: 'Una crónica honesta y sin filtros de mi viaje como desarrollador junior. Desde arreglar sistemas de notificaciones rotos hasta gestionar arquitecturas multi-timezone - esto es lo que nadie te cuenta sobre tu primer trabajo como programador.'
 pubDate: '2025-11-24'
-heroImage: '/blog-placeholder-5.jpg'
+heroImage: '/trabajo1.jpg'
 heroImageAlt: 'Desarrollador trabajando en múltiples proyectos'
 tags: ['job']
 lang: 'es'
@@ -46,10 +46,10 @@ Después de investigar el código, encontré el culpable:
 
 ```javascript
 // ANTES (incorrecto):
-moment.utc(register.start).tz('Europe/Madrid')
+moment.utc(entry.start).tz('Europe/Madrid')
 
 // DESPUÉS (correcto):
-moment(register.start, 'YYYY-MM-DD HH:mm:ss')
+moment(entry.start, 'YYYY-MM-DD HH:mm:ss')
 ```
 
 El problema era el parseo. El sistema estaba convirtiendo a UTC primero, luego aplicando la zona horaria, lo que causaba cambios de fecha.Y más importante, aprendí que las zonas horarias son la pesadilla de todo desarrollador. (Otra vez)
@@ -82,45 +82,17 @@ Mi solución fue innovadora (o al menos me gusta pensar eso):
 
 ```javascript
 // Obtener registros de HOY
-const todayRegisters = await fetchRegistries(dateToday);
+const todayRecords = await getRecords(currentDate);
 
 // Obtener registros de AYER sin cerrar
-const yesterdayRegisters = await fetchRegistries(dateYesterday)
-    .then(data => data.filter(reg => !reg.end || reg.end === 'null'));
+const yesterdayRecords = await getRecords(previousDate)
+    .then(data => data.filter(r => !r.endTime || r.endTime === 'null'));
 
 // Combinar ambos datasets
-const allActiveRegisters = [...todayRegisters, ...yesterdayRegisters];
+const allActiveRecords = [...todayRecords, ...yesterdayRecords];
 ```
 
 **Resultado:** 100% de precisión independientemente del horario del turno.
-
-### El Bug de Integridad de Datos Históricos
-
-Este fue crítico. Cuando un administrador cambiaba el nombre de un empleado en su licencia (digamos de Pablo a Enrique), **todos los registros históricos se actualizaban para mostrar el nuevo nombre**.
-
-Imagina reportes de nómina mostrando "Enrique trabajó 8 horas el 1 de septiembre" cuando en realidad fue Pablo. Esto es una pesadilla de cumplimiento legal.
-
-**La causa raíz:** La base de datos estaba haciendo JOINs en tiempo real, por lo que cambiar el nombre en la tabla `licenses` cambiaba retroactivamente todos los registros vinculados.
-
-**Mi solución:** Desnormalización parcial con triggers.
-
-```sql
--- Añadir nombre de empleado a la tabla registries
-ALTER TABLE registries 
-ADD COLUMN employee_name VARCHAR(255);
-
--- Trigger para guardar nombre en el momento del registro
-CREATE TRIGGER save_employee_name
-BEFORE INSERT ON registries
-FOR EACH ROW
-BEGIN
-    SET NEW.employee_name = (
-        SELECT name FROM licenses WHERE id = NEW.user_id
-    );
-END;
-```
-
-Ahora los registros históricos preservan el nombre en el momento en que fueron creados. Integridad de datos: **restaurada**.
 
 ### El Misterio de los 500 Registros
 
@@ -130,40 +102,15 @@ Un día, los clientes reportaron que no podían añadir más fechas no laborable
 
 ```sql
 -- Query problemática:
-SELECT * FROM registries 
-WHERE date >= '2024-01-01' 
-ORDER BY timestamp DESC
+SELECT * FROM records
+WHERE date >= '2024-01-01'
+ORDER BY created_at DESC
 LIMIT 500  -- ❌ Límite que causaba pérdida de datos
 ```
 
 **La causa raíz:** Sin acceso al servidor GraphQL ni a la base de datos de producción, no pude implementar la solución completa. Pero documenté el problema detalladamente, propuse soluciones (eliminar LIMIT, implementar paginación real, optimizar índices) y escalé el issue.
 
 **Lección aprendida:** No todos los bugs se pueden arreglar inmediatamente, especialmente en arquitecturas distribuidas. La clave es documentar bien el problema para quien sí tenga los accesos necesarios.
-
-### Auto-Cálculo de Horas: UX que Ahorra Tiempo
-
-Uno de esos "pequeños" detalles que hace la diferencia:
-
-Antes, los administradores tenían que calcular manualmente las horas semanales y mensuales cada vez que modificaban un horario. Tedioso y propenso a errores.
-
-**Implementé:**
-
-```javascript
-function calculateScheduleHours() {
-    let totalHours = 0;
-    for(let day = 1; day <= 7; day++) {
-        const hours = parseFloat($(`#hours_${day}`).val()) || 0;
-        const pause = parseFloat($(`#pause_${day}`).val()) || 0;
-        totalHours += (hours - pause);
-    }
-    $('#weekly_hours').val(totalHours.toFixed(2));
-    $('#monthly_hours').val((totalHours * 4.33).toFixed(2));
-}
-```
-
-**Resultado:** Cero errores de cálculo manual + ahorro de 10-15 minutos por modificación de horario.
-
-A veces las mejores features son las que nadie nota porque "simplemente funcionan".
 
 ### Portal del Empleado: Bridging Mobile y Web
 
@@ -194,13 +141,13 @@ Tuve que:
 Después de horas de debugging, encontré el problema:
 
 ```php
-case 'Todos':
-    $idinsert = -2;
-    // BUG: ¡Faltaba obtener los tokens GCM!
+case 'all_users':
+    $targetId = -2;
+    // BUG: ¡Faltaba obtener los tokens de dispositivos!
     // Estaba enviando al último token obtenido, no a todos
-    
+
     // FIX: Realmente obtener todos los tokens
-    $sql = "faltaba coger los tokens gcm de la bd";
+    $query = "SELECT device_token FROM push_tokens WHERE active = 1";
 ```
 
 **De 0% a 100% de funcionalidad.** Las notificaciones push finalmente funcionaban.
@@ -210,20 +157,20 @@ case 'Todos':
 Construí un cron job que se ejecuta cada 24 horas y envía recordatorios automáticos para eventos con deadlines próximos:
 
 ```php
-function enviarNotificacionesDeadline() {
-    $ahora = time();
-    $ventana24h = $ahora + (24 * 60 * 60);
-    
-    $eventos = getFirestoreEvents();
-    
-    foreach($eventos as $evento) {
-        if($evento['deadline'] >= $ahora && 
-           $evento['deadline'] <= $ventana24h) {
-            
-            $mensaje = "⏰ ¡Último día!\nEl plazo para " .
-                      $evento['title'] . " termina mañana.";
-            
-            enviarNotificacion($mensaje, $evento['id']);
+function sendDeadlineReminders() {
+    $now = time();
+    $window = $now + (24 * 60 * 60);
+
+    $events = getEventsFromDB();
+
+    foreach($events as $event) {
+        if($event['deadline'] >= $now &&
+           $event['deadline'] <= $window) {
+
+            $msg = "Recordatorio: El plazo para " .
+                   $event['title'] . " se acerca.";
+
+            sendPushNotification($msg, $event['id']);
         }
     }
 }
@@ -243,7 +190,7 @@ A pesar de la advertencia, se decidió proceder con el deploy en producción. Co
 
 ### Colaboración con el Equipo Mobile
 
-Una parte importante fue coordinar con Daniel, el desarrollador mobile. Especialmente en:
+Una parte importante fue coordinar con el desarrollador mobile. Especialmente en:
 
 - **Testing push notifications:** Necesitábamos múltiples dispositivos para probar envíos masivos
 - **Sincronización de datos:** Asegurar que la estructura Firestore funcionara para web y móvil
@@ -281,11 +228,11 @@ Cuando se exportaban más de 1 mes de datos de tracking GPS, los archivos eran m
 
 ```php
 if($dateRange > 30) {
-    // Solo coordenadas, reducir tamaño de archivo
-    $export = array('lat', 'lng', 'date');
+    // Solo coordenadas para reducir tamaño
+    $fields = array('latitude', 'longitude', 'date');
 } else {
-    // Exportación completa
-    $export = array('lat', 'lng', 'timestamp', 'user', 'activity');
+    // Exportación completa con todos los campos
+    $fields = array('latitude', 'longitude', 'timestamp', 'user_id', 'activity_type');
 }
 ```
 
@@ -366,8 +313,8 @@ Lo que **sí sé** es:
 - Bugs críticos de producción independientemente
 - Features complejas (push, vacaciones, multi-timezone)
 - 5 proyectos simultáneos
-- Cero supervisión
-- Cero code reviews
+- Alto grado de autonomía
+- Gestión autónoma del código
 - 27 tareas/mes
 
 Vosotros decidís.
@@ -398,9 +345,27 @@ Vosotros decidís.
 
 ## ¿Qué Sigue?
 
-Después de esta experiencia increíble, estoy emocionado por las oportunidades que vienen. He aprendido que puedo adaptarme rápidamente y enfrentar desafíos complejos.
+Después de esta experiencia, he decidido que este blog será mi espacio para compartir los retos y aprendizajes que voy encontrando en mi día a día como desarrollador. Las tecnologías principales con las que trabajo actualmente son **PHP, JavaScript, Firestore y MySQL**.
 
-Estos 3 meses me enseñaron que puedo manejar mucho más de lo que pensaba, y estoy listo para el siguiente nivel.
+Aquí algunos de los próximos temas que iré publicando:
+
+### Sistema de Horas Extras
+
+Desarrollé un módulo completo de gestión de horas extras. Los empleados pueden consultar las horas extra que han acumulado, y los administradores tienen la capacidad de marcarlas como pagadas o compensadas con tiempo de descanso. Un sistema que aporta transparencia tanto para trabajadores como para la empresa.
+
+### Sistema de Reservas para Club Empresarial
+
+Junto a mi jefe, modernizamos el sistema de reservas de un club empresarial que funcionaba de manera anticuada. Yo me encargué de desarrollar los scripts en Python que, usando la API y los datos existentes del cliente, permitían crear y cancelar reservas de forma automatizada. Mi jefe se encargó de integrar todo con WhatsApp para facilitar la comunicación con los usuarios. Un proyecto que combinó backend, automatización e integración de servicios.
+
+### La Importancia del Naming en las Ramas
+
+Un día, al hacer un despliegue a producción, publicamos la rama equivocada y el servidor se cayó. Lo identificamos rápidamente y lo restauramos, pero fue una lección muy valiosa: **utilizar convenciones claras para nombrar las ramas es fundamental.** Un buen naming evita errores humanos que pueden tener consecuencias serias.
+
+### Liderando al Nuevo Compañero de Prácticas
+
+Actualmente estoy mentorizando al nuevo compañero de prácticas. Le estoy enseñando todo lo que sé: desde las buenas prácticas del código hasta cómo enfrentarse a los problemas del día a día. Es una experiencia que me está ayudando a consolidar mis conocimientos y a desarrollar habilidades de liderazgo.
+
+Estos meses me han enseñado que puedo manejar mucho más de lo que pensaba, y estoy listo para el siguiente nivel.
 
 ## Pensamientos Finales
 

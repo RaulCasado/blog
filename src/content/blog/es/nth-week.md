@@ -2,7 +2,7 @@
 title: 'De la Entrevista al Código: Crónica de Mis Primeras Semanas como Programador'
 description: 'He estado ausente tres semanas, ¡pero por una buena razón! Te cuento todo sobre mi entrevista, cómo conseguí mi primer trabajo como programador y mi increíblemente productiva primera semana.'
 pubDate: '2025-09-30'
-heroImage: '/blog-placeholder-4.jpg'
+heroImage: '/nasa.png'
 heroImageAlt: 'Un escritorio con un ordenador mostrando código'
 tags: ['weekly']
 lang: 'es'
@@ -28,26 +28,7 @@ Fueron dos semanas de estudio intenso, pero increíblemente gratificantes. Cada 
 
 ## Semana 3: Mi Primera Semana en el Mundo Real
 
-Y llegó el día. La tercera semana fue mi primera semana de trabajo. La sensación de abrir el portátil sabiendo que el código que vas a escribir va a ser usado por personas reales es... indescriptible. Y ha sido, sin duda, una de las semanas más productivas de mi vida.
-
-Esto es un resumen de mis primeras misiones:
-
-### El Misterio de la Fecha Viajera en PHP
-
-Mi primera tarea fue arreglar un bug curioso. En una parte de la aplicación, las fechas se mostraban incorrectamente, a menudo aparecía un día anterior al seleccionado. Esto ocurría cuando un usuario en su PC tenía una configuración de zona horaria local diferente. Tras investigar un poco, descubrí que el problema estaba en el parseo de la fecha. La solución fue usar `getUTCTime()` para normalizar la fecha a UTC antes de procesarla, asegurando que la zona horaria del cliente no afectase al resultado. ¡Primer bug solucionado!
-
-### Alimentando a la IA con JSON
-
-Una de mis tareas más interesantes fue preparar datos para el modelo de IA que la empresa está desarrollando. Mi trabajo consistía en estructurar información diversa en formato **JSON**. No era solo "escribir JSON", sino entender qué datos necesitaba el modelo, cómo debían estar anidados y qué formato era el más eficiente para que la IA lo "entendiera" bien. Fue genial ver cómo mis conocimientos teóricos sobre APIs y estructuras de datos se aplicaban a un proyecto de IA real.
-
-### Desarrollando Nuevas Funcionalidades
-
-La última parte de la semana la dediqué a añadir nuevas características a una aplicación interna. Aquí es donde toqué un poco de todo:
-
-* **Imagen ampliable con JavaScript**: Implementé una funcionalidad para que los usuarios pudieran hacer clic en una imagen y verla en grande, en un modal. Un clásico del desarrollo front-end.
-* **Modal que se cierra al clicar fuera**: Para mejorar la usabilidad, añadí un listener para que, si el usuario hace clic fuera del modal de la imagen, este se cierre automáticamente. Pequeños detalles que marcan la diferencia.
-* **Campos de observaciones y deadline en Firestore**: Añadí nuevos campos a la base de datos de Firestore. Uno de ellos era un campo de "observaciones" para añadir texto libre. Otro, más interesante, fue un campo `deadline`. Este campo se usa para que un usuario no pueda inscribirse a un evento si la fecha límite ya ha pasado. Esto implicó no solo añadir el campo, sino también la lógica de validación correspondiente.
-* **Inscripciones irreversibles**: Implementé una lógica para que, una vez que un usuario se inscribe a un evento, no pueda deshacer la acción.
+Y llegó el día. La tercera semana fue mi primera semana de trabajo. La sensación de abrir el portátil sabiendo que el código que vas a escribir va a ser usado por personas reales es... indescriptible. Arreglé mi primer bug de fechas, preparé datos JSON para un modelo de IA, y añadí varias funcionalidades nuevas a una aplicación interna (modales, campos en Firestore, lógica de validación). Si queréis los detalles de todo lo que hice en mis primeros meses, lo cuento a fondo en mi post sobre mis primeros 3 meses como desarrollador.
 
 ## Y para rematar la semana: ¡La NASA International Space Apps Challenge!
 

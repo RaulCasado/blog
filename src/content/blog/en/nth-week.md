@@ -2,7 +2,7 @@
 title: 'From Interview to Code: A Chronicle of My First Weeks as a Programmer'
 description: "I've been away for three weeks, but for a good reason! I'll tell you all about my interview, how I landed my first job as a programmer, and my incredibly productive first week."
 pubDate: '2025-09-30'
-heroImage: '/blog-placeholder-4.jpg'
+heroImage: '/nasa.png'
 heroImageAlt: 'A desk with a computer showing code'
 tags: ['personal', 'career-development', 'php', 'firestore', 'javascript']
 lang: 'en'
@@ -28,26 +28,7 @@ Those were two weeks of intense study, but incredibly rewarding. Every small pro
 
 ## Week 3: My First Week in the Real World
 
-And then the day came. The third week was my first week on the job. The feeling of opening your laptop knowing that the code you're about to write will be used by real people is... indescribable. And it has been, without a doubt, one of the most productive weeks of my life.
-
-Here’s a summary of my first missions:
-
-### The Mystery of the Time-Traveling Date in PHP
-
-My first task was to fix a curious bug. In one part of the application, dates were displaying incorrectly, often showing the day before the one selected. This happened when a user's PC had a different local time zone setting. After a bit of digging, I found the problem was in the date parsing. The solution was to use `getUTCTime()` to normalize the date to UTC before processing it, ensuring the client's time zone didn't affect the result. First bug squashed!
-
-### Feeding the AI with JSON
-
-One of my most interesting tasks was preparing data for the company's AI model. My job was to structure various pieces of information into **JSON** format. It wasn't just "writing JSON," but understanding what data the model needed, how it should be nested, and what format was most efficient for the AI to "understand." It was great to see my theoretical knowledge of APIs and data structures being applied to a real AI project.
-
-### Developing New Features
-
-I spent the last part of the week adding new features to an internal application. This is where I got to touch a bit of everything:
-
-* **Expandable Image with JavaScript**: I implemented a feature allowing users to click on an image to view it enlarged in a modal. A front-end development classic.
-* **Modal That Closes on Outside Click**: To improve usability, I added a listener so that if the user clicks outside the image modal, it closes automatically. Small details that make a big difference.
-* **Observation and Deadline Fields in Firestore**: I added new fields to the Firestore database. One was an "observations" field for free text. Another, more interesting one, was a `deadline` field. This field is used to prevent a user from registering for an event after the deadline has passed. This involved not only adding the field but also the corresponding validation logic.
-* **Irreversible Registrations**: I implemented logic so that once a user registers for an event, they cannot undo the action.
+And then the day came. The third week was my first week on the job. The feeling of opening your laptop knowing that the code you're about to write will be used by real people is... indescribable. I fixed my first date bug, prepared JSON data for an AI model, and added several new features to an internal application (modals, Firestore fields, validation logic). If you want the full details of everything I did in my first months, I cover it in depth in my post about my first 3 months as a developer.
 
 ## And to Top It All Off: The NASA International Space Apps Challenge
 

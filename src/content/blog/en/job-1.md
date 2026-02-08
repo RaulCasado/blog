@@ -2,7 +2,7 @@
 title: 'My First 3 Months as a Developer: From Zero to Managing 5 Production Projects'
 description: 'A raw, honest chronicle of my journey as a junior developer. From fixing broken push notification systems to managing multi-timezone architectures - this is what nobody tells you about your first programming job.'
 pubDate: '2025-11-24'
-heroImage: '/blog-placeholder-5.jpg'
+heroImage: '/trabajo1.jpg'
 heroImageAlt: 'Developer working on multiple projects'
 tags: ['job']
 lang: 'en'
@@ -46,10 +46,10 @@ After digging through the codebase, I found the culprit:
 
 ```javascript
 // BEFORE (incorrect):
-moment.utc(register.start).tz('Europe/Madrid')
+moment.utc(entry.start).tz('Europe/Madrid')
 
 // AFTER (correct):
-moment(register.start, 'YYYY-MM-DD HH:mm:ss')
+moment(entry.start, 'YYYY-MM-DD HH:mm:ss')
 ```
 
 The issue was parsing. The system was converting to UTC first, then applying timezone, which caused date shifts. And more importantly, I learned that timezones are every developer's nightmare. (Again)
@@ -81,46 +81,18 @@ Here's a fun one: employees working night shifts (11 PM - 7 AM) weren't showing 
 My solution was innovative (or at least I like to think so):
 
 ```javascript
-// Fetch TODAY's registers
-const todayRegisters = await fetchRegistries(dateToday);
+// Fetch TODAY's records
+const todayRecords = await getRecords(currentDate);
 
-// Fetch YESTERDAY's unclosed registers
-const yesterdayRegisters = await fetchRegistries(dateYesterday)
-    .then(data => data.filter(reg => !reg.end || reg.end === 'null'));
+// Fetch YESTERDAY's unclosed records
+const yesterdayRecords = await getRecords(previousDate)
+    .then(data => data.filter(r => !r.endTime || r.endTime === 'null'));
 
 // Combine both datasets
-const allActiveRegisters = [...todayRegisters, ...yesterdayRegisters];
+const allActiveRecords = [...todayRecords, ...yesterdayRecords];
 ```
 
 **Result:** 100% accuracy regardless of shift timing.
-
-### The Historical Data Integrity Bug
-
-This one was critical. When an admin changed an employee's name in their license (let's say from Pablo to Enrique), **all historical records updated to show the new name**.
-
-Imagine payroll reports showing "Enrique worked 8 hours on September 1st" when it was actually Pablo. This is a compliance nightmare.
-
-**The root cause:** The database was doing real-time JOINs, so changing the name in the `licenses` table retroactively changed all linked records.
-
-**My solution:** Partial denormalization with triggers.
-
-```sql
--- Add employee name to registries table
-ALTER TABLE registries 
-ADD COLUMN employee_name VARCHAR(255);
-
--- Trigger to save name at the moment of registration
-CREATE TRIGGER save_employee_name
-BEFORE INSERT ON registries
-FOR EACH ROW
-BEGIN
-    SET NEW.employee_name = (
-        SELECT name FROM licenses WHERE id = NEW.user_id
-    );
-END;
-```
-
-Now historical records preserve the name at the time they were created. Data integrity: **restored**.
 
 ### The Mystery of the 500 Records
 
@@ -130,40 +102,15 @@ One day, clients reported they couldn't add more non-working dates. After invest
 
 ```sql
 -- Problematic query:
-SELECT * FROM registries 
-WHERE date >= '2024-01-01' 
-ORDER BY timestamp DESC
+SELECT * FROM records
+WHERE date >= '2024-01-01'
+ORDER BY created_at DESC
 LIMIT 500  -- ❌ Limit causing data loss
 ```
 
 **The root cause:** Without access to the GraphQL server or production database, I couldn't implement the complete solution. But I documented the problem in detail, proposed solutions (remove LIMIT, implement real pagination, optimize indexes) and escalated the issue.
 
 **Lesson learned:** Not all bugs can be fixed immediately, especially in distributed architectures. The key is to document the problem well for whoever does have the necessary access.
-
-### Auto-Calculate Hours: UX That Saves Time
-
-One of those "small" details that makes a difference:
-
-Before, administrators had to manually calculate weekly and monthly hours every time they modified a schedule. Tedious and error-prone.
-
-**I implemented:**
-
-```javascript
-function calculateScheduleHours() {
-    let totalHours = 0;
-    for(let day = 1; day <= 7; day++) {
-        const hours = parseFloat($(`#hours_${day}`).val()) || 0;
-        const pause = parseFloat($(`#pause_${day}`).val()) || 0;
-        totalHours += (hours - pause);
-    }
-    $('#weekly_hours').val(totalHours.toFixed(2));
-    $('#monthly_hours').val((totalHours * 4.33).toFixed(2));
-}
-```
-
-**Result:** Zero manual calculation errors + saving 10-15 minutes per schedule modification.
-
-Sometimes the best features are the ones nobody notices because they "just work".
 
 ### Employee Portal: Bridging Mobile and Web
 
@@ -194,13 +141,13 @@ I had to:
 After hours of debugging, I found the issue:
 
 ```php
-case 'Todos':
-    $idinsert = -2;
-    // BUG: Missing GCM token fetch!
+case 'all_users':
+    $targetId = -2;
+    // BUG: Missing device token fetch!
     // It was sending to the last fetched token, not all tokens
-    
+
     // FIX: Actually fetch all tokens from the database
-    $sql = "needed to fetch GCM tokens from db";
+    $query = "SELECT device_token FROM push_tokens WHERE active = 1";
 ```
 
 **From 0% to 100% functionality.** Push notifications were finally working.
@@ -210,20 +157,20 @@ case 'Todos':
 I built a cron job that runs every 24 hours and sends automatic reminders for events with approaching deadlines:
 
 ```php
-function enviarNotificacionesDeadline() {
-    $ahora = time();
-    $ventana24h = $ahora + (24 * 60 * 60);
-    
-    $eventos = getFirestoreEvents();
-    
-    foreach($eventos as $evento) {
-        if($evento['deadline'] >= $ahora && 
-           $evento['deadline'] <= $ventana24h) {
-            
-            $mensaje = "⏰ Last day!\nDeadline for " .
-                      $evento['title'] . " is tomorrow.";
-            
-            enviarNotificacion($mensaje, $evento['id']);
+function sendDeadlineReminders() {
+    $now = time();
+    $window = $now + (24 * 60 * 60);
+
+    $events = getEventsFromDB();
+
+    foreach($events as $event) {
+        if($event['deadline'] >= $now &&
+           $event['deadline'] <= $window) {
+
+            $msg = "Reminder: Deadline for " .
+                   $event['title'] . " is approaching.";
+
+            sendPushNotification($msg, $event['id']);
         }
     }
 }
@@ -243,7 +190,7 @@ Despite the warning, we decided to proceed with the production deploy. As expect
 
 ### Collaboration with the Mobile Team
 
-An important part was coordinating with Daniel, the mobile developer. Especially in:
+An important part was coordinating with the mobile developer. Especially in:
 
 - **Testing push notifications:** We needed multiple devices to test mass sending
 - **Data synchronization:** Ensuring the Firestore structure worked for both web and mobile
@@ -281,11 +228,11 @@ When exporting more than 1 month of GPS tracking data, file sizes were massive.
 
 ```php
 if($dateRange > 30) {
-    // Only coordinates, reduce file size
-    $export = array('lat', 'lng', 'date');
+    // Only coordinates to reduce file size
+    $fields = array('latitude', 'longitude', 'date');
 } else {
-    // Full export
-    $export = array('lat', 'lng', 'timestamp', 'user', 'activity');
+    // Full export with all fields
+    $fields = array('latitude', 'longitude', 'timestamp', 'user_id', 'activity_type');
 }
 ```
 
@@ -366,8 +313,8 @@ What I **do** know is:
 - Critical production bugs independently
 - Complex features (push, vacations, multi-timezone)
 - 5 simultaneous projects
-- Zero supervision
-- Zero code reviews
+- High degree of autonomy
+- Self-managed code workflow
 - 27 tasks/month
 
 You tell me.
@@ -398,9 +345,27 @@ You tell me.
 
 ## What's Next?
 
-After this incredible experience, I'm excited about the opportunities ahead. I've learned that I can adapt quickly and face complex challenges.
+After this experience, I've decided that this blog will be my space to share the challenges and lessons I encounter in my day-to-day life as a developer. The main technologies I currently work with are **PHP, JavaScript, Firestore, and MySQL**.
 
-These 3 months taught me that I can handle much more than I thought, and I'm ready for the next level.
+Here are some upcoming topics I'll be publishing:
+
+### Overtime Management System
+
+I developed a complete overtime management module. Employees can check their accumulated extra hours, and administrators can mark them as paid or compensated with rest time. A system that brings transparency for both workers and the company.
+
+### Booking System for a Business Club
+
+Together with my lead, we modernized the booking system for a business club that was operating in an outdated way. I was responsible for developing the Python scripts that, using the client's existing API and data, allowed creating and canceling reservations automatically. My lead handled the WhatsApp integration to facilitate communication with users. A project that combined backend, automation, and service integration.
+
+### The Importance of Branch Naming
+
+One day, while deploying to production, we pushed the wrong branch and the server went down. We identified it quickly and restored everything, but it was a valuable lesson: **using clear naming conventions for branches is essential.** Good naming prevents human errors that can have serious consequences.
+
+### Mentoring the New Intern
+
+I'm currently mentoring the new intern. I'm teaching them everything I know: from code best practices to how to tackle day-to-day problems. It's an experience that's helping me consolidate my knowledge and develop leadership skills.
+
+These months have taught me that I can handle much more than I thought, and I'm ready for the next level.
 
 ## Final Thoughts
 

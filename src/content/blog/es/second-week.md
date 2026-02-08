@@ -2,7 +2,7 @@
 title: "Mi Segunda Semana de Estudio: CS50, Deep Learning y una Lección sobre 'Over-engineering'"
 description: "Un diario de mi segunda semana de estudio intensivo, terminando el curso CS50P, mis primeros pasos con Kaggle y una valiosa lección sobre la complejidad en los proyectos."
 pubDate: "2025-08-10"
-heroImage: "/blog-placeholder-2.jpg"
+heroImage: "/cs50p.png"
 tags: ["cs50", "python", "weekly","kaggle"]
 ---
 
