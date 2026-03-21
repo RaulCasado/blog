@@ -71,7 +71,7 @@ function getReadingTime(post) {
 						data-is-weekly={isWeekly}
 					>
 						<div class="blog-card-image">
-							<a href={`/${lang}/blog/${post.id.replace(`${lang}/`, '')}/`}>
+							<a href={`/${lang}/blog/${post.id.replace(`${lang}/`, '').replace(/\.mdx?$/, '')}/`}>
 								<Image
 									width={720}
 									height={360}
@@ -85,7 +85,7 @@ function getReadingTime(post) {
 							</a>
 						</div>
 						<div class="blog-card-content">
-							<a href={`/${lang}/blog/${post.id.replace(`${lang}/`, '')}/`}>
+							<a href={`/${lang}/blog/${post.id.replace(`${lang}/`, '').replace(/\.mdx?$/, '')}/`}>
 								<h3 class="title">{post.data.title}</h3>
 							</a>
 							{post.data.tags?.length > 0 && (
@@ -133,7 +133,7 @@ function getReadingTime(post) {
 						data-is-weekly={isWeekly}
 					>
 						<div class="blog-card-image">
-							<a href={`/${lang}/blog/${post.id.replace(`${lang}/`, '')}/`}>
+							<a href={`/${lang}/blog/${post.id.replace(`${lang}/`, '').replace(/\.mdx?$/, '')}/`}>
 								<Image
 									width={720}
 									height={360}
@@ -146,7 +146,7 @@ function getReadingTime(post) {
 							</a>
 						</div>
 						<div class="blog-card-content">
-							<a href={`/${lang}/blog/${post.id.replace(`${lang}/`, '')}/`}>
+							<a href={`/${lang}/blog/${post.id.replace(`${lang}/`, '').replace(/\.mdx?$/, '')}/`}>
 								<h3 class="title">{post.data.title}</h3>
 							</a>
 							{post.data.tags?.length > 0 && (

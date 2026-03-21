@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://raulcasado.com/sitemap-index.xml
