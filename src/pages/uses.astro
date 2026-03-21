@@ -1,0 +1,18 @@
+---
+import { defaultLanguage } from "../i18n/ui";
+
+const getLanguageFromBrowser = () => {
+    if (Astro.request.headers.get("accept-language")) {
+        const browserLang = Astro.request.headers
+            .get("accept-language")
+            .split(",")[0]
+            .split("-")[0];
+        return browserLang === "en" ? "en" : defaultLanguage;
+    }
+    return defaultLanguage;
+};
+
+const lang = getLanguageFromBrowser();
+---
+
+<meta http-equiv="refresh" content={`0;url=/${lang}/uses`} />

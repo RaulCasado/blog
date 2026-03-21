@@ -1,0 +1,184 @@
+---
+import { useTranslations } from '../../i18n/utils';
+
+const { lang = 'en' } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<div class="uses-container">
+    <div class="uses-header">
+        <div class="uses-header-content">
+            <h1>{t('uses.header')}</h1>
+            <p class="uses-subtitle">{t('uses.subtitle')}</p>
+        </div>
+    </div>
+    
+    <div class="uses-card">
+        <div class="uses-card-header">
+            <h2 class="uses-card-title">{t('uses.pc.title')}</h2>
+        </div>
+        <div class="uses-card-content">
+            <ul class="uses-list">
+                <li>{t('uses.pc.cpu')}</li>
+                <li>{t('uses.pc.gpu')}</li>
+                <li>{t('uses.pc.mobo')}</li>
+                <li>{t('uses.pc.ram')}</li>
+                <li>{t('uses.pc.storage')}</li>
+                <li>{t('uses.pc.psu')}</li>
+                <li>{t('uses.pc.case')}</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="uses-card">
+        <div class="uses-card-header">
+            <h2 class="uses-card-title">{t('uses.server.title')}</h2>
+        </div>
+        <div class="uses-card-content">
+            <ul class="uses-list">
+                <li>{t('uses.server.os')}</li>
+                <li>{t('uses.server.cpu')}</li>
+                <li>{t('uses.server.ram')}</li>
+                <li>{t('uses.server.storage')}</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="uses-card">
+        <div class="uses-card-header">
+            <h2 class="uses-card-title">{t('uses.peripherals.title')}</h2>
+        </div>
+        <div class="uses-card-content">
+            <ul class="uses-list">
+                <li>{t('uses.peripherals.monitor')}</li>
+                <li>{t('uses.peripherals.light')}</li>
+                <li>{t('uses.peripherals.keyboard')}</li>
+                <li>{t('uses.peripherals.mouse')}</li>
+                <li>{t('uses.peripherals.headset')}</li>
+                <li>{t('uses.peripherals.console')}</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="uses-card">
+        <div class="uses-card-header">
+            <h2 class="uses-card-title">{t('uses.software.title')}</h2>
+        </div>
+        <div class="uses-card-content">
+            <ul class="uses-list">
+                <li>{t('uses.software.editor')}</li>
+                <li>{t('uses.software.terminal')}</li>
+                <li>{t('uses.software.browser')}</li>
+                <li>{t('uses.software.git')}</li>
+                <li>{t('uses.software.notes')}</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<style>
+    .uses-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .uses-header {
+        margin-bottom: 0.5rem;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        line-height: 1.2;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.025em;
+        color: hsl(var(--foreground));
+    }
+    
+    .uses-subtitle {
+        font-size: 1.1rem;
+        color: hsl(var(--muted-foreground));
+    }
+
+    /* Card styles */
+    .uses-card {
+        background-color: hsl(var(--card));
+        border-radius: var(--radius);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        border: 1px solid hsl(var(--border));
+        transition: box-shadow 0.2s ease-in-out;
+    }
+    
+    .uses-card:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .uses-card-header {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid hsl(var(--border));
+        background-color: hsl(var(--secondary) / 0.3);
+    }
+    
+    .uses-card-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin: 0;
+        color: hsl(var(--foreground));
+    }
+    
+    .uses-card-content {
+        padding: 1.5rem;
+    }
+    
+    .uses-list {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+    
+    .uses-list li {
+        font-size: 1.05rem;
+        line-height: 1.7;
+        color: hsl(var(--foreground));
+        position: relative;
+        padding-left: 1.75rem;
+    }
+    
+    .uses-list li::before {
+        content: '→';
+        position: absolute;
+        left: 0;
+        color: hsl(var(--primary));
+        font-weight: bold;
+    }
+    
+    .uses-list li strong {
+        color: hsl(var(--foreground));
+        font-weight: 600;
+    }
+    
+    .uses-list li i {
+        color: hsl(var(--muted-foreground));
+    }
+
+    /* Responsive Design */
+    @media (min-width: 768px) {
+        h1 {
+            font-size: 3rem;
+        }
+    }
+    
+    @media (max-width: 640px) {
+        h1 {
+            font-size: 2rem;
+        }
+    }
+</style>

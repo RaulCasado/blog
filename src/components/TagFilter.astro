@@ -2,32 +2,164 @@
 const { tags = [], selectedTags = [] } = Astro.props;
 ---
 
-<div class="tag-filter">
-  {
-    tags.map((tag) => (
-      <button
-        class={`tag-filter-btn${selectedTags.includes(tag) ? " active" : ""}`}
-        type="button"
-        data-tag={tag}
-        aria-pressed={selectedTags.includes(tag)}
-      >
-        #{tag}
-      </button>
-    ))
-  }
+<div class="tag-filter-wrapper">
+  <button
+    class="tag-scroll-btn left"
+    aria-label="Desplazar a la izquierda"
+    type="button"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      ><path d="m15 18-6-6 6-6"></path>
+    </svg>
+  </button>
+
+  <div class="tag-filter">
+    {
+      tags.map((tag) => (
+        <button
+          class={`tag-filter-btn${selectedTags.includes(tag) ? " active" : ""}`}
+          type="button"
+          data-tag={tag}
+          aria-pressed={selectedTags.includes(tag)}
+        >
+          #{tag}
+        </button>
+      ))
+    }
+  </div>
+
+  <button
+    class="tag-scroll-btn right"
+    aria-label="Desplazar a la derecha"
+    type="button"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      ><path d="m9 18 6-6-6-6"></path>
+    </svg>
+  </button>
 </div>
 
 <style>
+  .tag-filter-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 0 0.5rem;
+  }
+
+  .tag-scroll-btn {
+    position: absolute;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: hsl(var(--card) / 0.8);
+    backdrop-filter: blur(4px);
+    border: 1px solid hsl(var(--border));
+    color: hsl(var(--foreground));
+    cursor: pointer;
+    box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.2s ease;
+  }
+
+  .tag-scroll-btn.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .tag-scroll-btn:hover {
+    background: hsl(var(--muted));
+    transform: scale(1.05);
+  }
+
+  .tag-scroll-btn.left {
+    left: -10px;
+  }
+
+  .tag-scroll-btn.right {
+    right: -10px;
+  }
+
+  .tag-filter-wrapper::before,
+  .tag-filter-wrapper::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0.5rem;
+    width: 40px;
+    pointer-events: none;
+    z-index: 5;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .tag-filter-wrapper::before {
+    left: 0;
+    background: linear-gradient(
+      to right,
+      hsl(var(--background)) 0%,
+      transparent 100%
+    );
+  }
+
+  .tag-filter-wrapper::after {
+    right: 0;
+    background: linear-gradient(
+      to left,
+      hsl(var(--background)) 0%,
+      transparent 100%
+    );
+  }
+
+  .tag-filter-wrapper.has-scroll-left::before {
+    opacity: 1;
+  }
+
+  .tag-filter-wrapper.has-scroll-right::after {
+    opacity: 1;
+  }
+
   .tag-filter {
     display: flex;
     flex-wrap: nowrap;
     gap: 0.75rem;
-    margin-bottom: 2rem;
     overflow-x: auto;
     padding-bottom: 0.5rem;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     -ms-overflow-style: none;
+    cursor: grab;
+    width: 100%;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+
+  .tag-filter:active {
+    cursor: grabbing;
   }
 
   .tag-filter::-webkit-scrollbar {
@@ -40,7 +172,7 @@ const { tags = [], selectedTags = [] } = Astro.props;
     border-radius: 999px;
     background: hsl(var(--muted));
     color: hsl(var(--foreground));
-    border: 1px solid hsl(var(--border));
+    border: 1px solid hsl(var(--border) / 0.5);
     cursor: pointer;
     font-size: 0.85rem;
     transition: all 0.2s ease;
@@ -55,7 +187,110 @@ const { tags = [], selectedTags = [] } = Astro.props;
   .tag-filter-btn:active {
     background: hsl(var(--primary));
     color: hsl(var(--primary-foreground));
-    border-color: hsl(var(--primary));
+    border-color: transparent;
     box-shadow: 0 4px 10px hsla(var(--primary) / 0.2);
   }
 </style>
+
+<script>
+  function initDraggableCarousel() {
+    const wrappers = document.querySelectorAll(".tag-filter-wrapper");
+
+    wrappers.forEach((wrapper) => {
+      const slider = wrapper.querySelector(".tag-filter");
+      const btnLeft = wrapper.querySelector(".tag-scroll-btn.left");
+      const btnRight = wrapper.querySelector(".tag-scroll-btn.right");
+      if (!slider) return;
+
+      let isDown = false;
+      let isDragging = false;
+      let startX = 0;
+      let scrollLeft = 0;
+
+      const SCROLL_AMOUNT = 250;
+
+      const updateUI = () => {
+        const isAtStart = slider.scrollLeft <= 2;
+        const isAtEnd =
+          slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 2;
+
+        if (isAtStart) {
+          btnLeft?.classList.remove("show");
+          wrapper.classList.remove("has-scroll-left");
+        } else {
+          btnLeft?.classList.add("show");
+          wrapper.classList.add("has-scroll-left");
+        }
+
+        if (isAtEnd) {
+          btnRight?.classList.remove("show");
+          wrapper.classList.remove("has-scroll-right");
+        } else {
+          btnRight?.classList.add("show");
+          wrapper.classList.add("has-scroll-right");
+        }
+      };
+
+      if (btnLeft) {
+        btnLeft.addEventListener("click", () => {
+          slider.scrollBy({ left: -SCROLL_AMOUNT, behavior: "smooth" });
+        });
+      }
+
+      if (btnRight) {
+        btnRight.addEventListener("click", () => {
+          slider.scrollBy({ left: SCROLL_AMOUNT, behavior: "smooth" });
+        });
+      }
+
+      slider.addEventListener("scroll", updateUI);
+      window.addEventListener("resize", updateUI);
+      setTimeout(updateUI, 100);
+
+      slider.addEventListener("mousedown", (e) => {
+        isDown = true;
+        isDragging = false;
+        const pageX = e["pageX"] || 0;
+        const offsetLeft = slider["offsetLeft"] || 0;
+        startX = pageX - offsetLeft;
+        scrollLeft = slider.scrollLeft;
+      });
+
+      slider.addEventListener("mouseleave", () => {
+        isDown = false;
+      });
+      slider.addEventListener("mouseup", () => {
+        isDown = false;
+      });
+
+      slider.addEventListener("mousemove", (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const pageX = e["pageX"] || 0;
+        const offsetLeft = slider["offsetLeft"] || 0;
+        const x = pageX - offsetLeft;
+        const walk = (x - startX) * 1.5;
+
+        if (Math.abs(walk) > 4) {
+          isDragging = true;
+        }
+        slider.scrollLeft = scrollLeft - walk;
+      });
+
+      slider.addEventListener(
+        "click",
+        (e) => {
+          if (isDragging) {
+            e.preventDefault();
+            e.stopPropagation();
+            isDragging = false;
+          }
+        },
+        true
+      );
+    });
+  }
+
+  initDraggableCarousel();
+  document.addEventListener("astro:page-load", initDraggableCarousel);
+</script>
