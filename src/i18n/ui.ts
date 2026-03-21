@@ -182,6 +182,10 @@ export const translations = {
         'uses.software.git': 'Version Control: GitHub',
         'uses.software.notes': 'Notes: Notion / Obsidian',
         'nav.uses': 'Setup',
+        '404.title': 'Page Not Found',
+        '404.subtitle': '404 - Lost in the digital void',
+        '404.description': 'It seems the page you are looking for has been moved, deleted, or never existed.',
+        '404.button': 'Go back home',
     },
     'es': {
         // Navegación
@@ -359,5 +363,9 @@ export const translations = {
         'uses.software.git': 'Control de Versiones: GitHub',
         'uses.software.notes': 'Productividad y Notas: Notion u Obsidian',
         'nav.uses': 'Setup',
+        '404.title': 'Página No Encontrada',
+        '404.subtitle': '404 - Perdido en el vacío digital',
+        '404.description': 'Parece que la página que buscas ha sido movida, eliminada o nunca existió.',
+        '404.button': 'Volver al Inicio',
     }
 } as const;

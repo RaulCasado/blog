@@ -1,0 +1,125 @@
+---
+import StandardPageLayout from '../layouts/StandardPageLayout.astro';
+import { useTranslations } from '../i18n/utils';
+
+// By default, Astro generates a single root 404.html.
+// We'll use the default language (es) as a fallback since the path doesn't inherently contain the language.
+const lang = 'es';
+const t = useTranslations(lang);
+---
+
+<StandardPageLayout 
+    title={`404: ${t('404.title')} | Raúl Casado`}
+    description={t('404.description')}
+    lang={lang}
+>
+    <div class="error-container">
+        <div class="error-content">
+            <h1 class="error-code">404</h1>
+            <h2 class="error-subtitle">{t('404.subtitle')}</h2>
+            <p class="error-description">
+                {t('404.description')}
+            </p>
+            <a href={`/${lang}/`} class="back-home-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                {t('404.button')}
+            </a>
+        </div>
+    </div>
+</StandardPageLayout>
+
+<style>
+    .error-container {
+        min-height: 60vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem 1rem;
+        text-align: center;
+    }
+
+    .error-content {
+        max-width: 600px;
+        background-color: hsl(var(--card));
+        padding: 3rem 2rem;
+        border-radius: var(--radius);
+        box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+        border: 1px solid hsl(var(--border));
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    .error-code {
+        font-size: 8rem;
+        font-weight: 800;
+        line-height: 1;
+        margin: 0;
+        background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary) / 0.5));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: -0.05em;
+        text-shadow: 0 4px 10px hsl(var(--primary) / 0.2);
+    }
+
+    .error-subtitle {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: hsl(var(--foreground));
+        margin: 1rem 0;
+    }
+
+    .error-description {
+        font-size: 1.1rem;
+        color: hsl(var(--muted-foreground));
+        margin-bottom: 2.5rem;
+        line-height: 1.6;
+    }
+
+    .back-home-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background-color: hsl(var(--primary));
+        color: hsl(var(--primary-foreground));
+        padding: 0.75rem 1.5rem;
+        border-radius: 9999px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 6px -1px hsl(var(--primary) / 0.3);
+    }
+
+    .back-home-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px -2px hsl(var(--primary) / 0.4);
+        background-color: hsl(var(--primary) / 0.9);
+    }
+
+    .back-home-btn:active {
+        transform: translateY(0);
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 640px) {
+        .error-code {
+            font-size: 5rem;
+        }
+        
+        .error-content {
+            padding: 2rem 1.5rem;
+        }
+    }
+</style>
