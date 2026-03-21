@@ -15,6 +15,20 @@ const t = useTranslations(lang);
     
     <div class="uses-card">
         <div class="uses-card-header">
+            <h2 class="uses-card-title">{t('uses.laptop.title')}</h2>
+        </div>
+        <div class="uses-card-content">
+            <ul class="uses-list">
+                <li>{t('uses.laptop.cpu')}</li>
+                <li>{t('uses.laptop.ram')}</li>
+                <li>{t('uses.laptop.storage')}</li>
+                <li>{t('uses.laptop.os')}</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="uses-card">
+        <div class="uses-card-header">
             <h2 class="uses-card-title">{t('uses.pc.title')}</h2>
         </div>
         <div class="uses-card-content">
@@ -26,6 +40,7 @@ const t = useTranslations(lang);
                 <li>{t('uses.pc.storage')}</li>
                 <li>{t('uses.pc.psu')}</li>
                 <li>{t('uses.pc.case')}</li>
+                <li>{t('uses.pc.game')}</li>
             </ul>
         </div>
     </div>
@@ -56,6 +71,7 @@ const t = useTranslations(lang);
                 <li>{t('uses.peripherals.mouse')}</li>
                 <li>{t('uses.peripherals.headset')}</li>
                 <li>{t('uses.peripherals.console')}</li>
+                <li>{t('uses.peripherals.phones')}</li>
             </ul>
         </div>
     </div>
