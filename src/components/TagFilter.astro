@@ -3,37 +3,59 @@ const { tags = [], selectedTags = [] } = Astro.props;
 ---
 
 <div class="tag-filter">
-  {tags.map(tag => (
-    <button
-      class={`tag-filter-btn${selectedTags.includes(tag) ? ' active' : ''}`}
-      type="button"
-      data-tag={tag}
-      aria-pressed={selectedTags.includes(tag)}
-    >
-      #{tag}
-    </button>
-  ))}
+  {
+    tags.map((tag) => (
+      <button
+        class={`tag-filter-btn${selectedTags.includes(tag) ? " active" : ""}`}
+        type="button"
+        data-tag={tag}
+        aria-pressed={selectedTags.includes(tag)}
+      >
+        #{tag}
+      </button>
+    ))
+  }
 </div>
 
 <style>
   .tag-filter {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
+    flex-wrap: nowrap;
+    gap: 0.75rem;
     margin-bottom: 2rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
+
+  .tag-filter::-webkit-scrollbar {
+    display: none;
+  }
+
   .tag-filter-btn {
-    padding: 0.18rem 0.7rem;
+    flex-shrink: 0;
+    padding: 0.4rem 1rem;
     border-radius: 999px;
     background: hsl(var(--muted));
     color: hsl(var(--foreground));
     border: 1px solid hsl(var(--border));
     cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
   }
+
+  .tag-filter-btn:hover {
+    background: hsl(var(--muted) / 0.8);
+    transform: translateY(-1px);
+  }
+
   .tag-filter-btn.active,
   .tag-filter-btn:active {
     background: hsl(var(--primary));
     color: hsl(var(--primary-foreground));
     border-color: hsl(var(--primary));
+    box-shadow: 0 4px 10px hsla(var(--primary) / 0.2);
   }
 </style>
