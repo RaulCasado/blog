@@ -17,7 +17,7 @@ type Props = CollectionEntry<'blog'>['data'] & {
   }[];
 };
 
-const { title, description, pubDate, updatedDate, heroImage, headings = [] } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, tags = [], headings = [] } = Astro.props;
 const currentPageUrl = Astro.url.href;
 const lang = getLangFromUrl(Astro.url);
 const copyText = lang === 'en' ? 'Copy' : 'Copiar';
@@ -26,7 +26,16 @@ const copiedText = lang === 'en' ? 'Copied!' : '¡Copiado!';
 
 <html lang={lang}>
 	<head>
-		<BaseHead title={title} description={description} />
+		<BaseHead
+			title={title}
+			description={description}
+			image={heroImage?.src ?? '/blog-placeholder-1.jpg'}
+			lang={lang}
+			pageType="article"
+			pubDate={pubDate}
+			updatedDate={updatedDate}
+			tags={tags}
+		/>
 		<style>
 			html {
 				overflow: visible;

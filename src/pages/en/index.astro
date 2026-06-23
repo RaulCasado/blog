@@ -2,8 +2,7 @@
 import BaseHead from '../../components/BaseHead.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
-import { getLangFromUrl, useTranslations, useTranslatedPath } from '../../i18n/utils';
+import { useTranslations, useTranslatedPath } from '../../i18n/utils';
 import HomePageContent from '../../components/pages/HomePageContent.astro';
 const lang = 'en';
 const t = useTranslations(lang);
@@ -13,7 +12,7 @@ const translatePath = useTranslatedPath(lang);
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<BaseHead title={t('home.metaTitle')} description={t('home.metaDescription')} lang={lang} pageType="home" />
 	</head>
 	<body>
 		<Header />

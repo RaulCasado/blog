@@ -11,6 +11,7 @@ const blogCollection = defineCollection({
     title: z.string(),
     description: z.string().optional(),
     pubDate: z.coerce.date(),
+    updatedDate: z.coerce.date().optional(),
     heroImage: image().optional(),
     heroImageAlt: z.string().optional(),
     author: z.string().optional().default('Raúl Casado'),

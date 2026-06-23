@@ -7,14 +7,15 @@ interface Props {
 	title: string;
 	description: string;
 	lang?: string;
+	pageType?: 'home' | 'article' | 'about' | 'page';
 }
 
-const { title, description, lang = 'es' } = Astro.props;
+const { title, description, lang = 'es', pageType = 'page' } = Astro.props;
 ---
 
 <html lang={lang}>
 	<head>
-		<BaseHead title={title} description={description} />
+		<BaseHead title={title} description={description} lang={lang} pageType={pageType} />
 		<style>
 			main {
 				width: calc(100% - 2em);
