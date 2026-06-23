@@ -2,7 +2,7 @@
 title: 'Cómo monté un servidor de Minecraft modded con Docker en un PC antiguo'
 description: 'Guía completa para desplegar un servidor de Minecraft con Cobblemon usando Docker Compose en hardware limitado. Desde la configuración inicial hasta la optimización de RAM, gestión de mods por terminal y trucos de administrador.'
 pubDate: '2026-02-08'
-heroImage: '/minecraft.webp'
+heroImage: '../../../assets/blog/minecraft.webp'
 heroImageAlt: 'Servidor de Minecraft con Docker'
 tags: ['docker', 'linux', 'minecraft']
 lang: 'es'

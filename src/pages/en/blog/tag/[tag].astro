@@ -1,6 +1,8 @@
 ---
 import { getCollection } from 'astro:content';
 import StandardPageLayout from '../../../../layouts/StandardPageLayout.astro';
+import { Picture } from 'astro:assets';
+import fallbackHeroImage from '../../../../assets/blog/blog-placeholder-1.jpg';
 
 export async function getStaticPaths() {
   const allPosts = await getCollection('blog', ({ id }) => id.startsWith('en/'));
@@ -32,6 +34,8 @@ const sortedPosts = allPosts.sort(
 );
 
 const getPostUrl = (id: string) => `/en/blog/${id.replace(/^en\//, '').replace(/\.mdx?$/, '')}/`;
+const cardImageWidths = [360, 540, 720, 960];
+const cardImageSizes = '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw';
 ---
 <StandardPageLayout title={`Posts with tag "${tag}"`} description={`Posts related with tag "${tag}"`} lang="en">
   <div class="blog-container">
@@ -42,10 +46,17 @@ const getPostUrl = (id: string) => `/en/blog/${id.replace(/^en\//, '').replace(/
       {sortedPosts.map(post => (
         <article class="post-card">
           <a href={getPostUrl(post.id)} class="post-image-link">
-            <img
-              src={post.data.heroImage || "/blog-placeholder-1.jpg"}
+            <Picture
+              src={post.data.heroImage || fallbackHeroImage}
               alt={post.data.heroImageAlt || post.data.title}
               class="post-image"
+              formats={['avif', 'webp']}
+              fallbackFormat="jpg"
+              widths={cardImageWidths}
+              sizes={cardImageSizes}
+              width={720}
+              height={360}
+              quality={80}
               loading="lazy"
             />
           </a>

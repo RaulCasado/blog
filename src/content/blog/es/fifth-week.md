@@ -3,7 +3,7 @@ title: "Semana 5: Inmersión Profunda en una Gran Refactorización"
 description: "De componentes monolíticos a una arquitectura limpia. Esta semana ha sido un viaje de refactorización para atajar el prop drilling, centralizar la lógica y construir una base más sólida para el futuro."
 pubDate: "2025-09-01"
 tags: ["weekly","web_development"]
-heroImage: '/weekly/refactor.jpg'
+heroImage: '../../../assets/blog/weekly/refactor.jpg'
 heroImageAlt: 'Un diagrama que muestra cómo un sistema complejo se simplifica mediante la refactorización'
 ---
 

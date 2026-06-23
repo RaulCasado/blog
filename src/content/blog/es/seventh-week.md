@@ -3,7 +3,7 @@ title: "Semana 7: Mejorando el Blog: Buscador, Filtros y Posts Destacados"
 description: "Esta semana he cambiado el foco hacia el propio blog, implementando funcionalidades clave como un buscador dinámico, filtros para organizar el contenido y un sistema de posts destacados para mejorar la experiencia del lector."
 pubDate: "2025-09-15"
 tags: ["weekly","web_development", "astro"]
-heroImage: '/weekly/blog-meta.jpg'
+heroImage: '../../../assets/blog/weekly/blog-meta.jpg'
 heroImageAlt: 'Una imagen que representa la mejora de un blog con iconos de búsqueda y filtros'
 ---
 

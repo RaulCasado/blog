@@ -3,7 +3,7 @@ title: "Tercera Semana: Redes Neuronales, Reinstalaciones y Nuevos Proyectos"
 description: "Un resumen de mi tercera semana: un curso de Kaggle sobre redes convolucionales, desafíos técnicos, una nueva instalación de Ubuntu y el inicio de un emocionante proyecto personal."
 pubDate: "2025-08-17"
 tags: ["python", "weekly","kaggle"]
-heroImage: '/weekly/rusa.jpg'
+heroImage: '../../../assets/blog/weekly/rusa.jpg'
 heroImageAlt: 'Una montaña rusa simbolizando los altibajos del aprendizaje'
 ---
 

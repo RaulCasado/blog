@@ -2,7 +2,7 @@
 title: 'De la Entrevista al Código: Crónica de Mis Primeras Semanas como Programador'
 description: 'He estado ausente tres semanas, ¡pero por una buena razón! Te cuento todo sobre mi entrevista, cómo conseguí mi primer trabajo como programador y mi increíblemente productiva primera semana.'
 pubDate: '2025-09-30'
-heroImage: '/nasa.png'
+heroImage: '../../../assets/blog/nasa.png'
 heroImageAlt: 'Un escritorio con un ordenador mostrando código'
 tags: ['weekly']
 lang: 'es'

@@ -1,7 +1,8 @@
 ---
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 import FormattedDate from '../FormattedDate.astro';
 import TagFilter from '../TagFilter.astro';
+import fallbackHeroImage from '../../assets/blog/blog-placeholder-1.jpg';
 
 const { lang, posts, allTags, t } = Astro.props;
 
@@ -15,6 +16,9 @@ function getReadingTime(post) {
 	const minutes = Math.ceil(words / wordsPerMinute);
 	return minutes;
 }
+
+const cardImageWidths = [360, 540, 720, 960];
+const cardImageSizes = '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw';
 ---
 
 <section class="blog-section">
@@ -72,12 +76,15 @@ function getReadingTime(post) {
 					>
 						<div class="blog-card-image">
 							<a href={`/${lang}/blog/${post.id.replace(`${lang}/`, '').replace(/\.mdx?$/, '')}/`}>
-								<Image
+								<Picture
 									width={720}
 									height={360}
-									src={post.data.heroImage || "/blog-placeholder-1.jpg"}
+									src={post.data.heroImage || fallbackHeroImage}
 									alt={post.data.heroImageAlt || post.data.title}
-									format="webp"
+									formats={['avif', 'webp']}
+									fallbackFormat="jpg"
+									widths={cardImageWidths}
+									sizes={cardImageSizes}
 									quality={80}
 									loading="eager"
 								/>
@@ -134,12 +141,15 @@ function getReadingTime(post) {
 					>
 						<div class="blog-card-image">
 							<a href={`/${lang}/blog/${post.id.replace(`${lang}/`, '').replace(/\.mdx?$/, '')}/`}>
-								<Image
+								<Picture
 									width={720}
 									height={360}
-									src={post.data.heroImage || "/blog-placeholder-1.jpg"}
+									src={post.data.heroImage || fallbackHeroImage}
 									alt={post.data.heroImageAlt || post.data.title}
-									format="webp"
+									formats={['avif', 'webp']}
+									fallbackFormat="jpg"
+									widths={cardImageWidths}
+									sizes={cardImageSizes}
 									quality={80}
 									loading="lazy"
 								/>

@@ -3,7 +3,7 @@ title: "Cuarta Semana: A Tope con Kaggle y Avances en el Proyecto"
 description: "Esta semana ha sido súper productiva. He profundizado en conceptos clave de Data Science con Kaggle y he metido un buen empujón a mi proyecto organizador. ¡Os cuento los detalles!"
 pubDate: "2025-08-25"
 tags: ["python", "weekly","kaggle","web_development"]
-heroImage: '/weekly/arena.jpg'
+heroImage: '../../../assets/blog/weekly/arena.jpg'
 heroImageAlt: 'Un reloj de arena simbolizando el progreso en el tiempo'
 ---
 

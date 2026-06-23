@@ -3,7 +3,7 @@ title: "Week 5: A Deep Dive into a Major Refactor"
 description: "From monolithic components to a clean architecture. This week was all about a major refactoring effort to tackle prop drilling, centralize logic, and build a more maintainable foundation for the future."
 pubDate: "2025-09-01"
 tags: ["weekly","web_development"]
-heroImage: '/weekly/refactor.jpg'
+heroImage: '../../../assets/blog/weekly/refactor.jpg'
 heroImageAlt: 'A diagram showing a complex system being simplified through refactoring'
 ---
 

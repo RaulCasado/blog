@@ -2,7 +2,7 @@
 title: 'From Interview to Code: A Chronicle of My First Weeks as a Programmer'
 description: "I've been away for three weeks, but for a good reason! I'll tell you all about my interview, how I landed my first job as a programmer, and my incredibly productive first week."
 pubDate: '2025-09-30'
-heroImage: '/nasa.png'
+heroImage: '../../../assets/blog/nasa.png'
 heroImageAlt: 'A desk with a computer showing code'
 tags: ['personal', 'career-development', 'php', 'firestore', 'javascript']
 lang: 'en'

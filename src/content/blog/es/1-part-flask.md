@@ -2,7 +2,7 @@
 title: 'Flask Parte 1: Introducción'
 description: 'En esta serie de posts, exploraremos Flask, un microframework web para Python. Comenzaremos con una introducción a sus características principales y cómo configurar un entorno básico.'
 pubDate: '2025-09-17'
-heroImage: '/api-flask-1/python.jpg'
+heroImage: '../../../assets/blog/api-flask-1/python.jpg'
 heroImageAlt: 'Python code on a computer screen'
 tags: ['python']
 lang: 'es'

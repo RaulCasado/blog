@@ -3,7 +3,7 @@ title: "Week 4: Deepening Kaggle Skills and Project Progress"
 description: "A productive week covering key Kaggle concepts and significant progress on a personal project organizer."
 pubDate: "2025-08-25"
 tags: ["python", "weekly","kaggle","web_development"]
-heroImage: '/weekly/arena.jpg'
+heroImage: '../../../assets/blog/weekly/arena.jpg'
 heroImageAlt: 'A sand clock symbolizing progress over time'
 ---
 

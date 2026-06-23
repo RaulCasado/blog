@@ -2,7 +2,7 @@
 title: 'Titan Dashboard: Construyendo mi propio "Life OS" con FastAPI y React'
 description: 'Por qué decidí construir desde cero un dashboard personal para unificar nutrición, hábitos y finanzas. Stack técnico, patrones de arquitectura, decisiones de diseño y las lecciones aprendidas en el camino.'
 pubDate: '2026-02-08'
-heroImage: '/react.png'
+heroImage: '../../../assets/blog/react.png'
 heroImageAlt: 'Titan Dashboard - Life OS'
 tags: ['python', 'react', 'project']
 lang: 'es'

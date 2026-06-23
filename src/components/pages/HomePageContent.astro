@@ -1,5 +1,6 @@
 ---
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
+import profileImage from '../../assets/profile/raul_casado.png';
 const { lang, t, translatePath } = Astro.props;
 ---
 
@@ -16,13 +17,14 @@ const { lang, t, translatePath } = Astro.props;
 							</div>
 						</div>
 						<div class="hero-image">
-							<Image 
-								src="/raul.jpeg" 
+							<Picture
+								src={profileImage}
 								alt="Raúl Casado - Desarrollador Web" 
 								width={400} 
 								height={400}
+								formats={['avif', 'webp']}
+								fallbackFormat="png"
 								loading="eager"
-								format="webp"
 								quality={85}
 							/>
 						</div>

@@ -2,7 +2,7 @@
 title: 'Mis Primeros Meses como Desarrollador: Aprendizajes y Proyectos'
 description: 'Un resumen de mis primeros meses como desarrollador, lo que aprendi en distintos proyectos y como fui creciendo paso a paso en un entorno profesional.'
 pubDate: '2025-11-24'
-heroImage: '/trabajo1.jpg'
+heroImage: '../../../assets/blog/trabajo1.jpg'
 heroImageAlt: 'Desarrollador trabajando en multiples proyectos'
 tags: ['job']
 lang: 'es'

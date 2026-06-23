@@ -2,7 +2,7 @@
 title: 'Cómo le di una segunda vida a mi Xiaomi Mi A2 con una Custom ROM'
 description: 'Guía completa sobre cómo instalé una Custom ROM en un Xiaomi Mi A2 abandonado por el fabricante. Desde desbloquear el bootloader hasta instalar apps alternativas como NewPipe, Spotube y Aurora Store.'
 pubDate: '2026-02-08'
-heroImage: '/mi_a2.jpg'
+heroImage: '../../../assets/blog/mi_a2.jpg'
 heroImageAlt: 'Xiaomi Mi A2 con Custom ROM'
 tags: ['linux', 'android']
 lang: 'es'

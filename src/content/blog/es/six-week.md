@@ -3,7 +3,7 @@ title: "Semana 6: Desarrollo Intensivo: Refactorización y Mejoras en ProjectOrg
 description: "Una semana de transformación profunda: herramientas automatizadas, arquitectura limpia y funcionalidades robustas. De commits estandarizados a componentes optimizados, ProjectOrganizer gana en escalabilidad y mantenibilidad."
 pubDate: "2025-09-08"
 tags: ["weekly","web_development"]
-heroImage: '/weekly/husky.jpg'
+heroImage: '../../../assets/blog/weekly/husky.jpg'
 heroImageAlt: 'Un diagrama que muestra herramientas de desarrollo automatizadas optimizando el flujo de trabajo'
 ---
 

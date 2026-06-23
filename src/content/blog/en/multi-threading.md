@@ -2,7 +2,7 @@
 title: 'Multithreading'
 description: 'A philosophical exploration of the dining philosophers problem and concurrent programming concepts'
 pubDate: '2025-05-13'
-heroImage: '/philo.webp'
+heroImage: '../../../assets/blog/philo.webp'
 heroImageAlt: 'A conceptual illustration of five philosophers sitting around a table'
 tags: ['42-school']
 lang: 'en'

@@ -3,7 +3,7 @@ title: "Week 7: Improving the Blog: Search, Filters, and Featured Posts"
 description: "This week, I shifted my focus to the blog itself, implementing key features like a dynamic search, content filters, and a featured post system to enhance the reader experience."
 pubDate: "2025-09-15"
 tags: ["weekly","web_development", "astro"]
-heroImage: '/weekly/blog-meta.jpg'
+heroImage: '../../../assets/blog/weekly/blog-meta.jpg'
 heroImageAlt: 'An image representing blog improvements with search and filter icons'
 ---
 

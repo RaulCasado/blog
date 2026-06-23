@@ -7,11 +7,11 @@ const blogCollection = defineCollection({
     base: './src/content/blog',
     pattern: '**/*.{md,mdx}',
   }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     title: z.string(),
     description: z.string().optional(),
     pubDate: z.coerce.date(),
-    heroImage: z.string().optional(),
+    heroImage: image().optional(),
     heroImageAlt: z.string().optional(),
     author: z.string().optional().default('Raúl Casado'),
     lang: z.enum(['es', 'en']).optional(),

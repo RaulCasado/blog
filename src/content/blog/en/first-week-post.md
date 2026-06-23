@@ -2,7 +2,7 @@
 title: 'Weekly Summary #1: Kaggle, Blog Refactoring and CS50'
 description: 'An intensive week of learning: from advanced Machine Learning techniques in Kaggle and SQL with BigQuery, to a deep refactoring of my blog with Astro and major progress in the CS50 Python course.'
 pubDate: '2025-08-01'
-heroImage: '/weekly/maxresdefault.jpg'
+heroImage: '../../../assets/blog/weekly/maxresdefault.jpg'
 tags: ["weekly", "kaggle", "astro", "python"]
 lang: 'en'
 ---

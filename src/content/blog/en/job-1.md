@@ -2,7 +2,7 @@
 title: 'My First Months as a Developer: Lessons and Projects'
 description: 'A short overview of my first months as a developer, what I learned across different projects, and how I grew step by step in a professional environment.'
 pubDate: '2025-11-24'
-heroImage: '/trabajo1.jpg'
+heroImage: '../../../assets/blog/trabajo1.jpg'
 heroImageAlt: 'Developer working on multiple projects'
 tags: ['job']
 lang: 'en'

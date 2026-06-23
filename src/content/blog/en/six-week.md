@@ -3,7 +3,7 @@ title: "Week 6: Intensive Development: Refactoring and Improvements in ProjectOr
 description: "A week of deep transformation: automated tools, clean architecture, and robust features. From standardized commits to optimized components, ProjectOrganizer gains in scalability and maintainability."
 pubDate: "2025-09-08"
 tags: ["weekly","web_development"]
-heroImage: '/weekly/husky.jpg'
+heroImage: '../../../assets/blog/weekly/husky.jpg'
 heroImageAlt: 'A diagram showing automated development tools optimizing the workflow'
 ---
 

@@ -7,6 +7,7 @@ import FormattedDate from '../components/FormattedDate.astro';
 import TableOfContents from '../components/TableOfContents.astro';
 import SocialShare from '../components/SocialShare.astro';
 import { getLangFromUrl } from '../i18n/utils';
+import { Picture } from 'astro:assets';
 
 type Props = CollectionEntry<'blog'>['data'] & {
   headings?: {
@@ -305,7 +306,20 @@ const copiedText = lang === 'en' ? 'Copied!' : '¡Copiado!';
 		<main>
 			<article>
 				<div class="hero-image">
-					{heroImage && <img width={1020} height={510} src={heroImage} alt={title} />}
+					{heroImage && (
+						<Picture
+							width={1020}
+							height={510}
+							src={heroImage}
+							alt={title}
+							formats={['avif', 'webp']}
+							fallbackFormat="jpg"
+							widths={[640, 820, 1020, 1280]}
+							sizes="(min-width: 1024px) 1020px, 100vw"
+							quality={82}
+							loading="eager"
+						/>
+					)}
 				</div>
 				
 				{headings && headings.length > 0 ? (
