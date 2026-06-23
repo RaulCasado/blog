@@ -1,58 +1,54 @@
-# Personal Blog & Portfolio
+# Raúl Casado — Personal Blog & Portfolio
 
-This is my personal blog and portfolio, built with [Astro](https://astro.build/). It's designed to be fast, content-focused, and easily maintainable.
+Personal blog and portfolio built with [Astro](https://astro.build/). The site is focused on bilingual technical writing, project visibility, performance, accessibility, RSS, sitemap, and a maintainable content workflow.
 
 [Leer en Español](README_es.md)
 
-## ✨ Features
+## Features
 
--   ✅ Minimal styling (make it your own!)
--   ✅ 100/100 Lighthouse performance
--   ✅ SEO-friendly with canonical URLs and OpenGraph data
--   ✅ Sitemap support
--   ✅ RSS Feed support
--   ✅ Markdown & MDX support
--   ✅ Internationalization (i18n) ready for English and Spanish.
+- Bilingual routes for English and Spanish.
+- Blog powered by Astro content collections, Markdown and MDX.
+- RSS feed, sitemap, canonical URLs and Open Graph metadata.
+- Optimized images through Astro assets from `src/assets` when images are part of the build pipeline.
+- Reproducible browser, Lighthouse and security audits.
+- Netlify-ready static build.
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
+## Project structure
 
 ```text
-├── public/
+├── public/              # Public static files and stable URLs
 ├── src/
+│   ├── assets/          # Images processed by Astro
 │   ├── components/
-│   ├── content/
+│   ├── content/         # Blog posts
 │   ├── layouts/
 │   └── pages/
+├── scripts/             # Audit automation
+├── tests/               # Playwright checks
 ├── astro.config.mjs
-├── README.md
 ├── package.json
-└── tsconfig.json
+└── playwright.config.ts
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Commands
 
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`.
+All commands use pnpm:
 
-Any static assets, like images, can be placed in the `public/` directory.
+| Command | Action |
+| :-- | :-- |
+| `pnpm install` | Install dependencies |
+| `pnpm dev` | Start the local dev server |
+| `pnpm build` | Build the production site into `./dist/` |
+| `pnpm preview` | Preview the production build locally |
+| `pnpm audit:security` | Run production and high-severity dependency audits |
+| `pnpm audit:browser` | Run Playwright browser checks |
+| `pnpm audit:lighthouse` | Generate Lighthouse reports for selected routes |
+| `pnpm audit` | Run build, security, browser and Lighthouse checks |
 
-## 🧞 Commands
+## Auditing notes
 
-All commands are run from the root of the project, from a terminal:
-
-| Command          | Action                                         |
-| :--------------- | :--------------------------------------------- |
-| `pnpm install`   | Installs dependencies                          |
-| `pnpm dev`       | Starts local dev server at `localhost:4321`    |
-| `pnpm build`     | Build your production site to `./dist/`        |
-| `pnpm preview`   | Preview your build locally, before deploying   |
-| `pnpm astro ...` | Run CLI commands like `astro add`, `astro check` |
-
-## 👀 Want to learn more?
-
-Check out the [Astro documentation](https://docs.astro.build) or jump into the [Astro Discord server](https://astro.build/chat).
+Lighthouse results are route-specific, not a blanket permanent `100/100` claim. Audit artifacts are written to `.audit/` and ignored by Git.
 
 ## Credit
 
-This theme is based on the [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+The original theme started from [Bear Blog](https://github.com/HermanMartinus/bearblog/) and has since been adapted for this portfolio.

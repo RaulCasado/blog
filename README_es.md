@@ -1,56 +1,52 @@
-# Blog Personal y Portafolio
+# Raúl Casado — Blog personal y portfolio
 
-Este es mi blog personal y portafolio, construido con [Astro](https://astro.build/). Está diseñado para ser rápido, centrado en el contenido y fácil de mantener.
+Blog personal y portfolio construido con [Astro](https://astro.build/). La web está pensada para escritura técnica bilingüe, visibilidad de proyectos, rendimiento, accesibilidad, RSS, sitemap y un flujo de contenido mantenible.
 
-## ✨ Características
+## Características
 
--   ✅ Estilo minimalista (¡personalízalo a tu gusto!)
--   ✅ Rendimiento 100/100 en Lighthouse
--   ✅ Optimizado para SEO con URLs canónicas y datos OpenGraph
--   ✅ Soporte para mapas del sitio
--   ✅ Soporte para fuentes RSS
--   ✅ Soporte para Markdown y MDX
--   ✅ Preparado para internacionalización (i18n) en inglés y español.
+- Rutas bilingües en español e inglés.
+- Blog basado en colecciones de contenido de Astro, Markdown y MDX.
+- RSS, sitemap, URLs canónicas y metadatos Open Graph.
+- Imágenes optimizadas mediante assets de Astro desde `src/assets` cuando forman parte del pipeline de build.
+- Auditorías reproducibles de navegador, Lighthouse y seguridad.
+- Build estático preparado para Netlify.
 
-## 🚀 Estructura del Proyecto
-
-Dentro de tu proyecto Astro, verás las siguientes carpetas y archivos:
+## Estructura del proyecto
 
 ```text
-├── public/
+├── public/              # Archivos públicos y URLs estables
 ├── src/
+│   ├── assets/          # Imágenes procesadas por Astro
 │   ├── components/
-│   ├── content/
+│   ├── content/         # Posts del blog
 │   ├── layouts/
 │   └── pages/
+├── scripts/             # Automatización de auditoría
+├── tests/               # Checks con Playwright
 ├── astro.config.mjs
-├── README.md
 ├── package.json
-└── tsconfig.json
+└── playwright.config.ts
 ```
 
-Astro busca archivos `.astro` o `.md` en el directorio `src/pages/`. Cada página se expone como una ruta basada en su nombre de archivo.
+## Comandos
 
-El directorio `src/content/` contiene "colecciones" de documentos relacionados en Markdown y MDX. Usa `getCollection()` para recuperar publicaciones de `src/content/blog/`.
+Todos los comandos usan pnpm:
 
-Cualquier recurso estático, como imágenes, puede colocarse en el directorio `public/`.
+| Comando | Acción |
+| :-- | :-- |
+| `pnpm install` | Instala las dependencias |
+| `pnpm dev` | Inicia el servidor de desarrollo local |
+| `pnpm build` | Construye la web de producción en `./dist/` |
+| `pnpm preview` | Previsualiza el build de producción en local |
+| `pnpm audit:security` | Ejecuta auditorías de dependencias de producción y severidad alta |
+| `pnpm audit:browser` | Ejecuta checks de navegador con Playwright |
+| `pnpm audit:lighthouse` | Genera informes Lighthouse para rutas seleccionadas |
+| `pnpm audit` | Ejecuta build, seguridad, navegador y Lighthouse |
 
-## 🧞 Comandos
+## Notas de auditoría
 
-Todos los comandos se ejecutan desde la raíz del proyecto, desde una terminal:
-
-| Comando          | Acción                                         |
-| :--------------- | :--------------------------------------------- |
-| `pnpm install`   | Instala las dependencias                       |
-| `pnpm dev`       | Inicia el servidor de desarrollo local en `localhost:4321` |
-| `pnpm build`     | Construye tu sitio de producción en `./dist/`  |
-| `pnpm preview`   | Previsualiza tu construcción localmente, antes de desplegar |
-| `pnpm astro ...` | Ejecuta comandos CLI como `astro add`, `astro check` |
-
-## 👀 ¿Quieres aprender más?
-
-Consulta la [documentación de Astro](https://docs.astro.build) o únete al [servidor de Discord de Astro](https://astro.build/chat).
+Los resultados de Lighthouse son específicos por ruta, no una promesa global y permanente de `100/100`. Los artefactos de auditoría se guardan en `.audit/` y se ignoran en Git.
 
 ## Crédito
 
-Este tema está basado en el [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+El tema original partía de [Bear Blog](https://github.com/HermanMartinus/bearblog/) y se ha adaptado para este portfolio.

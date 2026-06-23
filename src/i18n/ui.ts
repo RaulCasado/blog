@@ -133,6 +133,7 @@ export const translations = {
 
         // Portfolio Filter
         'portfolio.filter.all' : 'All',
+        'portfolio.filter.label' : 'Filter projects by language',
 
         //blog page
         'blog.header' : 'Blog',
@@ -313,6 +314,7 @@ export const translations = {
 
         // Filtro de Portfolio
         'portfolio.filter.all' : 'Todos',
+        'portfolio.filter.label' : 'Filtrar proyectos por lenguaje',
 
         // blog
         'blog.header' : 'Blog',

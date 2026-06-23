@@ -10,11 +10,12 @@ const availableLanguages = [...new Set(
 )].sort();
 ---
 
-<div class="filter-project" role="tablist" aria-label="Filter projects by language">
+<div class="filter-project" aria-label={t('portfolio.filter.label')}>
     <button 
         class="filter-link active"
         data-language="all"
         type="button"
+        aria-pressed="true"
     >
         {t('portfolio.filter.all')}
     </button>
@@ -23,6 +24,7 @@ const availableLanguages = [...new Set(
             class="filter-link"
             data-language={language}
             type="button"
+            aria-pressed="false"
         >
             {language}
         </button>

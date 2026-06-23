@@ -406,7 +406,15 @@ const { lang, t, translatePath } = Astro.props;
 		display: inline-flex;
 		align-items: center;
 		gap: 0.5rem;
+		border-color: hsl(var(--border));
+		color: hsl(var(--foreground));
 		transition: all 0.2s ease-in-out;
+	}
+
+	.view-more-btn:hover {
+		background-color: hsl(var(--primary));
+		border-color: hsl(var(--primary));
+		color: hsl(var(--primary-foreground));
 	}
 	
 	.view-more-btn svg {

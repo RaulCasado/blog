@@ -14,7 +14,7 @@ const translatePath = useTranslatedPath(lang);
 <header>
 	<nav>
 		<div class="logo-container">
-			<h2><a href={translatePath('/')}>{SITE_TITLE}</a></h2>
+			<div class="site-title"><a href={translatePath('/')}>{SITE_TITLE}</a></div>
 			<BurgerMenu />
 		</div>
 		<div class="nav-container">
@@ -82,13 +82,14 @@ const translatePath = useTranslatedPath(lang);
 		z-index: 1000;
 	}
 	
-	h2 {
+	.site-title {
 		margin: 0;
 		font-size: 1em;
+		font-weight: 700;
 	}
 
-	h2 a,
-	h2 a.active {
+	.site-title a,
+	.site-title a.active {
 		text-decoration: none;
 	}
 	

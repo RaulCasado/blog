@@ -43,21 +43,33 @@ function getLanguageColor(language) {
   return colors[language] || '#8e8e8e';
 }
 
+function getReadableTextColor(backgroundColor) {
+  const hex = backgroundColor.replace('#', '');
+  const rgb = [0, 2, 4].map(index => parseInt(hex.slice(index, index + 2), 16) / 255);
+  const luminance = rgb
+    .map(value => value <= 0.03928 ? value / 12.92 : Math.pow((value + 0.055) / 1.055, 2.4))
+    .reduce((sum, value, index) => sum + value * [0.2126, 0.7152, 0.0722][index], 0);
+
+  const darkTextContrast = (luminance + 0.05) / 0.05;
+  const lightTextContrast = 1.05 / (luminance + 0.05);
+  return darkTextContrast >= lightTextContrast ? '#000000' : '#ffffff';
+}
+
 function getLanguageIcon(language) {
   if ((!language) || language === null || language === undefined) {
-    return 'https://cdn.simpleicons.org/markdown';
+    return 'MD';
   }
   
   const icons = {
-    JavaScript: 'https://cdn.simpleicons.org/javascript',
-    TypeScript: 'https://cdn.simpleicons.org/typescript',
-    HTML: 'https://cdn.simpleicons.org/html5',
-    Astro: 'https://cdn.simpleicons.org/astro',
-    CSS: 'https://cdn.simpleicons.org/css',
-    Python: 'https://cdn.simpleicons.org/python',
-    C: 'https://cdn.simpleicons.org/c',
-    'C++': 'https://cdn.simpleicons.org/cplusplus',
-    PHP: 'https://cdn.simpleicons.org/php'
+    JavaScript: 'JS',
+    TypeScript: 'TS',
+    HTML: 'HTML',
+    Astro: 'A',
+    CSS: 'CSS',
+    Python: 'Py',
+    C: 'C',
+    'C++': 'C++',
+    PHP: 'PHP'
   };
   
   return icons[language] || language.substring(0, 2).toUpperCase();
@@ -66,7 +78,7 @@ function getLanguageIcon(language) {
 ---
 
 <div class="portfolio-container">
-  <h2>{t('portfolio.header')}</h2>
+  <h1>{t('portfolio.header')}</h1>
   <p class="portfolio-intro">
     {t('portfolio.subtitle')}
   </p>
@@ -81,12 +93,12 @@ function getLanguageIcon(language) {
       <div class={`project-card ${project.language ? `lang-${project.language.toLowerCase()}` : ''}`} data-language={project.language || 'none'}>
         <div class="project-header">
           <div class="project-icon">
-            <img src={getLanguageIcon(project.language)} alt={project.language} width="24" height="24" />
+            <span aria-hidden="true">{getLanguageIcon(project.language)}</span>
           </div>
           <div class="project-title-container">
-            <h3 class="project-title">{project.name}</h3>
+            <h2 class="project-title">{project.name}</h2>
             {project.language && (
-              <span class="project-language-pill" style={`--lang-color: ${getLanguageColor(project.language)};`}>
+              <span class="project-language-pill" style={`--lang-color: ${getLanguageColor(project.language)}; --lang-text-color: ${getReadableTextColor(getLanguageColor(project.language))};`}>
                 {project.language}
               </span>
             )}
@@ -156,9 +168,10 @@ function getLanguageIcon(language) {
     updateActiveFilter(currentFilter);
 
     document.addEventListener('click', function(e) {
-      if (e.target && e.target.matches && e.target.matches('.filter-link')) {
+      const filterButton = e.target instanceof Element ? e.target.closest('.filter-link') : null;
+      if (filterButton instanceof HTMLButtonElement) {
         e.preventDefault();
-        const language = e.target.getAttribute('data-language');
+        const language = filterButton.getAttribute('data-language');
         
         filterProjects(language);
         updateActiveFilter(language);
@@ -212,22 +225,17 @@ function getLanguageIcon(language) {
       const header = createElement('div', 'project-header');
       const iconContainer = createElement('div', 'project-icon');
       const icon = getLanguageIcon(language);
-      if (icon.startsWith('https://cdn.simpleicons.org/')) {
-        const image = document.createElement('img');
-        image.src = icon;
-        image.alt = language || 'Markdown';
-        image.width = 24;
-        image.height = 24;
-        iconContainer.append(image);
-      } else {
-        iconContainer.textContent = icon;
-      }
+      const iconText = createElement('span', '', icon);
+      iconText.setAttribute('aria-hidden', 'true');
+      iconContainer.append(iconText);
 
       const titleContainer = createElement('div', 'project-title-container');
-      titleContainer.append(createElement('h3', 'project-title', String(project.name || '')));
+      titleContainer.append(createElement('h2', 'project-title', String(project.name || '')));
       if (language) {
         const pill = createElement('span', 'project-language-pill', language);
-        pill.style.setProperty('--lang-color', getLanguageColor(language));
+        const languageColor = getLanguageColor(language);
+        pill.style.setProperty('--lang-color', languageColor);
+        pill.style.setProperty('--lang-text-color', getReadableTextColor(languageColor));
         titleContainer.append(pill);
       }
       header.append(iconContainer, titleContainer);
@@ -298,8 +306,10 @@ function getLanguageIcon(language) {
         
         if (linkLanguage === activeLanguage) {
           link.classList.add('active');
+          link.setAttribute('aria-pressed', 'true');
         } else {
           link.classList.remove('active');
+          link.setAttribute('aria-pressed', 'false');
         }
       });
     }
@@ -319,21 +329,33 @@ function getLanguageIcon(language) {
       return colors[language] || '#8e8e8e';
     }
 
+    function getReadableTextColor(backgroundColor) {
+      const hex = String(backgroundColor).replace('#', '');
+      const rgb = [0, 2, 4].map(index => parseInt(hex.slice(index, index + 2), 16) / 255);
+      const luminance = rgb
+        .map(value => value <= 0.03928 ? value / 12.92 : Math.pow((value + 0.055) / 1.055, 2.4))
+        .reduce((sum, value, index) => sum + value * [0.2126, 0.7152, 0.0722][index], 0);
+
+      const darkTextContrast = (luminance + 0.05) / 0.05;
+      const lightTextContrast = 1.05 / (luminance + 0.05);
+      return darkTextContrast >= lightTextContrast ? '#000000' : '#ffffff';
+    }
+
     function getLanguageIcon(language) {
       if ((!language) || language === null || language === undefined) {
-        return 'https://cdn.simpleicons.org/markdown';
+        return 'MD';
       }
       
       const icons = {
-        JavaScript: 'https://cdn.simpleicons.org/javascript',
-        TypeScript: 'https://cdn.simpleicons.org/typescript',
-        HTML: 'https://cdn.simpleicons.org/html5',
-        Astro: 'https://cdn.simpleicons.org/astro',
-        CSS: 'https://cdn.simpleicons.org/css',
-        Python: 'https://cdn.simpleicons.org/python',
-        C: 'https://cdn.simpleicons.org/c',
-        'C++': 'https://cdn.simpleicons.org/cplusplus',
-        PHP: 'https://cdn.simpleicons.org/php'
+        JavaScript: 'JS',
+        TypeScript: 'TS',
+        HTML: 'HTML',
+        Astro: 'A',
+        CSS: 'CSS',
+        Python: 'Py',
+        C: 'C',
+        'C++': 'C++',
+        PHP: 'PHP'
       };
       
       return icons[language] || language.substring(0, 2).toUpperCase();
@@ -347,7 +369,7 @@ function getLanguageIcon(language) {
     margin: 0 auto;
   }
 
-  .portfolio-container h2 {
+  .portfolio-container h1 {
     font-size: 2rem;
     font-weight: 700;
     margin-bottom: 1rem;
@@ -420,7 +442,7 @@ function getLanguageIcon(language) {
     padding: 0.2rem 0.5rem;
     border-radius: 9999px;
     background-color: var(--lang-color, #8e8e8e);
-    color: white;
+    color: var(--lang-text-color, #ffffff);
   }
 
   .project-description {
@@ -504,6 +526,43 @@ function getLanguageIcon(language) {
   .lang-php .project-icon {
     background-color: rgba(79, 93, 149, 0.15);
     color: #4F5D95;
+  }
+
+  .project-icon span {
+    color: hsl(var(--foreground));
+  }
+
+  .pagination {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 2.5rem;
+  }
+
+  .pagination-info {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.95rem;
+  }
+
+  .pagination-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.5rem;
+    padding: 0.55rem 0.9rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    color: hsl(var(--foreground));
+    text-decoration: none;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .pagination-link:hover {
+    background-color: hsl(var(--primary));
+    border-color: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
   }
 
   /* Responsive Design */

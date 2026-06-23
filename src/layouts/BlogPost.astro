@@ -20,7 +20,6 @@ type Props = CollectionEntry<'blog'>['data'] & {
 const { title, description, pubDate, updatedDate, heroImage, headings = [] } = Astro.props;
 const currentPageUrl = Astro.url.href;
 const lang = getLangFromUrl(Astro.url);
-
 const copyText = lang === 'en' ? 'Copy' : 'Copiar';
 const copiedText = lang === 'en' ? 'Copied!' : '¡Copiado!';
 ---
@@ -344,7 +343,7 @@ const copiedText = lang === 'en' ? 'Copied!' : '¡Copiado!';
 							</div>
 							<slot />
 
-                            <SocialShare url={currentPageUrl} title={title} description={description} />
+                            <SocialShare url={currentPageUrl} title={title} description={description} lang={lang} />
 
                             <!-- Comments section -->
                             <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid hsl(var(--border));">

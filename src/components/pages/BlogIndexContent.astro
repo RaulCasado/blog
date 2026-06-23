@@ -24,7 +24,7 @@ const cardImageSizes = '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw
 <section class="blog-section">
 	<div class="container">
 	<div class="section-header">
-			<h2>{t('blog.header')}</h2>
+			<h1>{t('blog.header')}</h1>
 			<p>{t('blog.subtitle')}</p>
 		</div>
 
@@ -93,7 +93,7 @@ const cardImageSizes = '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw
 						</div>
 						<div class="blog-card-content">
 							<a href={`/${lang}/blog/${post.id.replace(`${lang}/`, '').replace(/\.mdx?$/, '')}/`}>
-								<h3 class="title">{post.data.title}</h3>
+								<h2 class="title">{post.data.title}</h2>
 							</a>
 							{post.data.tags?.length > 0 && (
 								<div class="blog-card-tags">
@@ -157,7 +157,7 @@ const cardImageSizes = '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw
 						</div>
 						<div class="blog-card-content">
 							<a href={`/${lang}/blog/${post.id.replace(`${lang}/`, '').replace(/\.mdx?$/, '')}/`}>
-								<h3 class="title">{post.data.title}</h3>
+								<h2 class="title">{post.data.title}</h2>
 							</a>
 							{post.data.tags?.length > 0 && (
 								<div class="blog-card-tags">
@@ -305,7 +305,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		padding: 0 0.5rem;
 	}
 
-	.section-header h2 {
+	.section-header h1 {
 		font-size: 1.75rem;
 		font-weight: 700;
 		margin: 0 0 0.75rem;
@@ -601,7 +601,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			padding: 0 1.5rem;
 		}
 		
-		.section-header h2 {
+		.section-header h1 {
 			font-size: 2rem;
 		}
 	}
