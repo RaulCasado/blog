@@ -21,7 +21,7 @@ export const translations = {
 
         // Home page - Hero section
         'hero.greeting': 'Hi, I\'m Raúl Casado',
-        'hero.tagline': 'Web developer perfecting and improving my skills',
+        'hero.tagline': 'Full-stack web developer with experience in production applications, legacy code maintenance, and continuous learning through my blog and personal projects.',
         'hero.cta.projects': 'View My Projects',
         'hero.cta.about': 'About Me',
 
@@ -31,27 +31,28 @@ export const translations = {
         
         // Cards
         'card.blog.title': 'Blog',
-        'card.blog.description': 'Read my thoughts and decisions on the projects I\'ve worked on (or some of them)',
+        'card.blog.description': 'Read technical notes, lessons learned, and decisions from real projects.',
         'card.blog.link': 'Read the blog',
         
         'card.portfolio.title': 'Portfolio',
-        'card.portfolio.description': 'Explore the projects I\'ve worked on',
+        'card.portfolio.description': 'Explore projects where I apply web development, backend, systems, and problem solving.',
         'card.portfolio.link': 'View Portfolio',
         
         'card.about.title': 'About Me',
-        'card.about.description': 'Learn about my professional experience, skills, and education.',
+        'card.about.description': 'Learn about my experience, training, and how I work as a developer.',
         'card.about.link': 'Read More',
 
         // Tech stack section
         'tech.title': 'My Tech Stack',
         'tech.description': 'Technologies I work with',
+        'tech.viewFullStack': 'See my full tech stack',
 
         // About page
         'about.title': 'About Me',
         'about.description': 'Raúl Casado - Web Developer',
         'about.greeting': 'Hello, I\'m Raúl Casado 👋',
-        'about.intro1': 'Hello! I\'m a web developer, 🖥️ I have experience in creating projects or at least I try, I\'m always looking to learn something new at 42 or on my own.',
-        'about.intro2': 'Currently, I\'m looking for an opportunity that allows me to grow professionally. I would love to find a place where I can advance and learn along with the company.',
+        'about.intro1': 'I’m a web developer with experience in real applications and production projects. I like working close to the product, understanding the problem before writing code, and building maintainable solutions.',
+        'about.intro2': 'I currently work on developing and maintaining full-stack features in enterprise projects, combining legacy code, new functionality, databases, push notifications, and multi-timezone systems. Outside of work, I keep learning through my blog and personal projects, applying and documenting what I build in real cases.',
         'about.intro3': 'It all started with the higher degree cycle in DAW. That\'s where curiosity bit me and the desire to learn has not left me, even after finishing, I continued studying. Next was Python and other technologies like React and frameworks like Flask, which gave me a good foundation for creating scalable and efficient applications.',
         'about.intro4': 'What motivates me is using technology to create solutions that solve real problems. I want to find projects where I can combine my creativity with my technical skills.',
         'about.intro5': 'Looking to the future, I would like to specialize in web application development, especially in the backend. Also, I want to keep learning, as there\'s always something new. Like another JS framework, but that\'s another topic.',
@@ -201,7 +202,7 @@ export const translations = {
 
         // Página de inicio - Sección hero
         'hero.greeting': 'Hola, soy Raúl Casado',
-        'hero.tagline': 'Desarrollador web perfeccionando y mejorando mis habilidades',
+        'hero.tagline': 'Desarrollador web full-stack con experiencia en aplicaciones en producción, mantenimiento de código legacy y aprendizaje continuo a través del blog y proyectos propios.',
         'hero.cta.projects': 'Ver Mis Proyectos',
         'hero.cta.about': 'Sobre Mí',
 
@@ -211,27 +212,28 @@ export const translations = {
         
         // Tarjetas
         'card.blog.title': 'Blog',
-        'card.blog.description': 'Lee mis pensamientos y decisiones en los proyectos que he realizado (o algunos)',
+        'card.blog.description': 'Lee notas técnicas, aprendizajes y decisiones tomadas en proyectos reales.',
         'card.blog.link': 'Lee el blog',
         
         'card.portfolio.title': 'Portfolio',
-        'card.portfolio.description': 'Explora los proyectos que he realizado',
+        'card.portfolio.description': 'Explora proyectos donde aplico desarrollo web, backend, sistemas y resolución de problemas.',
         'card.portfolio.link': 'Ver Portfolio',
         
         'card.about.title': 'Sobre Mí',
-        'card.about.description': 'Conoce mi experiencia profesional, habilidades y educación.',
+        'card.about.description': 'Conoce mi experiencia, formación y forma de trabajar como desarrollador.',
         'card.about.link': 'Leer Más',
 
         // Sección de stack tecnológico
         'tech.title': 'Mi Stack Tecnológico',
         'tech.description': 'Tecnologías con las que trabajo',
+        'tech.viewFullStack': 'Ver mi stack completo',
         
         // Página Sobre Mi
         'about.title': 'Sobre Mí',
         'about.description': 'Raúl Casado - Desarrollador Web',
         'about.greeting': 'Hola, soy Raúl Casado 👋',
-        'about.intro1': '¡Hola! Soy un desarrollador web, 🖥️ Tengo experiencia en crear proyectos o por lo menos lo intento, siempre estoy en la búsqueda de aprender algo nuevo en 42 o por mi cuenta.',
-        'about.intro2': 'Actualmente estoy en la búsqueda de una oportunidad que me permita crecer profesionalmente. Me encantaría encontrar un lugar donde pueda avanzar y aprender junto con la empresa.',
+        'about.intro1': 'Soy desarrollador web con experiencia en aplicaciones reales y proyectos en producción. Me gusta trabajar cerca del producto, entender los problemas antes de escribir código y construir soluciones mantenibles.',
+        'about.intro2': 'Actualmente trabajo desarrollando y manteniendo funcionalidades full-stack en proyectos empresariales, combinando código legacy, nuevas features, bases de datos, notificaciones push y sistemas multi-timezone. Fuera del trabajo sigo aprendiendo a través del blog y proyectos propios, aplicando lo que construyo y documento en casos reales.',
         'about.intro3': 'Todo comenzó con el ciclo de grado superior en DAW. Ahí fue donde me picó la curiosidad y las ganas de aprender no me han abandonado, incluso después de terminar, seguí estudiando. Lo siguiente fue Python y otras tecnologías como React y frameworks como Flask, lo que me proporcionó una buena base para crear aplicaciones escalables y eficientes.',
         'about.intro4': 'Lo que me motiva es usar la tecnología para crear soluciones que resuelvan problemas reales. Quiero encontrar proyectos donde pueda combinar mi creatividad con mis habilidades técnicas.',
         'about.intro5': 'De cara al futuro, me gustaría especializarme en el desarrollo de aplicaciones web, especialmente en el backend. Además, quiero seguir aprendiendo, ya que siempre hay algo nuevo. Como otro framework de JS, pero eso ya es otro tema.',
