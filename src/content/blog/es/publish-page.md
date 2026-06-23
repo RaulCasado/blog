@@ -8,8 +8,6 @@ tags: ['web_development', 'publishing']
 lang: 'es'
 ---
 
-# De localhost a producción: una guía para publicar tu página web
-
 Publicar una página web puede parecer algo complejo, y es cierto que hay muchos pasos que se deben seguir. Pero teniendo una guía es algo más sencillo. En este artículo, te voy a explicar cómo publicar tu web y todas las preguntas que me surgieron a mí cuando lo hice por primera vez.
 
 ## ¿Qué es publicar una página web?

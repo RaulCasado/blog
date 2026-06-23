@@ -8,8 +8,6 @@ tags: ['linux', 'android']
 lang: 'en'
 ---
 
-# How I Gave My Xiaomi Mi A2 a Second Life with a Custom ROM
-
 ## Introduction
 
 I had a **Xiaomi Mi A2** collecting dust in a drawer. The phone works perfectly hardware-wise, but Xiaomi dropped support for it years ago. It was stuck on Android 10 with no security patches, no updates, and more and more apps becoming incompatible.

@@ -8,7 +8,7 @@ tags: ['42-school']
 lang: 'es'
 ---
 
-# Una mirada filosófica al Multithreading
+## Una mirada filosófica al Multithreading
 
 ## Introducción
 

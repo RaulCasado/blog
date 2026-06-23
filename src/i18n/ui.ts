@@ -16,8 +16,8 @@ export const translations = {
         'nav.cv': 'Resume',
         
         // General labels
-        'about.projectsLabel': 'Projects',
-        'about.skillsLabel': 'Skills learned',
+        'about.projectsLabel': 'Enterprise apps in production',
+        'about.skillsLabel': 'Main production stack',
 
         // Home page - Hero section
         'hero.greeting': 'Hi, I\'m Raúl Casado',
@@ -56,10 +56,10 @@ export const translations = {
         'about.intro3': 'It all started with the higher degree cycle in DAW. That\'s where curiosity bit me and the desire to learn has not left me, even after finishing, I continued studying. Next was Python and other technologies like React and frameworks like Flask, which gave me a good foundation for creating scalable and efficient applications.',
         'about.intro4': 'What motivates me is using technology to create solutions that solve real problems. I want to find projects where I can combine my creativity with my technical skills.',
         'about.intro5': 'Looking to the future, I would like to specialize in web application development, especially in the backend. Also, I want to keep learning, as there\'s always something new. Like another JS framework, but that\'s another topic.',
-        'about.available': 'Available',
-        'about.projects': 'For new projects',
-        'about.hours': '+1000',
-        'about.learning': 'Hours of study',
+        'about.available': 'Full Stack',
+        'about.projects': 'Web developer in production',
+        'about.hours': '+1 year',
+        'about.learning': 'Professional experience',
         'about.h3' : 'Studying this technologies',
         'about.goalTitle' : 'My goal as a developer is to',
         'about.goalDescription' : 'I see programming as a continuous way to learn and improve myself. Each project is an opportunity to discover new ideas, reinforce previous knowledge and solve real challenges. It\'s not about reinventing the wheel, but about understanding how and why it works, to build better and more efficient solutions.',
@@ -198,8 +198,8 @@ export const translations = {
         'nav.cv': 'Currículum',
         
         // General labels
-        'about.projectsLabel': 'Proyectos',
-        'about.skillsLabel': 'Habilidades aprendidas',
+        'about.projectsLabel': 'Apps empresariales en producción',
+        'about.skillsLabel': 'Stack principal en producción',
 
         // Página de inicio - Sección hero
         'hero.greeting': 'Hola, soy Raúl Casado',
@@ -238,10 +238,10 @@ export const translations = {
         'about.intro3': 'Todo comenzó con el ciclo de grado superior en DAW. Ahí fue donde me picó la curiosidad y las ganas de aprender no me han abandonado, incluso después de terminar, seguí estudiando. Lo siguiente fue Python y otras tecnologías como React y frameworks como Flask, lo que me proporcionó una buena base para crear aplicaciones escalables y eficientes.',
         'about.intro4': 'Lo que me motiva es usar la tecnología para crear soluciones que resuelvan problemas reales. Quiero encontrar proyectos donde pueda combinar mi creatividad con mis habilidades técnicas.',
         'about.intro5': 'De cara al futuro, me gustaría especializarme en el desarrollo de aplicaciones web, especialmente en el backend. Además, quiero seguir aprendiendo, ya que siempre hay algo nuevo. Como otro framework de JS, pero eso ya es otro tema.',
-        'about.available': 'Disponible',
-        'about.projects': 'Para nuevos proyectos',
-        'about.hours': '+1000',
-        'about.learning': 'Horas de estudio',
+        'about.available': 'Full Stack',
+        'about.projects': 'Programador web en producción',
+        'about.hours': '+1 año',
+        'about.learning': 'Experiencia profesional',
         'about.h3' : 'Estudiando estas tecnologías',
         'about.goalTitle' : 'Mi objetivo como desarrollador es',
         'about.goalDescription' : 'Veo la programación como una forma continua de aprender y mejorarme. Cada proyecto es una oportunidad para descubrir nuevas ideas, reforzar conocimientos previos y resolver desafíos reales. No se trata de reinventar la rueda, sino de entender cómo y por qué funciona, para construir soluciones mejores y más eficientes.',

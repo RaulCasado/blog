@@ -8,8 +8,6 @@ tags: ['python', 'react', 'project']
 lang: 'en'
 ---
 
-# Titan Dashboard: Building My Own "Life OS" with FastAPI and React
-
 ## The Idea
 
 I've been wanting to centralize several areas of my life in one place for a while: **nutrition** (recipes, ingredients, costs), **habits**, **finances**, **gym** and even stoic philosophy notes. There are apps for each of these things, but none of them brings everything together or lets me customize them the way I want.

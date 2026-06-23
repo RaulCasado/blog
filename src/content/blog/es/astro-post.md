@@ -8,8 +8,6 @@ tags: ['astro', 'web_development']
 lang: 'es'
 ---
 
-# Astro y por qué lo escogí
-
 ## Introducción
 
 ¡Hola a todos! Como habrán notado, he decidido lanzar mi blog utilizando Astro. Quizás te estés preguntando si esta es la opción correcta para ti, o si deberías considerar otro framework. La elección de una herramienta para un proyecto web personal, como un blog, puede ser compleja, con muchísimas opciones disponibles. Es crucial tomar una decisión informada, sin dejarse llevar solo por las tendencias. Por eso, en este artículo, te explicaré por qué elegí Astro, sus ventajas y desventajas, y cuándo realmente brilla. Espero que esta guía te ayude a decidir si Astro es la herramienta ideal para tu próximo proyecto.

@@ -8,8 +8,6 @@ tags: ['docker', 'linux', 'minecraft']
 lang: 'es'
 ---
 
-# Cómo monté un servidor de Minecraft modded con Docker en un PC antiguo
-
 ## Introducción
 
 Hace unas semanas me propuse algo que mucha gente piensa que necesita un servidor dedicado caro: montar un **servidor de Minecraft modded (Cobblemon)** estable para jugar con amigos. Lo hice en un PC viejo que tengo en casa al que cariñosamente llamo "Servercito", corriendo **Ubuntu Server**, sin gastar ni un euro en hosting.

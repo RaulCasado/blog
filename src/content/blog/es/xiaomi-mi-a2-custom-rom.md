@@ -8,8 +8,6 @@ tags: ['linux', 'android']
 lang: 'es'
 ---
 
-# Cómo le di una segunda vida a mi Xiaomi Mi A2 con una Custom ROM
-
 ## Introducción
 
 Tenía un **Xiaomi Mi A2** acumulando polvo en un cajón. El teléfono funciona perfectamente a nivel de hardware, pero Xiaomi dejó de darle soporte hace años. Se quedó atascado en Android 10 sin parches de seguridad, sin actualizaciones, y cada vez más apps dejaban de ser compatibles.
