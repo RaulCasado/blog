@@ -154,3 +154,40 @@ test('seed pages do not expose broken internal links', async ({ page, request },
   }
   expect(broken).toEqual([]);
 });
+
+test('every blog article exposes exactly one h1', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-chrome', 'Heading structure is viewport-independent.');
+  const baseUrl = new URL(process.env.AUDIT_BASE_URL || 'http://127.0.0.1:4321');
+  const articleListPages = ['/es/blog/', '/en/blog/'];
+  const articleUrls = new Set<string>();
+
+  for (const listPath of articleListPages) {
+    await page.goto(listPath, { waitUntil: 'domcontentloaded' });
+    const hrefs = await page.locator('a[href*="/blog/"]').evaluateAll(anchors =>
+      anchors.map(anchor => (anchor as HTMLAnchorElement).href),
+    );
+    for (const href of hrefs) {
+      const { origin, pathname } = new URL(href);
+      if (origin !== baseUrl.origin) continue;
+      // Keep article pages (/<lang>/blog/<slug>/); exclude the index and tag listings.
+      if (/^\/(es|en)\/blog\/[^/]+\/?$/.test(pathname) && !pathname.includes('/tag')) {
+        articleUrls.add(new URL(pathname, baseUrl).href);
+      }
+    }
+  }
+
+  expect(articleUrls.size, 'crawl should discover blog articles').toBeGreaterThan(0);
+
+  const offenders: Array<{ url: string; h1Count: number }> = [];
+  for (const url of articleUrls) {
+    await page.goto(url, { waitUntil: 'domcontentloaded' });
+    const h1Count = await page.locator('h1').count();
+    if (h1Count !== 1) offenders.push({ url, h1Count });
+  }
+
+  await testInfo.attach('article-h1-audit', {
+    body: Buffer.from(JSON.stringify({ checked: articleUrls.size, offenders }, null, 2)),
+    contentType: 'application/json',
+  });
+  expect(offenders, 'every article must expose exactly one h1').toEqual([]);
+});
