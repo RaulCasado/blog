@@ -196,46 +196,101 @@ function getLanguageIcon(language) {
     }
 
     function renderProjects(projects) {
-      projectsGrid.innerHTML = projects.map(project => {
-        const iconResult = getLanguageIcon(project.language);
-        const isUrl = iconResult.startsWith('http');
-        
-        return `<div class="project-card ${project.language ? `lang-${project.language.toLowerCase()}` : ''}" data-language="${project.language || 'none'}">
-  <div class="project-header">
-    <div class="project-icon">
-      ${isUrl 
-        ? `<img src="${iconResult}" alt="${project.language}" width="24" height="24" />`
-        : iconResult
+      const fragment = document.createDocumentFragment();
+      projects.forEach(project => fragment.append(createProjectCard(project)));
+      projectsGrid.replaceChildren(fragment);
+    }
+
+    function createProjectCard(project) {
+      const language = typeof project.language === 'string' ? project.language : '';
+      const card = createElement('div', 'project-card');
+      if (language) {
+        card.classList.add(`lang-${language.toLowerCase().replace(/[^a-z0-9_-]/g, '-')}`);
       }
-    </div>
-    <div class="project-title-container">
-      <h3 class="project-title">${project.name}</h3>
-      ${project.language ? `<span class="project-language-pill" style="--lang-color: ${getLanguageColor(project.language)};">${project.language}</span>` : ''}
-    </div>
-  </div>
-  
-  <p class="project-description">${project.description || translations.noDescription}</p>
-  
-  <div class="project-meta">
-    <div class="project-stats">
-      <span class="project-badge">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-        ${project.stars}
-      </span>
-      <span class="project-updated" title="${project.updatedAt}">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-        ${new Date(project.updatedAt).toLocaleDateString(lang === 'es' ? 'es-ES' : 'en-US', {year: 'numeric', month: 'short'})}
-      </span>
-    </div>
-    
-    <a href="${project.url}" target="_blank" rel="noopener noreferrer" class="project-link">
-      <span>${translations.viewOnGithub}</span>
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-    </a>
-  </div>
-</div>`;
-      }).join('');
-    }    function updateActiveFilter(activeLanguage) {
+      card.dataset.language = language || 'none';
+
+      const header = createElement('div', 'project-header');
+      const iconContainer = createElement('div', 'project-icon');
+      const icon = getLanguageIcon(language);
+      if (icon.startsWith('https://cdn.simpleicons.org/')) {
+        const image = document.createElement('img');
+        image.src = icon;
+        image.alt = language || 'Markdown';
+        image.width = 24;
+        image.height = 24;
+        iconContainer.append(image);
+      } else {
+        iconContainer.textContent = icon;
+      }
+
+      const titleContainer = createElement('div', 'project-title-container');
+      titleContainer.append(createElement('h3', 'project-title', String(project.name || '')));
+      if (language) {
+        const pill = createElement('span', 'project-language-pill', language);
+        pill.style.setProperty('--lang-color', getLanguageColor(language));
+        titleContainer.append(pill);
+      }
+      header.append(iconContainer, titleContainer);
+
+      const description = createElement(
+        'p',
+        'project-description',
+        String(project.description || translations.noDescription),
+      );
+
+      const meta = createElement('div', 'project-meta');
+      const stats = createElement('div', 'project-stats');
+      const stars = Number.isFinite(Number(project.stars)) ? Number(project.stars) : 0;
+      stats.append(
+        createElement('span', 'project-badge', `☆ ${stars}`),
+        createUpdatedAt(project.updatedAt),
+      );
+
+      const link = createElement('a', 'project-link');
+      link.href = getSafeProjectUrl(project.url);
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.append(
+        createElement('span', '', translations.viewOnGithub),
+        createElement('span', '', '↗'),
+      );
+      meta.append(stats, link);
+      card.append(header, description, meta);
+      return card;
+    }
+
+    function createUpdatedAt(value) {
+      const rawValue = typeof value === 'string' ? value : '';
+      const date = new Date(rawValue);
+      const formattedDate = Number.isNaN(date.valueOf())
+        ? ''
+        : date.toLocaleDateString(lang === 'es' ? 'es-ES' : 'en-US', {
+            year: 'numeric',
+            month: 'short',
+          });
+      const element = createElement('span', 'project-updated', `◷ ${formattedDate}`);
+      if (rawValue) element.title = rawValue;
+      return element;
+    }
+
+    function createElement(tagName, className = '', text = '') {
+      const element = document.createElement(tagName);
+      if (className) element.className = className;
+      if (text !== '') element.textContent = String(text);
+      return element;
+    }
+
+    function getSafeProjectUrl(value) {
+      try {
+        const url = new URL(String(value));
+        if (url.protocol === 'https:' && url.hostname === 'github.com') return url.href;
+      } catch {
+        // Invalid and unexpected URLs fall back to the public GitHub profile.
+      }
+      return 'https://github.com/RaulCasado';
+    }
+
+    function updateActiveFilter(activeLanguage) {
       const filterLinks = document.querySelectorAll('.filter-link');
       
       filterLinks.forEach(link => {

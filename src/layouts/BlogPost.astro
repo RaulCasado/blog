@@ -403,7 +403,7 @@ const copiedText = lang === 'en' ? 'Copied!' : '¡Copiado!';
 			codeBlocks.forEach(block => {
 				let button = document.createElement("button");
 				button.className = "copy-code-btn";
-				button.innerHTML = copyText;
+				button.textContent = copyText;
 				
 				block.appendChild(button);
 
@@ -412,11 +412,11 @@ const copiedText = lang === 'en' ? 'Copied!' : '¡Copiado!';
 					
 					await navigator.clipboard.writeText(code);
 					
-					button.innerHTML = copiedText;
+					button.textContent = copiedText;
 					button.classList.add("copied");
 					
 					setTimeout(() => {
-						button.innerHTML = copyText;
+						button.textContent = copyText;
 						button.classList.remove("copied");
 					}, 2000);
 				});

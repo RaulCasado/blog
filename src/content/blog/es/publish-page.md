@@ -187,7 +187,7 @@ npm run build
 
 **¿Por qué no subir `dist/`?**
 Como has visto en el `.gitignore`, Astro excluye automáticamente:
-```gitignore
+```text
 # build output
 dist/
 # generated types  

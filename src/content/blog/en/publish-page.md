@@ -192,7 +192,7 @@ The `dist/` folder contains the final, optimized version of your site, ready for
 
 Your `.gitignore` file should include `dist/` to prevent it from being tracked:
 
-```gitignore
+```text
 # ... other ignores
 dist/
 .astro/

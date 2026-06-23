@@ -3,6 +3,12 @@ dist/
 # generated types
 .astro/
 
+# local audit artifacts
+.audit/
+playwright-report/
+test-results/
+AUDIT_REPORT.md
+
 # dependencies
 node_modules/
 
