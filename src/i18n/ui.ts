@@ -56,6 +56,14 @@ export const translations = {
         'home.metaDescription': 'Full Stack developer working on production applications. Technical blog, projects and professional experience with PHP, JavaScript, SQL and Firebase.',
         'blog.metaTitle': 'Blog — Raúl Casado',
         'blog.metaDescription': 'Technical notes, lessons learned and decisions from real projects on web development, backend and tooling.',
+
+        // Contact / conversion CTA
+        'contact.title': 'Let\'s talk',
+        'contact.subtitle': 'Open to interesting projects and opportunities. The quickest way to reach me is by email — I usually reply within a day.',
+        'contact.email': 'Email me',
+        'contact.linkedin': 'LinkedIn',
+        'contact.cv': 'Download CV',
+        'contact.footer': 'Email',
         'about.greeting': 'Hello, I\'m Raúl Casado 👋',
         'about.intro1': 'I’m a web developer with experience in real applications and production projects. I like working close to the product, understanding the problem before writing code, and building maintainable solutions.',
         'about.intro2': 'I currently work on developing and maintaining full-stack features in enterprise projects, combining legacy code, new functionality, databases, push notifications, and multi-timezone systems. Outside of work, I keep learning through my blog and personal projects, applying and documenting what I build in real cases.',
@@ -244,6 +252,14 @@ export const translations = {
         'home.metaDescription': 'Desarrollador Full Stack en aplicaciones en producción. Blog técnico, proyectos y experiencia profesional con PHP, JavaScript, SQL y Firebase.',
         'blog.metaTitle': 'Blog — Raúl Casado',
         'blog.metaDescription': 'Notas técnicas, aprendizajes y decisiones de proyectos reales sobre desarrollo web, backend y herramientas.',
+
+        // CTA de contacto / conversión
+        'contact.title': 'Hablemos',
+        'contact.subtitle': 'Abierto a proyectos y oportunidades interesantes. La forma más rápida de contactarme es por email — suelo responder en menos de un día.',
+        'contact.email': 'Escríbeme',
+        'contact.linkedin': 'LinkedIn',
+        'contact.cv': 'Descargar CV',
+        'contact.footer': 'Email',
         'about.greeting': 'Hola, soy Raúl Casado 👋',
         'about.intro1': 'Soy desarrollador web con experiencia en aplicaciones reales y proyectos en producción. Me gusta trabajar cerca del producto, entender los problemas antes de escribir código y construir soluciones mantenibles.',
         'about.intro2': 'Actualmente trabajo desarrollando y manteniendo funcionalidades full-stack en proyectos empresariales, combinando código legacy, nuevas features, bases de datos, notificaciones push y sistemas multi-timezone. Fuera del trabajo sigo aprendiendo a través del blog y proyectos propios, aplicando lo que construyo y documento en casos reales.',

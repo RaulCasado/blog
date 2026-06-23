@@ -1,6 +1,7 @@
 ---
 import { Picture } from 'astro:assets';
 import profileImage from '../../assets/profile/raul_casado.png';
+import ContactCTA from '../ContactCTA.astro';
 const { lang, t, translatePath } = Astro.props;
 ---
 
@@ -120,6 +121,7 @@ const { lang, t, translatePath } = Astro.props;
 				</div>
 			</section>
 
+			<ContactCTA lang={lang} />
 
 <style>
 	main {

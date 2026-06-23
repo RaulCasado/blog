@@ -1,0 +1,107 @@
+---
+import { useTranslations } from '../i18n/utils';
+
+interface Props {
+	lang?: string;
+}
+
+const { lang = 'es' } = Astro.props;
+const t = useTranslations(lang);
+
+const email = 'raul@raulcasado.com';
+const linkedin = 'https://www.linkedin.com/in/raul-casado-moreno/';
+const cvHref = '/raulcasado_cv.pdf';
+---
+
+<section class="contact-cta">
+	<h2 class="contact-cta-title">{t('contact.title')}</h2>
+	<p class="contact-cta-subtitle">{t('contact.subtitle')}</p>
+	<div class="contact-cta-actions">
+		<a class="contact-btn contact-btn--primary" href={`mailto:${email}`}>
+			{t('contact.email')}
+		</a>
+		<a class="contact-btn" href={linkedin} target="_blank" rel="noopener noreferrer">
+			{t('contact.linkedin')}
+		</a>
+		<a class="contact-btn" href={cvHref} target="_blank" rel="noopener noreferrer">
+			{t('contact.cv')}
+		</a>
+	</div>
+	<a class="contact-cta-email" href={`mailto:${email}`}>{email}</a>
+</section>
+
+<style>
+	.contact-cta {
+		max-width: 720px;
+		margin: 4rem auto 2rem;
+		padding: 2.5rem 1.5rem;
+		text-align: center;
+		background-color: hsl(var(--secondary) / 0.2);
+		border: 1px solid hsl(var(--border));
+		border-radius: var(--radius);
+	}
+
+	.contact-cta-title {
+		font-size: 1.75rem;
+		font-weight: 700;
+		margin: 0 0 0.5rem;
+		color: hsl(var(--foreground));
+	}
+
+	.contact-cta-subtitle {
+		max-width: 48ch;
+		margin: 0 auto 1.75rem;
+		color: hsl(var(--muted-foreground));
+		line-height: 1.6;
+	}
+
+	.contact-cta-actions {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 0.75rem;
+	}
+
+	.contact-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 2.75rem;
+		padding: 0.6rem 1.25rem;
+		border: 1px solid hsl(var(--border));
+		border-radius: var(--radius);
+		color: hsl(var(--foreground));
+		text-decoration: none;
+		font-weight: 600;
+		transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+	}
+
+	.contact-btn:hover {
+		background-color: hsl(var(--primary));
+		border-color: hsl(var(--primary));
+		color: hsl(var(--primary-foreground));
+	}
+
+	.contact-btn--primary {
+		background-color: hsl(var(--primary));
+		border-color: hsl(var(--primary));
+		color: hsl(var(--primary-foreground));
+	}
+
+	.contact-btn--primary:hover {
+		opacity: 0.9;
+	}
+
+	.contact-cta-email {
+		display: inline-block;
+		margin-top: 1.25rem;
+		font-size: 0.95rem;
+		color: hsl(var(--muted-foreground));
+		text-decoration: none;
+	}
+
+	.contact-cta-email:hover {
+		color: hsl(var(--primary));
+		text-decoration: underline;
+	}
+</style>

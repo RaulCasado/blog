@@ -1,5 +1,6 @@
 ---
 import { useTranslations } from '../../i18n/utils';
+import ContactCTA from '../ContactCTA.astro';
 
 const { lang = 'en' } = Astro.props;
 const t = useTranslations(lang);
@@ -175,6 +176,8 @@ const t = useTranslations(lang);
         </div>
     </div>
 </div>
+
+<ContactCTA lang={lang} />
 
 <style>
     .about-container {
