@@ -141,7 +141,7 @@ export const translations = {
         'portfolio.title': 'Portfolio',
         'portfolio.description': 'Raúl Casado - Projects',
         'portfolio.header': 'My Projects',
-        'portfolio.subtitle': 'Here are some of my GitHub projects.',
+        'portfolio.subtitle': 'A selection of projects that reflect how I think and build — backend logic, systems programming, and full-stack work.',
         'portfolio.noDescription': 'No description available',
         'portfolio.viewOnGithub': 'View on GitHub',
 
@@ -336,7 +336,7 @@ export const translations = {
         'portfolio.title': 'Portfolio',
         'portfolio.description': 'Raúl Casado - Proyectos',
         'portfolio.header': 'Mis Proyectos',
-        'portfolio.subtitle': 'Aquí hay algunos de mis proyectos de GitHub.',
+        'portfolio.subtitle': 'Una selección de proyectos que reflejan cómo pienso y construyo — lógica backend, programación de sistemas y trabajo full-stack.',
         'portfolio.noDescription': 'No hay descripción disponible',
         'portfolio.viewOnGithub': 'Ver en GitHub',
 

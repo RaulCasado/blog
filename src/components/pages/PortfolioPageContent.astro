@@ -1,367 +1,144 @@
 ---
 import { useTranslations } from '../../i18n/utils';
-import FilterProject from '../FilterProject.astro';
 
-const { lang = 'en', page, allProjects } = Astro.props;
+const { lang = 'en' } = Astro.props;
 const t = useTranslations(lang);
 
-let projects = [];
-if (page) {
-  projects = page.data;
-} else {
-  const username = "RaulCasado";
-  const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated`);
-  const repositories = await response.json();
-  
-  projects = repositories
-    .filter(repo => !repo.fork)
-    .map(repo => ({
-      name: repo.name,
-      description: repo.description,
-      url: repo.html_url,
-      language: repo.language,
-      stars: repo.stargazers_count,
-      updatedAt: repo.updated_at
-    }));
-}
-
-const projectsForFilter = allProjects || projects;
-
-function getLanguageColor(language) {
-  const colors = {
-    JavaScript: '#f0db4f',
-    TypeScript: '#3178c6',
-    Astro : '#ff5c00',
-    HTML: '#e34c26',
-    CSS: '#563d7c',
-    Python: '#3572A5',
-    C: '#555555',
-    'C++': '#f34b7d',
-    PHP: '#4F5D95'
-  };
-  
-  return colors[language] || '#8e8e8e';
-}
-
-function getReadableTextColor(backgroundColor) {
-  const hex = backgroundColor.replace('#', '');
-  const rgb = [0, 2, 4].map(index => parseInt(hex.slice(index, index + 2), 16) / 255);
-  const luminance = rgb
-    .map(value => value <= 0.03928 ? value / 12.92 : Math.pow((value + 0.055) / 1.055, 2.4))
-    .reduce((sum, value, index) => sum + value * [0.2126, 0.7152, 0.0722][index], 0);
-
-  const darkTextContrast = (luminance + 0.05) / 0.05;
-  const lightTextContrast = 1.05 / (luminance + 0.05);
-  return darkTextContrast >= lightTextContrast ? '#000000' : '#ffffff';
-}
-
-function getLanguageIcon(language) {
-  if ((!language) || language === null || language === undefined) {
-    return 'MD';
+const PROJECTS = [
+  {
+    name: 'blog',
+    url: 'https://github.com/RaulCasado/blog',
+    language: 'Astro',
+    stars: 1,
+    updatedAt: '2026-06-23',
+    description: {
+      en: 'Bilingual blog and portfolio built with Astro 7. Features i18n routing, automated SEO metadata, JSON-LD structured data, and a Playwright audit suite deployed on Netlify.',
+      es: 'Blog y portfolio bilingüe construido con Astro 7. Enrutamiento i18n, SEO automatizado, datos estructurados JSON-LD y suite de auditorías Playwright desplegado en Netlify.'
+    }
+  },
+  {
+    name: 'minishell',
+    url: 'https://github.com/RaulCasado/minishell',
+    language: 'C',
+    stars: 1,
+    updatedAt: '2025-05-05',
+    description: {
+      en: 'POSIX-compliant Unix shell implemented in C from scratch. Covers process creation (fork/exec), pipelines, I/O redirection, heredocs, signal handling and environment variable expansion.',
+      es: 'Shell Unix compatible con POSIX implementada en C desde cero. Incluye creación de procesos (fork/exec), pipelines, redirección I/O, heredocs, manejo de señales y expansión de variables.'
+    }
+  },
+  {
+    name: 'Battleship',
+    url: 'https://github.com/RaulCasado/Battleship',
+    language: 'TypeScript',
+    stars: 0,
+    updatedAt: '2024-05-30',
+    description: {
+      en: 'Final degree project: full-stack Battleship game with a TypeScript frontend and a Python/Flask backend managing game state, turn logic and player sessions.',
+      es: 'Proyecto de fin de grado: juego de Hundir la Flota full-stack con frontend TypeScript y backend Python/Flask que gestiona el estado del juego, turnos y sesiones.'
+    }
+  },
+  {
+    name: '42_push_swap',
+    url: 'https://github.com/RaulCasado/42_push_swap',
+    language: 'C',
+    stars: 0,
+    updatedAt: '2025-07-24',
+    description: {
+      en: 'Sorting algorithm under strict constraints: integers sorted using only two stacks and a fixed set of operations, with an LIS-based strategy to minimise total moves.',
+      es: 'Algoritmo de ordenación bajo restricciones estrictas: enteros ordenados con solo dos pilas y un conjunto fijo de operaciones, usando estrategia LIS para minimizar movimientos.'
+    }
   }
-  
-  const icons = {
-    JavaScript: 'JS',
-    TypeScript: 'TS',
-    HTML: 'HTML',
-    Astro: 'A',
-    CSS: 'CSS',
-    Python: 'Py',
-    C: 'C',
-    'C++': 'C++',
-    PHP: 'PHP'
-  };
-  
-  return icons[language] || language.substring(0, 2).toUpperCase();
+];
+
+const projects = PROJECTS.map(p => ({
+  ...p,
+  description: p.description[lang as 'en' | 'es'] ?? p.description.en
+}));
+
+const languageColors: Record<string, string> = {
+  JavaScript: '#f0db4f',
+  TypeScript: '#3178c6',
+  Astro: '#ff5c00',
+  Python: '#3572A5',
+  C: '#555555',
+  'C++': '#f34b7d',
+  PHP: '#4F5D95'
+};
+
+const languageIcons: Record<string, string> = {
+  JavaScript: 'JS',
+  TypeScript: 'TS',
+  Astro: 'A',
+  Python: 'Py',
+  C: 'C',
+  'C++': 'C++',
+  PHP: 'PHP'
+};
+
+function getColor(lang: string) {
+  return languageColors[lang] ?? '#8e8e8e';
 }
 
+function getIcon(lang: string) {
+  return languageIcons[lang] ?? lang.substring(0, 2).toUpperCase();
+}
+
+function getTextColor(hex: string) {
+  const h = hex.replace('#', '');
+  const rgb = [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16) / 255);
+  const lum = rgb
+    .map(v => v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4))
+    .reduce((s, v, i) => s + v * [0.2126, 0.7152, 0.0722][i], 0);
+  return (lum + 0.05) / 0.05 >= 1.05 / (lum + 0.05) ? '#000000' : '#ffffff';
+}
 ---
 
 <div class="portfolio-container">
   <h1>{t('portfolio.header')}</h1>
-  <p class="portfolio-intro">
-    {t('portfolio.subtitle')}
-  </p>
-  
-  <FilterProject 
-    lang={lang}
-    allProjects={projectsForFilter}
-  />
-  
-  <div class="projects-grid" id="projects-grid">
-    {projects.map(project => (
-      <div class={`project-card ${project.language ? `lang-${project.language.toLowerCase()}` : ''}`} data-language={project.language || 'none'}>
-        <div class="project-header">
-          <div class="project-icon">
-            <span aria-hidden="true">{getLanguageIcon(project.language)}</span>
-          </div>
-          <div class="project-title-container">
-            <h2 class="project-title">{project.name}</h2>
-            {project.language && (
-              <span class="project-language-pill" style={`--lang-color: ${getLanguageColor(project.language)}; --lang-text-color: ${getReadableTextColor(getLanguageColor(project.language))};`}>
+  <p class="portfolio-intro">{t('portfolio.subtitle')}</p>
+
+  <div class="projects-grid">
+    {projects.map(project => {
+      const color = getColor(project.language);
+      const textColor = getTextColor(color);
+      return (
+        <div class="project-card">
+          <div class="project-header">
+            <div class="project-icon" style={`background-color: ${color}22; color: ${color};`}>
+              <span aria-hidden="true">{getIcon(project.language)}</span>
+            </div>
+            <div class="project-title-container">
+              <h2 class="project-title">{project.name}</h2>
+              <span class="project-language-pill" style={`background-color: ${color}; color: ${textColor};`}>
                 {project.language}
               </span>
-            )}
+            </div>
+          </div>
+
+          <p class="project-description">{project.description}</p>
+
+          <div class="project-meta">
+            <div class="project-stats">
+              <span class="project-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                {project.stars}
+              </span>
+              <span class="project-updated">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                {new Date(project.updatedAt).toLocaleDateString(lang === 'es' ? 'es-ES' : 'en-US', { year: 'numeric', month: 'short' })}
+              </span>
+            </div>
+            <a href={project.url} target="_blank" rel="noopener noreferrer" class="project-link">
+              <span>{t('portfolio.viewOnGithub')}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            </a>
           </div>
         </div>
-        
-        <p class="project-description">{project.description || t('portfolio.noDescription')}</p>
-        
-        <div class="project-meta">
-          <div class="project-stats">
-            <span class="project-badge">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-              {project.stars}
-            </span>
-            <span class="project-updated" title={project.updatedAt}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-              {new Date(project.updatedAt).toLocaleDateString(lang === 'es' ? 'es-ES' : 'en-US', {year: 'numeric', month: 'short'})}
-            </span>
-          </div>
-          
-          <a href={project.url} target="_blank" rel="noopener noreferrer" class="project-link">
-            <span>{t('portfolio.viewOnGithub')}</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-          </a>
-        </div>
-      </div>
-    ))}
+      );
+    })}
   </div>
-
-  {page && page.lastPage > 1 && (
-    <nav class="pagination" id="pagination-nav">
-      {page.url.prev && (
-        <a href={page.url.prev} class="pagination-link">
-          ← {lang === 'es' ? 'Anterior' : 'Previous'}
-        </a>
-      )}
-      
-      <span class="pagination-info">
-        {lang === 'es' ? 'Página' : 'Page'} {page.currentPage} {lang === 'es' ? 'de' : 'of'} {page.lastPage}
-      </span>
-      
-      {page.url.next && (
-        <a href={page.url.next} class="pagination-link">
-          {lang === 'es' ? 'Siguiente' : 'Next'} →
-        </a>
-      )}
-    </nav>
-  )}
 </div>
-
-<script define:vars={{ 
-  allProjects: projectsForFilter, 
-  currentPageProjects: projects,
-  lang,
-  translations: {
-    noDescription: t('portfolio.noDescription'),
-    viewOnGithub: t('portfolio.viewOnGithub')
-  }
-}}>
-  document.addEventListener('DOMContentLoaded', () => {
-    const projectsGrid = document.getElementById('projects-grid');
-    const paginationNav = document.getElementById('pagination-nav');
-    
-    const urlParams = new URLSearchParams(window.location.search);
-    const currentFilter = urlParams.get('language') || 'all';
-    filterProjects(currentFilter);
-    updateActiveFilter(currentFilter);
-
-    document.addEventListener('click', function(e) {
-      const filterButton = e.target instanceof Element ? e.target.closest('.filter-link') : null;
-      if (filterButton instanceof HTMLButtonElement) {
-        e.preventDefault();
-        const language = filterButton.getAttribute('data-language');
-        
-        filterProjects(language);
-        updateActiveFilter(language);
-        
-        const newUrl = new URL(window.location.href);
-        if (language === 'all') {
-          newUrl.searchParams.delete('language');
-        } else {
-          newUrl.searchParams.set('language', language);
-        }
-        window.history.pushState({}, '', newUrl);
-      }
-    });
-
-    window.addEventListener('popstate', () => {
-      const language = new URLSearchParams(window.location.search).get('language') || 'all';
-      filterProjects(language);
-      updateActiveFilter(language);
-    });
-
-    function filterProjects(language) {
-      let projectsToShow;
-      
-      if (language === 'all') {
-        projectsToShow = currentPageProjects;
-        if (paginationNav) paginationNav.style.display = 'flex';
-      } else {
-        projectsToShow = allProjects.filter(project => 
-          project.language === language
-        );
-        if (paginationNav) paginationNav.style.display = 'none';
-      }
-      
-      renderProjects(projectsToShow);
-    }
-
-    function renderProjects(projects) {
-      const fragment = document.createDocumentFragment();
-      projects.forEach(project => fragment.append(createProjectCard(project)));
-      projectsGrid.replaceChildren(fragment);
-    }
-
-    function createProjectCard(project) {
-      const language = typeof project.language === 'string' ? project.language : '';
-      const card = createElement('div', 'project-card');
-      if (language) {
-        card.classList.add(`lang-${language.toLowerCase().replace(/[^a-z0-9_-]/g, '-')}`);
-      }
-      card.dataset.language = language || 'none';
-
-      const header = createElement('div', 'project-header');
-      const iconContainer = createElement('div', 'project-icon');
-      const icon = getLanguageIcon(language);
-      const iconText = createElement('span', '', icon);
-      iconText.setAttribute('aria-hidden', 'true');
-      iconContainer.append(iconText);
-
-      const titleContainer = createElement('div', 'project-title-container');
-      titleContainer.append(createElement('h2', 'project-title', String(project.name || '')));
-      if (language) {
-        const pill = createElement('span', 'project-language-pill', language);
-        const languageColor = getLanguageColor(language);
-        pill.style.setProperty('--lang-color', languageColor);
-        pill.style.setProperty('--lang-text-color', getReadableTextColor(languageColor));
-        titleContainer.append(pill);
-      }
-      header.append(iconContainer, titleContainer);
-
-      const description = createElement(
-        'p',
-        'project-description',
-        String(project.description || translations.noDescription),
-      );
-
-      const meta = createElement('div', 'project-meta');
-      const stats = createElement('div', 'project-stats');
-      const stars = Number.isFinite(Number(project.stars)) ? Number(project.stars) : 0;
-      stats.append(
-        createElement('span', 'project-badge', `☆ ${stars}`),
-        createUpdatedAt(project.updatedAt),
-      );
-
-      const link = createElement('a', 'project-link');
-      link.href = getSafeProjectUrl(project.url);
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
-      link.append(
-        createElement('span', '', translations.viewOnGithub),
-        createElement('span', '', '↗'),
-      );
-      meta.append(stats, link);
-      card.append(header, description, meta);
-      return card;
-    }
-
-    function createUpdatedAt(value) {
-      const rawValue = typeof value === 'string' ? value : '';
-      const date = new Date(rawValue);
-      const formattedDate = Number.isNaN(date.valueOf())
-        ? ''
-        : date.toLocaleDateString(lang === 'es' ? 'es-ES' : 'en-US', {
-            year: 'numeric',
-            month: 'short',
-          });
-      const element = createElement('span', 'project-updated', `◷ ${formattedDate}`);
-      if (rawValue) element.title = rawValue;
-      return element;
-    }
-
-    function createElement(tagName, className = '', text = '') {
-      const element = document.createElement(tagName);
-      if (className) element.className = className;
-      if (text !== '') element.textContent = String(text);
-      return element;
-    }
-
-    function getSafeProjectUrl(value) {
-      try {
-        const url = new URL(String(value));
-        if (url.protocol === 'https:' && url.hostname === 'github.com') return url.href;
-      } catch {
-        // Invalid and unexpected URLs fall back to the public GitHub profile.
-      }
-      return 'https://github.com/RaulCasado';
-    }
-
-    function updateActiveFilter(activeLanguage) {
-      const filterLinks = document.querySelectorAll('.filter-link');
-      
-      filterLinks.forEach(link => {
-        const linkLanguage = link.getAttribute('data-language');
-        
-        if (linkLanguage === activeLanguage) {
-          link.classList.add('active');
-          link.setAttribute('aria-pressed', 'true');
-        } else {
-          link.classList.remove('active');
-          link.setAttribute('aria-pressed', 'false');
-        }
-      });
-    }
-
-    function getLanguageColor(language) {
-      const colors = {
-        JavaScript: '#f0db4f',
-        TypeScript: '#3178c6',
-        Astro: '#ff5c00',
-        HTML: '#e34c26',
-        CSS: '#563d7c',
-        Python: '#3572A5',
-        C: '#555555',
-        'C++': '#f34b7d',
-        PHP: '#4F5D95'
-      };
-      return colors[language] || '#8e8e8e';
-    }
-
-    function getReadableTextColor(backgroundColor) {
-      const hex = String(backgroundColor).replace('#', '');
-      const rgb = [0, 2, 4].map(index => parseInt(hex.slice(index, index + 2), 16) / 255);
-      const luminance = rgb
-        .map(value => value <= 0.03928 ? value / 12.92 : Math.pow((value + 0.055) / 1.055, 2.4))
-        .reduce((sum, value, index) => sum + value * [0.2126, 0.7152, 0.0722][index], 0);
-
-      const darkTextContrast = (luminance + 0.05) / 0.05;
-      const lightTextContrast = 1.05 / (luminance + 0.05);
-      return darkTextContrast >= lightTextContrast ? '#000000' : '#ffffff';
-    }
-
-    function getLanguageIcon(language) {
-      if ((!language) || language === null || language === undefined) {
-        return 'MD';
-      }
-      
-      const icons = {
-        JavaScript: 'JS',
-        TypeScript: 'TS',
-        HTML: 'HTML',
-        Astro: 'A',
-        CSS: 'CSS',
-        Python: 'Py',
-        C: 'C',
-        'C++': 'C++',
-        PHP: 'PHP'
-      };
-      
-      return icons[language] || language.substring(0, 2).toUpperCase();
-    }
-  });
-</script>
 
 <style is:global>
   .portfolio-container {
@@ -388,7 +165,6 @@ function getLanguageIcon(language) {
     gap: 1.5rem;
   }
 
-  /* Project Card */
   .project-card {
     background-color: hsl(var(--card));
     border-radius: var(--radius);
@@ -415,11 +191,10 @@ function getLanguageIcon(language) {
   .project-icon {
     width: 40px;
     height: 40px;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: hsl(var(--muted));
-    color: hsl(var(--muted-foreground));
     border-radius: var(--radius);
     font-weight: 600;
     font-size: 0.875rem;
@@ -427,6 +202,7 @@ function getLanguageIcon(language) {
 
   .project-title-container {
     flex: 1;
+    min-width: 0;
   }
 
   .project-title {
@@ -441,8 +217,6 @@ function getLanguageIcon(language) {
     font-size: 0.7rem;
     padding: 0.2rem 0.5rem;
     border-radius: 9999px;
-    background-color: var(--lang-color, #8e8e8e);
-    color: var(--lang-text-color, #ffffff);
   }
 
   .project-description {
@@ -465,7 +239,8 @@ function getLanguageIcon(language) {
     gap: 1rem;
   }
 
-  .project-badge {
+  .project-badge,
+  .project-updated {
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;
@@ -484,7 +259,7 @@ function getLanguageIcon(language) {
     font-size: 0.875rem;
     font-weight: 500;
     text-decoration: none;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 
   .project-link:hover {
@@ -492,80 +267,6 @@ function getLanguageIcon(language) {
     color: hsl(var(--primary-foreground));
   }
 
-  /* Language specific styling */
-  .lang-javascript .project-icon {
-    background-color: rgba(240, 219, 79, 0.15);
-    color: #f0db4f;
-  }
-
-  .lang-typescript .project-icon {
-    background-color: rgba(49, 120, 198, 0.15);
-    color: #3178c6;
-  }
-
-  .lang-html .project-icon {
-    background-color: rgba(227, 76, 38, 0.15);
-    color: #e34c26;
-  }
-
-  .lang-css .project-icon {
-    background-color: rgba(86, 61, 124, 0.15);
-    color: #563d7c;
-  }
-
-  .lang-python .project-icon {
-    background-color: rgba(53, 114, 165, 0.15);
-    color: #3572A5;
-  }
-
-  .lang-c .project-icon {
-    background-color: rgba(85, 85, 85, 0.15);
-    color: #555555;
-  }
-
-  .lang-php .project-icon {
-    background-color: rgba(79, 93, 149, 0.15);
-    color: #4F5D95;
-  }
-
-  .project-icon span {
-    color: hsl(var(--foreground));
-  }
-
-  .pagination {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    margin-top: 2.5rem;
-  }
-
-  .pagination-info {
-    color: hsl(var(--muted-foreground));
-    font-size: 0.95rem;
-  }
-
-  .pagination-link {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 2.5rem;
-    padding: 0.55rem 0.9rem;
-    border: 1px solid hsl(var(--border));
-    border-radius: var(--radius);
-    color: hsl(var(--foreground));
-    text-decoration: none;
-    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-  }
-
-  .pagination-link:hover {
-    background-color: hsl(var(--primary));
-    border-color: hsl(var(--primary));
-    color: hsl(var(--primary-foreground));
-  }
-
-  /* Responsive Design */
   @media (min-width: 640px) {
     .projects-grid {
       grid-template-columns: repeat(2, 1fr);
@@ -574,7 +275,7 @@ function getLanguageIcon(language) {
 
   @media (min-width: 1024px) {
     .projects-grid {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 </style>
