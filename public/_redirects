@@ -7,3 +7,62 @@
 /uses         /es/uses        301
 /blog         /es/blog        301
 /rss.xml      /es/rss.xml     301
+
+# --- SEO: legacy URL migrations (added 2026-06-24) ---
+# 1) Old post slugs included the ".md" extension; now stripped. Redirect every
+#    current post from its legacy ".md" URL to the clean one.
+/es/blog/1-part-flask.md/             /es/blog/1-part-flask/             301
+/es/blog/astro-post.md/               /es/blog/astro-post/               301
+/es/blog/git-tutorial.md/             /es/blog/git-tutorial/             301
+/es/blog/job-1.md/                    /es/blog/job-1/                    301
+/es/blog/learning-journey.md/         /es/blog/learning-journey/         301
+/es/blog/minecraft-server-docker.md/  /es/blog/minecraft-server-docker/  301
+/es/blog/multi-threading.md/          /es/blog/multi-threading/          301
+/es/blog/nth-week.md/                 /es/blog/nth-week/                 301
+/es/blog/publish-page.md/             /es/blog/publish-page/             301
+/es/blog/titan-dashboard.md/          /es/blog/titan-dashboard/          301
+/es/blog/web-security-basic.md/       /es/blog/web-security-basic/       301
+/es/blog/xiaomi-mi-a2-custom-rom.md/  /es/blog/xiaomi-mi-a2-custom-rom/  301
+/en/blog/1-part-flask.md/             /en/blog/1-part-flask/             301
+/en/blog/astro-post.md/               /en/blog/astro-post/               301
+/en/blog/git-tutorial.md/             /en/blog/git-tutorial/             301
+/en/blog/job-1.md/                    /en/blog/job-1/                    301
+/en/blog/learning-journey.md/         /en/blog/learning-journey/         301
+/en/blog/minecraft-server-docker.md/  /en/blog/minecraft-server-docker/  301
+/en/blog/multi-threading.md/          /en/blog/multi-threading/          301
+/en/blog/nth-week.md/                 /en/blog/nth-week/                 301
+/en/blog/publish-page.md/             /en/blog/publish-page/             301
+/en/blog/titan-dashboard.md/          /en/blog/titan-dashboard/          301
+/en/blog/web-security-basic.md/       /en/blog/web-security-basic/       301
+/en/blog/xiaomi-mi-a2-custom-rom.md/  /en/blog/xiaomi-mi-a2-custom-rom/  301
+
+# 2) Seven weekly logs were consolidated into "learning-journey".
+#    Redirect both their clean and legacy ".md" URLs to it.
+/es/blog/first-week-post/      /es/blog/learning-journey/  301
+/es/blog/first-week-post.md/   /es/blog/learning-journey/  301
+/es/blog/second-week/          /es/blog/learning-journey/  301
+/es/blog/second-week.md/       /es/blog/learning-journey/  301
+/es/blog/third-week/           /es/blog/learning-journey/  301
+/es/blog/third-week.md/        /es/blog/learning-journey/  301
+/es/blog/fourth-week/          /es/blog/learning-journey/  301
+/es/blog/fourth-week.md/       /es/blog/learning-journey/  301
+/es/blog/fifth-week/           /es/blog/learning-journey/  301
+/es/blog/fifth-week.md/        /es/blog/learning-journey/  301
+/es/blog/six-week/             /es/blog/learning-journey/  301
+/es/blog/six-week.md/          /es/blog/learning-journey/  301
+/es/blog/seventh-week/         /es/blog/learning-journey/  301
+/es/blog/seventh-week.md/      /es/blog/learning-journey/  301
+/en/blog/first-week-post/      /en/blog/learning-journey/  301
+/en/blog/first-week-post.md/   /en/blog/learning-journey/  301
+/en/blog/second-week/          /en/blog/learning-journey/  301
+/en/blog/second-week.md/       /en/blog/learning-journey/  301
+/en/blog/third-week/           /en/blog/learning-journey/  301
+/en/blog/third-week.md/        /en/blog/learning-journey/  301
+/en/blog/fourth-week/          /en/blog/learning-journey/  301
+/en/blog/fourth-week.md/       /en/blog/learning-journey/  301
+/en/blog/fifth-week/           /en/blog/learning-journey/  301
+/en/blog/fifth-week.md/        /en/blog/learning-journey/  301
+/en/blog/six-week/             /en/blog/learning-journey/  301
+/en/blog/six-week.md/          /en/blog/learning-journey/  301
+/en/blog/seventh-week/         /en/blog/learning-journey/  301
+/en/blog/seventh-week.md/      /en/blog/learning-journey/  301
