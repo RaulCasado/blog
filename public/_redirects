@@ -1,0 +1,9 @@
+# Language-less entry points -> default-language (es) routes, as real 301s.
+# Astro no longer emits stub pages for these; Netlify resolves them at the edge.
+/             /es/            301
+/about        /es/about       301
+/cv           /es/cv          301
+/portfolio    /es/portfolio   301
+/uses         /es/uses        301
+/blog         /es/blog        301
+/rss.xml      /es/rss.xml     301

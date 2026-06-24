@@ -98,8 +98,8 @@ else if (articleSchema) schemas.push(articleSchema);
 <link
 	rel="alternate"
 	type="application/rss+xml"
-	title={SITE_TITLE}
-	href={new URL('rss.xml', Astro.site)}
+	title={`${SITE_TITLE} (${lang.toUpperCase()})`}
+	href={new URL(`${lang}/rss.xml`, Astro.site)}
 />
 <meta name="generator" content={Astro.generator} />
 

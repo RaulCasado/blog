@@ -42,7 +42,9 @@ export default defineConfig({
     ? undefined
     : {
         command: 'pnpm build && pnpm preview --host 127.0.0.1 --port 4321',
-        url: baseURL,
+        // `/` only 301-redirects via Netlify _redirects (not processed by the
+        // local preview server), so probe a real page for the readiness check.
+        url: `${baseURL}/es/`,
         reuseExistingServer: false,
         timeout: 120_000,
       },

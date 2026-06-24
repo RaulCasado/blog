@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="es" class="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Refactor del Blog · Paginación + Fuzzy Search · Documentación viva</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui'], mono: ['JetBrains Mono', 'ui-monospace', 'monospace'] },
+        colors: {
+          ink: { 950: '#09090b', 900: '#0c0c0f', 850: '#111114', 800: '#18181b', 700: '#27272a', 600: '#3f3f46' },
+        },
+        keyframes: {
+          fadein: { '0%': { opacity: 0, transform: 'translateY(6px)' }, '100%': { opacity: 1, transform: 'translateY(0)' } },
+          pulsering: { '0%': { boxShadow: '0 0 0 0 rgba(34,197,94,.45)' }, '100%': { boxShadow: '0 0 0 10px rgba(34,197,94,0)' } },
+        },
+        animation: { fadein: 'fadein .35s ease both', pulsering: 'pulsering 1s ease-out' },
+      },
+    },
+  };
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  html { scroll-behavior: smooth; }
+  ::selection { background: rgba(99,102,241,.35); }
+  .scroll-thin::-webkit-scrollbar { height: 8px; width: 8px; }
+  .scroll-thin::-webkit-scrollbar-thumb { background: rgba(120,120,130,.4); border-radius: 99px; }
+  .card-grad { background-image: radial-gradient(120% 120% at 0% 0%, rgba(99,102,241,.08), transparent 40%); }
+  .tab-active { color: #fff; }
+  .hl { background: linear-gradient(transparent 60%, rgba(99,102,241,.35) 0); }
+  .step-line::after { content:''; position:absolute; left:50%; top:100%; width:2px; height:1.5rem; background:linear-gradient(rgba(99,102,241,.6), transparent); }
+  details > summary { list-style: none; cursor: pointer; }
+  details > summary::-webkit-details-marker { display: none; }
+  details[open] .chev { transform: rotate(90deg); }
+  .chev { transition: transform .2s ease; }
+</style>
+</head>
+<body class="bg-white text-zinc-800 dark:bg-ink-950 dark:text-zinc-200 antialiased transition-colors duration-300 font-sans">
+
+<!-- ░░░ TOP BAR ░░░ -->
+<header class="sticky top-0 z-40 backdrop-blur-xl bg-white/70 dark:bg-ink-950/70 border-b border-zinc-200 dark:border-ink-700">
+  <div class="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="h-8 w-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 grid place-items-center text-white font-bold shadow-lg shadow-indigo-500/30">R</div>
+      <div class="leading-tight">
+        <p class="text-sm font-semibold">Blog Refactor</p>
+        <p class="text-[11px] text-zinc-500">Pagination · Fuzzy Search</p>
+      </div>
+    </div>
+    <nav class="hidden md:flex items-center gap-1 text-sm">
+      <a href="#compare" class="px-3 py-1.5 rounded-md hover:bg-zinc-100 dark:hover:bg-ink-800 transition">Antes / Después</a>
+      <a href="#flow" class="px-3 py-1.5 rounded-md hover:bg-zinc-100 dark:hover:bg-ink-800 transition">Flujo</a>
+      <a href="#deep" class="px-3 py-1.5 rounded-md hover:bg-zinc-100 dark:hover:bg-ink-800 transition">Arquitectura</a>
+      <a href="#play" class="px-3 py-1.5 rounded-md hover:bg-zinc-100 dark:hover:bg-ink-800 transition">Playground</a>
+    </nav>
+    <button id="themeBtn" class="h-9 w-9 grid place-items-center rounded-lg border border-zinc-200 dark:border-ink-700 hover:bg-zinc-100 dark:hover:bg-ink-800 transition" aria-label="Cambiar tema">
+      <svg class="h-4 w-4 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>
+      <svg class="h-4 w-4 block dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-5">
+
+<!-- ░░░ HERO ░░░ -->
+<section class="pt-16 pb-12">
+  <div class="inline-flex items-center gap-2 text-xs font-medium px-3 py-1 rounded-full border border-zinc-200 dark:border-ink-700 text-zinc-500 mb-5">
+    <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+    Documentación viva · generada del refactor real
+  </div>
+  <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight leading-[1.05]">
+    De <span class="text-rose-500">cargar todo y filtrar el DOM</span><br/>
+    a <span class="bg-gradient-to-r from-indigo-400 to-violet-500 bg-clip-text text-transparent">paginar + búsqueda difusa indexada</span>
+  </h1>
+  <p class="mt-5 max-w-2xl text-zinc-500 dark:text-zinc-400 text-lg">
+    El índice del blog serializaba el cuerpo entero de cada post dentro del HTML y "buscaba" ocultando tarjetas con
+    <code class="text-indigo-500">.includes()</code>. Ahora hay paginación estática real y un buscador
+    <strong>fuzzy</strong> que carga bajo demanda un índice JSON compacto. Esta dashboard lo explica y lo deja tocar en vivo.
+  </p>
+  <div class="mt-7 flex flex-wrap gap-3">
+    <a href="#play" class="px-4 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold shadow-lg shadow-indigo-600/30 transition">▶ Probar el Playground</a>
+    <a href="#deep" class="px-4 py-2.5 rounded-lg border border-zinc-200 dark:border-ink-700 hover:bg-zinc-100 dark:hover:bg-ink-800 text-sm font-semibold transition">Ver la lógica del código</a>
+  </div>
+
+  <!-- KPI strip -->
+  <div class="mt-10 grid grid-cols-2 md:grid-cols-4 gap-3">
+    <div class="rounded-xl border border-zinc-200 dark:border-ink-700 p-4 card-grad">
+      <p class="text-2xl font-bold text-emerald-500">~0 KB</p>
+      <p class="text-xs text-zinc-500 mt-1">de cuerpos de post en el HTML del índice (antes: todos)</p>
+    </div>
+    <div class="rounded-xl border border-zinc-200 dark:border-ink-700 p-4 card-grad">
+      <p class="text-2xl font-bold">9 / pág.</p>
+      <p class="text-xs text-zinc-500 mt-1">rejilla 3×3, páginas estáticas <code>/blog/page/N</code></p>
+    </div>
+    <div class="rounded-xl border border-zinc-200 dark:border-ink-700 p-4 card-grad">
+      <p class="text-2xl font-bold">~6 KB</p>
+      <p class="text-xs text-zinc-500 mt-1">índice JSON de metadatos, lazy on-focus</p>
+    </div>
+    <div class="rounded-xl border border-zinc-200 dark:border-ink-700 p-4 card-grad">
+      <p class="text-2xl font-bold text-indigo-500">Fuzzy</p>
+      <p class="text-xs text-zinc-500 mt-1">tolerante a erratas (Fuse.js · Bitap)</p>
+    </div>
+  </div>
+</section>
+
+<!-- ░░░ ANTES vs DESPUÉS ░░░ -->
+<section id="compare" class="py-12 scroll-mt-20">
+  <h2 class="text-2xl font-bold tracking-tight mb-1">Antes vs. Después</h2>
+  <p class="text-zinc-500 mb-7">El mismo problema, dos arquitecturas opuestas.</p>
+
+  <div class="grid md:grid-cols-2 gap-5">
+    <!-- ANTES -->
+    <div class="rounded-2xl border border-rose-500/30 bg-rose-500/[0.03] p-6">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="text-xs font-bold uppercase tracking-wider px-2 py-1 rounded-md bg-rose-500/15 text-rose-500">Antes</span>
+        <h3 class="font-semibold">Todo en el cliente, filtrando el DOM</h3>
+      </div>
+      <p class="text-sm text-zinc-500 mb-5">
+        Se renderizaban <strong>todos</strong> los posts en una sola rejilla. El cuerpo completo de cada post (Markdown
+        renderizado) se volcaba en atributos <code>data-content</code>. El "buscador" recorría las tarjetas y hacía
+        <code>display:none</code> según un <code>String.includes()</code> de substring.
+      </p>
+      <ul class="space-y-2.5 text-sm">
+        <li class="flex gap-2.5"><span class="text-rose-500 mt-0.5">✕</span><span><b>HTML hinchado:</b> el documento llevaba el texto íntegro de todos los posts, los buscases o no.</span></li>
+        <li class="flex gap-2.5"><span class="text-rose-500 mt-0.5">✕</span><span><b>DOM pesado:</b> N tarjetas siempre montadas; el scroll móvil era una lista infinita.</span></li>
+        <li class="flex gap-2.5"><span class="text-rose-500 mt-0.5">✕</span><span><b>Búsqueda rígida:</b> substring exacto, sin tolerancia a erratas ni ranking de relevancia.</span></li>
+        <li class="flex gap-2.5"><span class="text-rose-500 mt-0.5">✕</span><span><b>HTML sin sanear en atributos</b> y trabajo de filtrado proporcional a todo el corpus en cada tecla.</span></li>
+        <li class="flex gap-2.5"><span class="text-rose-500 mt-0.5">✕</span><span><b>Sin paginación:</b> no escalaba a medida que crecía el número de artículos.</span></li>
+      </ul>
+      <pre class="mt-5 text-[11px] leading-relaxed bg-ink-900 text-zinc-300 rounded-lg p-4 overflow-x-auto scroll-thin"><code>&lt;div class="blog-card"
+  data-title="..."
+  data-content="<span class="text-rose-400">{cuerpo Markdown ENTERO del post}</span>"&gt;
+
+cards.forEach(card =&gt; {
+  const hay = card.dataset.content.includes(term); <span class="text-rose-400">// substring</span>
+  card.style.display = hay ? '' : 'none';
+});</code></pre>
+    </div>
+
+    <!-- DESPUÉS -->
+    <div class="rounded-2xl border border-emerald-500/30 bg-emerald-500/[0.03] p-6">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="text-xs font-bold uppercase tracking-wider px-2 py-1 rounded-md bg-emerald-500/15 text-emerald-500">Después</span>
+        <h3 class="font-semibold">Paginación estática + índice fuzzy lazy</h3>
+      </div>
+      <p class="text-sm text-zinc-500 mb-5">
+        Dos modos que no compiten. <b>Navegar</b>: páginas estáticas de 9 posts (<code>slice</code> en build).
+        <b>Buscar</b>: al enfocar el input se carga <code>fuse.js</code> + un JSON de metadatos y se hace búsqueda
+        difusa sobre <strong>todo</strong> el corpus, no sobre lo pintado.
+      </p>
+      <ul class="space-y-2.5 text-sm">
+        <li class="flex gap-2.5"><span class="text-emerald-500 mt-0.5">✓</span><span><b>HTML ligero:</b> cero cuerpos de post en el índice; solo 9 tarjetas por página.</span></li>
+        <li class="flex gap-2.5"><span class="text-emerald-500 mt-0.5">✓</span><span><b>Carga diferida:</b> quien solo navega no descarga ni Fuse ni el JSON.</span></li>
+        <li class="flex gap-2.5"><span class="text-emerald-500 mt-0.5">✓</span><span><b>Fuzzy + ranking:</b> tolera typos y ordena por relevancia con pesos por campo.</span></li>
+        <li class="flex gap-2.5"><span class="text-emerald-500 mt-0.5">✓</span><span><b>Render seguro:</b> resultados construidos con <code>textContent</code>, sin <code>innerHTML</code>.</span></li>
+        <li class="flex gap-2.5"><span class="text-emerald-500 mt-0.5">✓</span><span><b>Escala:</b> 12 o 1.200 posts, el índice navegable pesa igual.</span></li>
+      </ul>
+      <pre class="mt-5 text-[11px] leading-relaxed bg-ink-900 text-zinc-300 rounded-lg p-4 overflow-x-auto scroll-thin"><code>searchInput.addEventListener('focus', ensureIndex, {once:true});
+
+async function ensureIndex() {
+  const [{default: Fuse}, data] = await Promise.all([
+    <span class="text-emerald-400">import('fuse.js')</span>,            <span class="text-zinc-500">// chunk aparte</span>
+    fetch(`/${lang}/blog-search.json`).then(r =&gt; r.json()),
+  ]);
+  fuse = new Fuse(data, { keys:[...], threshold:0.4 });
+}</code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ░░░ DIAGRAMA DE FLUJO ░░░ -->
+<section id="flow" class="py-12 scroll-mt-20">
+  <h2 class="text-2xl font-bold tracking-tight mb-1">El camino de los datos, hoy</h2>
+  <p class="text-zinc-500 mb-8">Pasa el ratón por cada paso. Dos rutas independientes: <span class="text-indigo-400 font-medium">Navegar</span> y <span class="text-violet-400 font-medium">Buscar</span>.</p>
+
+  <div class="grid lg:grid-cols-2 gap-8">
+    <!-- Ruta navegar -->
+    <div>
+      <div class="flex items-center gap-2 mb-4 text-indigo-400 font-semibold text-sm uppercase tracking-wide">
+        <span class="h-2 w-2 rounded-full bg-indigo-400"></span> Modo navegar (build time)
+      </div>
+      <div class="space-y-6" id="flowBrowse">
+        <div class="flow-step relative step-line rounded-xl border border-zinc-200 dark:border-ink-700 p-4 hover:border-indigo-500/50 transition card-grad">
+          <div class="flex items-start gap-3"><span class="text-lg">📥</span><div>
+            <p class="font-semibold text-sm">getCollection('blog')</p>
+            <p class="text-xs text-zinc-500 mt-1">Astro lee los .md y filtra por idioma con <code>getLangPosts()</code>.</p>
+          </div></div>
+        </div>
+        <div class="flow-step relative step-line rounded-xl border border-zinc-200 dark:border-ink-700 p-4 hover:border-indigo-500/50 transition card-grad">
+          <div class="flex items-start gap-3"><span class="text-lg">🔢</span><div>
+            <p class="font-semibold text-sm">sort → featured primero, luego fecha</p>
+            <p class="text-xs text-zinc-500 mt-1">Orden estable compartido por índice, paginación y buscador.</p>
+          </div></div>
+        </div>
+        <div class="flow-step relative step-line rounded-xl border border-zinc-200 dark:border-ink-700 p-4 hover:border-indigo-500/50 transition card-grad">
+          <div class="flex items-start gap-3"><span class="text-lg">✂️</span><div>
+            <p class="font-semibold text-sm">slice((page-1)*9, page*9)</p>
+            <p class="text-xs text-zinc-500 mt-1"><code>getStaticPaths</code> genera <code>/blog</code> y <code>/blog/page/N</code> como HTML estático.</p>
+          </div></div>
+        </div>
+        <div class="flow-step relative rounded-xl border border-emerald-500/40 bg-emerald-500/[0.04] p-4">
+          <div class="flex items-start gap-3"><span class="text-lg">🟢</span><div>
+            <p class="font-semibold text-sm">9 tarjetas + nav de páginas</p>
+            <p class="text-xs text-zinc-500 mt-1">HTML mínimo. Sin JS para navegar.</p>
+          </div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ruta buscar -->
+    <div>
+      <div class="flex items-center gap-2 mb-4 text-violet-400 font-semibold text-sm uppercase tracking-wide">
+        <span class="h-2 w-2 rounded-full bg-violet-400"></span> Modo buscar (runtime, lazy)
+      </div>
+      <div class="space-y-6">
+        <div class="flow-step relative step-line rounded-xl border border-zinc-200 dark:border-ink-700 p-4 hover:border-violet-500/50 transition card-grad">
+          <div class="flex items-start gap-3"><span class="text-lg">🎯</span><div>
+            <p class="font-semibold text-sm">focus en el input</p>
+            <p class="text-xs text-zinc-500 mt-1">Dispara <code>ensureIndex()</code> una sola vez (<code>{once:true}</code>).</p>
+          </div></div>
+        </div>
+        <div class="flow-step relative step-line rounded-xl border border-zinc-200 dark:border-ink-700 p-4 hover:border-violet-500/50 transition card-grad">
+          <div class="flex items-start gap-3"><span class="text-lg">⚡</span><div>
+            <p class="font-semibold text-sm">import('fuse.js') + fetch(JSON)</p>
+            <p class="text-xs text-zinc-500 mt-1">En paralelo. El chunk de Fuse y el índice (~6 KB) se piden solo aquí.</p>
+          </div></div>
+        </div>
+        <div class="flow-step relative step-line rounded-xl border border-zinc-200 dark:border-ink-700 p-4 hover:border-violet-500/50 transition card-grad">
+          <div class="flex items-start gap-3"><span class="text-lg">🔍</span><div>
+            <p class="font-semibold text-sm">fuse.search(term) → ranking</p>
+            <p class="text-xs text-zinc-500 mt-1">Bitap difuso sobre todo el corpus, con pesos por campo.</p>
+          </div></div>
+        </div>
+        <div class="flow-step relative rounded-xl border border-violet-500/40 bg-violet-500/[0.04] p-4">
+          <div class="flex items-start gap-3"><span class="text-lg">🟣</span><div>
+            <p class="font-semibold text-sm">render con textContent</p>
+            <p class="text-xs text-zinc-500 mt-1">Oculta rejilla+paginación, muestra resultados. Vaciar restaura navegar.</p>
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ░░░ ARQUITECTURA / TABS ░░░ -->
+<section id="deep" class="py-12 scroll-mt-20">
+  <h2 class="text-2xl font-bold tracking-tight mb-1">Arquitectura de código</h2>
+  <p class="text-zinc-500 mb-6">La lógica algorítmica detrás de cada pieza.</p>
+
+  <div class="inline-flex p-1 rounded-xl bg-zinc-100 dark:bg-ink-850 border border-zinc-200 dark:border-ink-700 mb-6">
+    <button data-tab="fuzzy" class="tabBtn px-4 py-2 rounded-lg text-sm font-semibold transition bg-indigo-600 text-white shadow">Fuzzy Search</button>
+    <button data-tab="pag" class="tabBtn px-4 py-2 rounded-lg text-sm font-semibold transition text-zinc-500">Paginación</button>
+  </div>
+
+  <!-- TAB FUZZY -->
+  <div data-panel="fuzzy" class="tabPanel animate-fadein">
+    <div class="grid lg:grid-cols-5 gap-6">
+      <div class="lg:col-span-3 space-y-4">
+        <p class="text-sm text-zinc-500">
+          Se usa <b>Fuse.js</b>, que implementa el algoritmo <b>Bitap</b> (a.k.a. <i>shift-or / Baeza-Yates–Gonnet</i>):
+          una búsqueda aproximada que, mediante operaciones de bits, encuentra coincidencias del patrón dentro de un texto
+          permitiendo hasta <i>k</i> errores (inserciones, borrados, sustituciones — esencialmente distancia de
+          Levenshtein acotada). Fuse envuelve eso con <b>pesos por campo</b> y un <b>score</b> normalizado.
+        </p>
+
+        <pre class="text-[12px] leading-relaxed bg-ink-900 text-zinc-300 rounded-xl p-5 overflow-x-auto scroll-thin"><code>fuse = new Fuse(data, {
+  keys: [
+    { name: 'title',       weight: 0.5 },  <span class="text-zinc-500">// el título manda</span>
+    { name: 'tags',        weight: 0.2 },
+    { name: 'description', weight: 0.2 },
+    { name: 'excerpt',     weight: 0.1 },
+  ],
+  threshold: 0.4,          <span class="text-zinc-500">// 0 = exacto · 1 = cualquier cosa</span>
+  ignoreLocation: true,    <span class="text-zinc-500">// el match puede estar en cualquier parte</span>
+  minMatchCharLength: 2,
+});
+
+const results = fuse.search(term); <span class="text-zinc-500">// [{ item, score, matches }]</span></code></pre>
+
+        <div class="space-y-2.5">
+          <details class="group rounded-xl border border-zinc-200 dark:border-ink-700 p-4">
+            <summary class="flex items-center justify-between font-semibold text-sm">
+              <span>¿Qué es exactamente <code>threshold</code>?</span><span class="chev text-zinc-400">›</span>
+            </summary>
+            <p class="text-sm text-zinc-500 mt-3">Umbral de tolerancia del score de Fuse (0–1). <b>0.4</b> es el punto dulce: deja pasar erratas razonables (“dockr”, “astr”) pero descarta ruido. Subirlo encuentra más pero ensucia; bajarlo se vuelve casi exacto.</p>
+          </details>
+          <details class="group rounded-xl border border-zinc-200 dark:border-ink-700 p-4">
+            <summary class="flex items-center justify-between font-semibold text-sm">
+              <span>¿Por qué pesos por campo?</span><span class="chev text-zinc-400">›</span>
+            </summary>
+            <p class="text-sm text-zinc-500 mt-3">Un acierto en el <b>título</b> (peso 0.5) debe rankear por encima de uno enterrado en el <code>excerpt</code> (0.1). Fuse combina las distancias por campo ponderándolas, así el orden de resultados refleja relevancia real.</p>
+          </details>
+          <details class="group rounded-xl border border-zinc-200 dark:border-ink-700 p-4">
+            <summary class="flex items-center justify-between font-semibold text-sm">
+              <span>¿Por qué lazy (<code>import()</code> dinámico)?</span><span class="chev text-zinc-400">›</span>
+            </summary>
+            <p class="text-sm text-zinc-500 mt-3">Vite parte <code>import('fuse.js')</code> en un chunk separado. Solo se descarga cuando el usuario enfoca el buscador, no en la carga inicial. El 90% que solo navega no paga ese coste.</p>
+          </details>
+        </div>
+      </div>
+
+      <div class="lg:col-span-2">
+        <div class="rounded-xl border border-zinc-200 dark:border-ink-700 p-5 sticky top-20">
+          <p class="text-xs font-semibold uppercase tracking-wide text-zinc-500 mb-3">El índice JSON (endpoint estático)</p>
+          <pre class="text-[11px] leading-relaxed bg-ink-900 text-zinc-300 rounded-lg p-4 overflow-x-auto scroll-thin"><code>// src/pages/[lang]/blog-search.json.ts
+export const GET = async ({params}) =&gt; {
+  const posts = getLangPosts(all, params.lang);
+  const index = posts.map(p =&gt; ({
+    title: p.data.title,
+    description: p.data.description,
+    tags: p.data.tags,
+    url: `/${lang}/blog/${slug}/`,
+    excerpt: strip(p.body).slice(0,160), <span class="text-emerald-400">// NO el body entero</span>
+  }));
+  return Response.json(index);
+};</code></pre>
+          <p class="text-xs text-zinc-500 mt-3">Metadatos, no contenido. ~6 KB para 12 posts. Aquí está la clave del ahorro frente al modelo anterior.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB PAGINACIÓN -->
+  <div data-panel="pag" class="tabPanel hidden animate-fadein">
+    <div class="grid lg:grid-cols-5 gap-6">
+      <div class="lg:col-span-3 space-y-4">
+        <p class="text-sm text-zinc-500">
+          La paginación es <b>estática</b>: se calcula en <i>build time</i>, no en el cliente. El número de páginas es
+          <code>Math.ceil(total / PAGE_SIZE)</code>; cada página corta su porción con
+          <code>slice(inicio, fin)</code> donde <code>inicio = (page-1)*PAGE_SIZE</code> y <code>fin = page*PAGE_SIZE</code>.
+        </p>
+
+        <pre class="text-[12px] leading-relaxed bg-ink-900 text-zinc-300 rounded-xl p-5 overflow-x-auto scroll-thin"><code>export const PAGE_SIZE = 9;
+
+<span class="text-zinc-500">// Página 1 vive en /[lang]/blog</span>
+const totalPages = Math.ceil(posts.length / PAGE_SIZE);
+const pagePosts  = posts.slice(0, PAGE_SIZE);
+
+<span class="text-zinc-500">// Páginas 2..N → /[lang]/blog/page/[page].astro</span>
+export function getStaticPaths() {
+  for (const lang of langs) {
+    const posts = getLangPosts(all, lang);
+    const total = Math.ceil(posts.length / PAGE_SIZE);
+    for (let page = 2; page &lt;= total; page++)
+      paths.push({ params: { lang, page: String(page) } });
+  }
+}
+const start = (currentPage - 1) * PAGE_SIZE;
+const pagePosts = posts.slice(start, start + PAGE_SIZE);</code></pre>
+
+        <div class="space-y-2.5">
+          <details class="group rounded-xl border border-zinc-200 dark:border-ink-700 p-4">
+            <summary class="flex items-center justify-between font-semibold text-sm">
+              <span>¿Por qué <code>/blog/page/N</code> y no <code>/blog/[...page]</code>?</span><span class="chev text-zinc-400">›</span>
+            </summary>
+            <p class="text-sm text-zinc-500 mt-3">Ya existe un catch-all <code>[...slug]</code> para los artículos. Un segundo rest-route en el mismo nivel sería ambiguo. Un segmento literal <code>page/</code> elimina toda colisión y da URLs limpias.</p>
+          </details>
+          <details class="group rounded-xl border border-zinc-200 dark:border-ink-700 p-4">
+            <summary class="flex items-center justify-between font-semibold text-sm">
+              <span>¿Y cuando se busca? ¿Cómo muta el estado?</span><span class="chev text-zinc-400">›</span>
+            </summary>
+            <p class="text-sm text-zinc-500 mt-3">La paginación gobierna <b>solo</b> el modo navegar. Al escribir, se ocultan rejilla y nav y se renderiza desde el índice fuzzy (todo el corpus). Al vaciar el input, vuelve la rejilla paginada en su página actual. Son dos modos disjuntos: nunca “se filtra solo lo visible”.</p>
+          </details>
+        </div>
+      </div>
+
+      <div class="lg:col-span-2">
+        <div class="rounded-xl border border-zinc-200 dark:border-ink-700 p-5 sticky top-20">
+          <p class="text-xs font-semibold uppercase tracking-wide text-zinc-500 mb-3">Cómputo de índices</p>
+          <table class="w-full text-xs">
+            <thead class="text-zinc-500"><tr class="text-left"><th class="py-1">page</th><th>start</th><th>end</th><th>slice</th></tr></thead>
+            <tbody class="font-mono">
+              <tr class="border-t border-zinc-200 dark:border-ink-700"><td class="py-1.5">1</td><td>0</td><td>9</td><td class="text-indigo-400">[0,9)</td></tr>
+              <tr class="border-t border-zinc-200 dark:border-ink-700"><td class="py-1.5">2</td><td>9</td><td>18</td><td class="text-indigo-400">[9,18)</td></tr>
+              <tr class="border-t border-zinc-200 dark:border-ink-700"><td class="py-1.5">3</td><td>18</td><td>27</td><td class="text-indigo-400">[18,27)</td></tr>
+            </tbody>
+          </table>
+          <p class="text-xs text-zinc-500 mt-3">El playground de abajo recalcula esto en vivo según el tamaño de página.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ░░░ PLAYGROUND ░░░ -->
+<section id="play" class="py-12 scroll-mt-20">
+  <h2 class="text-2xl font-bold tracking-tight mb-1">Playground en vivo</h2>
+  <p class="text-zinc-500 mb-6">JSON dummy de 12 posts. Busca con erratas (<code>dockr</code>, <code>astr</code>, <code>ciberseguridd</code>) y cambia de página. El panel de estado refleja la lógica real.</p>
+
+  <div class="rounded-2xl border border-zinc-200 dark:border-ink-700 overflow-hidden">
+    <!-- controls -->
+    <div class="p-5 border-b border-zinc-200 dark:border-ink-700 bg-zinc-50 dark:bg-ink-850 flex flex-col md:flex-row md:items-center gap-4">
+      <div class="relative flex-1">
+        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400">🔍</span>
+        <input id="pgSearch" type="text" placeholder="Buscar (prueba con una errata…)" autocomplete="off"
+          class="w-full pl-9 pr-3 py-2.5 rounded-lg bg-white dark:bg-ink-900 border border-zinc-200 dark:border-ink-700 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500 transition" />
+      </div>
+      <div class="flex items-center gap-2 text-sm">
+        <span class="text-zinc-500">Por página:</span>
+        <div id="pgSizeBtns" class="inline-flex rounded-lg border border-zinc-200 dark:border-ink-700 overflow-hidden">
+          <button data-size="3" class="sizeBtn px-3 py-1.5 text-sm">3</button>
+          <button data-size="4" class="sizeBtn px-3 py-1.5 text-sm bg-indigo-600 text-white">4</button>
+          <button data-size="6" class="sizeBtn px-3 py-1.5 text-sm">6</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid lg:grid-cols-3 gap-0">
+      <!-- results -->
+      <div class="lg:col-span-2 p-5 min-h-[22rem]">
+        <div id="pgMode" class="text-xs font-semibold uppercase tracking-wide mb-4 flex items-center gap-2"></div>
+        <div id="pgResults" class="grid sm:grid-cols-2 gap-3"></div>
+        <div id="pgEmpty" class="hidden text-center py-14 text-zinc-500">
+          <div class="text-4xl mb-2">🛰️</div>No hay coincidencias. Prueba otro término.
+        </div>
+        <!-- pagination -->
+        <nav id="pgNav" class="mt-6 flex items-center justify-center gap-2 flex-wrap"></nav>
+      </div>
+
+      <!-- state panel -->
+      <div class="border-t lg:border-t-0 lg:border-l border-zinc-200 dark:border-ink-700 p-5 bg-zinc-50 dark:bg-ink-850">
+        <p class="text-xs font-semibold uppercase tracking-wide text-zinc-500 mb-3">Estado en vivo</p>
+        <div id="pgState" class="space-y-2 font-mono text-xs"></div>
+        <div class="mt-5 pt-4 border-t border-zinc-200 dark:border-ink-700">
+          <p class="text-xs font-semibold uppercase tracking-wide text-zinc-500 mb-2">Línea de slice</p>
+          <pre class="text-[11px] bg-ink-900 text-zinc-300 rounded-lg p-3 overflow-x-auto scroll-thin"><code id="pgSlice"></code></pre>
+        </div>
+        <div class="mt-4">
+          <p class="text-xs font-semibold uppercase tracking-wide text-zinc-500 mb-2">Motor activo</p>
+          <div id="pgEngine" class="text-xs text-zinc-500"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="text-[11px] text-zinc-500 mt-3">* El fuzzy del playground es una implementación didáctica propia (subsecuencia + distancia de Levenshtein por token). El blog real usa Fuse.js/Bitap; la idea algorítmica es la misma.</p>
+</section>
+
+<footer class="py-12 mt-8 border-t border-zinc-200 dark:border-ink-700 text-sm text-zinc-500 flex flex-col sm:flex-row items-center justify-between gap-3">
+  <p>Documentación viva del refactor · <span class="text-zinc-400">paginación + fuzzy search</span></p>
+  <p class="font-mono text-xs">commits: routing → consolidación → tags → paginación+búsqueda</p>
+</footer>
+</main>
+
+<script>
+/* ===================== THEME ===================== */
+const root = document.documentElement;
+const saved = localStorage.getItem('refactor-theme');
+if (saved === 'light') root.classList.remove('dark');
+document.getElementById('themeBtn').addEventListener('click', () => {
+  root.classList.toggle('dark');
+  localStorage.setItem('refactor-theme', root.classList.contains('dark') ? 'dark' : 'light');
+});
+
+/* ===================== TABS ===================== */
+const tabBtns = document.querySelectorAll('.tabBtn');
+tabBtns.forEach(btn => btn.addEventListener('click', () => {
+  tabBtns.forEach(b => { b.classList.remove('bg-indigo-600','text-white','shadow'); b.classList.add('text-zinc-500'); });
+  btn.classList.add('bg-indigo-600','text-white','shadow'); btn.classList.remove('text-zinc-500');
+  document.querySelectorAll('.tabPanel').forEach(p => p.classList.add('hidden'));
+  const panel = document.querySelector(`[data-panel="${btn.dataset.tab}"]`);
+  panel.classList.remove('hidden');
+  panel.classList.remove('animate-fadein'); void panel.offsetWidth; panel.classList.add('animate-fadein');
+}));
+
+/* ===================== PLAYGROUND DATA ===================== */
+const POSTS = [
+  { title: 'Ciberseguridad Web: Conceptos Básicos', tags: ['security','web_development'], excerpt: 'Amenazas comunes, XSS, cookies HttpOnly y buenas prácticas.', featured: true },
+  { title: 'Servidor de Minecraft con Docker', tags: ['devops','linux'], excerpt: 'Cobblemon en un PC viejo con Ubuntu Server, sin pagar hosting.' },
+  { title: 'Git: la guía que me hubiera gustado tener', tags: ['devops'], excerpt: 'add, commit, reset, revert, merge vs rebase explicados.' },
+  { title: 'Astro y por qué lo escogí', tags: ['astro','web_development'], excerpt: 'Islas, cero hidratación global y HTML estático rapidísimo.' },
+  { title: 'Mi sprint de autoaprendizaje', tags: ['career','python','web_development'], excerpt: 'Kaggle, CS50, React y la lección del over-engineering.' },
+  { title: 'Publicar tu web: de localhost a producción', tags: ['web_development'], excerpt: 'Dominios, DNS, hosting y los pasos que me costaron la primera vez.' },
+  { title: 'Titan Dashboard: centralizar mi vida', tags: ['python','web_development'], excerpt: 'Nutrición, hábitos y finanzas en una app a medida con React.' },
+  { title: 'Flask desde cero, parte 1', tags: ['python','web_development'], excerpt: 'Qué es una API, rutas y el primer servidor en Python.' },
+  { title: 'Multithreading: una mirada filosófica', tags: ['42-school'], excerpt: 'Hilos, mutexes y el problema de los filósofos comensales.' },
+  { title: 'Xiaomi Mi A2: ROM personalizada', tags: ['linux'], excerpt: 'Revivir un móvil abandonado con una ROM actualizada.' },
+  { title: 'Conseguí mi primer trabajo como programador', tags: ['career'], excerpt: 'De la entrevista a la primera semana en las trincheras.' },
+  { title: 'Resumen: arquitectura del blog', tags: ['astro','web_development'], excerpt: 'i18n, SEO automatizado y auditorías con Playwright.' },
+];
+
+/* ===================== FUZZY (didáctico) ===================== */
+function levenshtein(a, b) {
+  const m = a.length, n = b.length;
+  if (!m) return n; if (!n) return m;
+  let prev = Array.from({ length: n + 1 }, (_, i) => i);
+  for (let i = 1; i <= m; i++) {
+    let cur = [i];
+    for (let j = 1; j <= n; j++) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + cost);
+    }
+    prev = cur;
+  }
+  return prev[n];
+}
+// score 0..1 (1 = match perfecto). Tolera erratas comparando por tokens.
+function fieldScore(query, text) {
+  query = query.toLowerCase().trim();
+  text = (text || '').toLowerCase();
+  if (!query) return 0;
+  if (text.includes(query)) return 1; // substring = match fuerte
+  let best = 0;
+  for (const word of text.split(/[\s,]+/)) {
+    if (!word) continue;
+    const win = word.slice(0, query.length + 2);
+    const d = levenshtein(query, win);
+    const ratio = 1 - d / Math.max(query.length, win.length, 1);
+    if (ratio > best) best = ratio;
+  }
+  return best;
+}
+const WEIGHTS = { title: 0.5, tags: 0.3, excerpt: 0.2 };
+const THRESHOLD = 0.55;
+function fuzzySearch(query) {
+  return POSTS
+    .map(p => {
+      const s = WEIGHTS.title * fieldScore(query, p.title)
+              + WEIGHTS.tags * fieldScore(query, p.tags.join(' '))
+              + WEIGHTS.excerpt * fieldScore(query, p.excerpt);
+      // normaliza por el peso máximo posible para que el umbral sea intuitivo
+      const best = Math.max(fieldScore(query, p.title), fieldScore(query, p.tags.join(' ')), fieldScore(query, p.excerpt));
+      return { item: p, score: Math.max(s, best * 0.9) };
+    })
+    .filter(r => r.score >= THRESHOLD)
+    .sort((a, b) => b.score - a.score);
+}
+
+/* ===================== STATE + RENDER ===================== */
+let PAGE_SIZE = 4;
+let currentPage = 1;
+let query = '';
+
+const elResults = document.getElementById('pgResults');
+const elNav = document.getElementById('pgNav');
+const elState = document.getElementById('pgState');
+const elSlice = document.getElementById('pgSlice');
+const elMode = document.getElementById('pgMode');
+const elEmpty = document.getElementById('pgEmpty');
+const elEngine = document.getElementById('pgEngine');
+
+// Tarjeta construida 100% con nodos + textContent (refleja el render seguro real).
+function card(p, score, indexLabel) {
+  const el = document.createElement('article');
+  el.className = 'rounded-xl border border-zinc-200 dark:border-ink-700 p-4 hover:border-indigo-500/50 hover:-translate-y-0.5 transition card-grad animate-fadein';
+
+  const top = document.createElement('div');
+  top.className = 'flex items-center justify-between gap-2 mb-2 min-h-[1.25rem]';
+  const left = document.createElement('span');
+  if (indexLabel != null) {
+    left.className = 'text-[10px] font-mono text-zinc-400';
+    left.textContent = indexLabel;
+  } else if (score != null) {
+    left.className = 'text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-500';
+    left.textContent = 'score ' + score.toFixed(2);
+  }
+  top.appendChild(left);
+  if (p.featured) {
+    const b = document.createElement('span');
+    b.className = 'text-[10px] font-bold uppercase px-1.5 py-0.5 rounded bg-indigo-500/15 text-indigo-400';
+    b.textContent = 'featured';
+    top.appendChild(b);
+  }
+
+  const h = document.createElement('h4');
+  h.className = 'font-semibold text-sm leading-snug';
+  h.textContent = p.title;
+
+  const ex = document.createElement('p');
+  ex.className = 'text-xs text-zinc-500 mt-2 leading-relaxed';
+  ex.textContent = p.excerpt;
+
+  const tags = document.createElement('div');
+  tags.className = 'flex flex-wrap gap-1.5 mt-2';
+  p.tags.forEach(t => {
+    const s = document.createElement('span');
+    s.className = 'text-[10px] px-1.5 py-0.5 rounded-full bg-zinc-100 dark:bg-ink-800 text-zinc-500';
+    s.textContent = '#' + t;
+    tags.appendChild(s);
+  });
+
+  el.append(top, h, ex, tags);
+  return el;
+}
+
+function render() {
+  elResults.replaceChildren();
+  const searching = query.trim().length > 0;
+
+  if (searching) {
+    /* ---- MODO BÚSQUEDA: todo el corpus, fuzzy, sin paginar ---- */
+    const matches = fuzzySearch(query);
+    elMode.innerHTML = '<span class="h-2 w-2 rounded-full bg-violet-400"></span><span class="text-violet-400">Modo búsqueda · fuzzy sobre los 12 posts</span>';
+    elNav.classList.add('hidden');
+    elEngine.innerHTML = 'Levenshtein por token · threshold ' + THRESHOLD + ' · pesos title/tags/excerpt';
+    if (!matches.length) { elEmpty.classList.remove('hidden'); }
+    else {
+      elEmpty.classList.add('hidden');
+      matches.forEach(m => elResults.appendChild(card(m.item, m.score)));
+    }
+    elState.innerHTML = `
+      <div class="flex justify-between"><span class="text-zinc-500">mode</span><span class="text-violet-400">SEARCH</span></div>
+      <div class="flex justify-between"><span class="text-zinc-500">query</span><span>"${query.replace(/</g,'&lt;')}"</span></div>
+      <div class="flex justify-between"><span class="text-zinc-500">corpus</span><span>${POSTS.length}</span></div>
+      <div class="flex justify-between"><span class="text-zinc-500">matches</span><span class="text-emerald-500">${matches.length}</span></div>
+      <div class="flex justify-between"><span class="text-zinc-500">paginación</span><span class="text-zinc-600">— (off)</span></div>`;
+    elSlice.textContent = 'fuse.search("' + query + '")\n// sin slice: ranking completo';
+    return;
+  }
+
+  /* ---- MODO NAVEGAR: paginado ---- */
+  elEmpty.classList.add('hidden');
+  elNav.classList.remove('hidden');
+  const total = POSTS.length;
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  if (currentPage > totalPages) currentPage = totalPages;
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const end = start + PAGE_SIZE;
+  const slice = POSTS.slice(start, end);
+
+  elMode.innerHTML = '<span class="h-2 w-2 rounded-full bg-indigo-400"></span><span class="text-indigo-400">Modo navegar · página ' + currentPage + ' de ' + totalPages + '</span>';
+  elEngine.innerHTML = 'Estático: Math.ceil(' + total + '/' + PAGE_SIZE + ') = ' + totalPages + ' páginas';
+  slice.forEach((p, i) => {
+    elResults.appendChild(card(p, null, '#' + (start + i)));
+  });
+
+  // nav
+  elNav.replaceChildren();
+  const mkBtn = (label, page, opts = {}) => {
+    const b = document.createElement('button');
+    b.className = 'min-w-9 h-9 px-3 rounded-lg border text-sm font-medium transition '
+      + (opts.active ? 'bg-indigo-600 text-white border-transparent'
+        : opts.disabled ? 'border-zinc-200 dark:border-ink-700 text-zinc-300 dark:text-ink-600 cursor-not-allowed'
+        : 'border-zinc-200 dark:border-ink-700 hover:bg-zinc-100 dark:hover:bg-ink-800');
+    b.textContent = label;
+    if (!opts.disabled && !opts.active) b.addEventListener('click', () => { currentPage = page; render(); });
+    return b;
+  };
+  elNav.appendChild(mkBtn('← Anterior', currentPage - 1, { disabled: currentPage === 1 }));
+  for (let n = 1; n <= totalPages; n++) elNav.appendChild(mkBtn(String(n), n, { active: n === currentPage }));
+  elNav.appendChild(mkBtn('Siguiente →', currentPage + 1, { disabled: currentPage === totalPages }));
+
+  elState.innerHTML = `
+    <div class="flex justify-between"><span class="text-zinc-500">mode</span><span class="text-indigo-400">BROWSE</span></div>
+    <div class="flex justify-between"><span class="text-zinc-500">PAGE_SIZE</span><span>${PAGE_SIZE}</span></div>
+    <div class="flex justify-between"><span class="text-zinc-500">currentPage</span><span>${currentPage}</span></div>
+    <div class="flex justify-between"><span class="text-zinc-500">totalPages</span><span>${totalPages}</span></div>
+    <div class="flex justify-between"><span class="text-zinc-500">start</span><span class="text-indigo-400">${start}</span></div>
+    <div class="flex justify-between"><span class="text-zinc-500">end</span><span class="text-indigo-400">${end}</span></div>
+    <div class="flex justify-between"><span class="text-zinc-500">mostrando</span><span>${slice.length} posts</span></div>`;
+  elSlice.textContent = 'const start = (' + currentPage + ' - 1) * ' + PAGE_SIZE + '; // ' + start + '\n'
+    + 'posts.slice(' + start + ', ' + end + '); // ' + slice.length + ' items';
+}
+
+/* ===================== EVENTS ===================== */
+let deb;
+document.getElementById('pgSearch').addEventListener('input', e => {
+  clearTimeout(deb);
+  deb = setTimeout(() => { query = e.target.value; currentPage = 1; render(); }, 120);
+});
+document.querySelectorAll('.sizeBtn').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('.sizeBtn').forEach(x => x.classList.remove('bg-indigo-600','text-white'));
+  b.classList.add('bg-indigo-600','text-white');
+  PAGE_SIZE = Number(b.dataset.size); currentPage = 1; render();
+}));
+
+render();
+</script>
+</body>
+</html>
