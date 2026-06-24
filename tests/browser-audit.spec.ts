@@ -44,18 +44,9 @@ for (const route of routes) {
     expect(h1Count, 'page should expose exactly one h1').toBe(1);
 
     if (route.name === 'portfolio') {
+      // Portfolio is now a static curated list (no language filters); just ensure
+      // no incomplete tablist ARIA remains.
       await expect(page.locator('[role="tablist"]'), 'portfolio filters should not use incomplete tabs ARIA').toHaveCount(0);
-
-      const filterButtons = page.locator('.filter-project .filter-link');
-      const filterCount = await filterButtons.count();
-      expect(filterCount, 'portfolio filters').toBeGreaterThan(0);
-      await expect(filterButtons.first(), 'default filter should be pressed').toHaveAttribute('aria-pressed', 'true');
-
-      if (filterCount > 1) {
-        await filterButtons.nth(1).click();
-        await expect(filterButtons.first(), 'previous filter should be unpressed').toHaveAttribute('aria-pressed', 'false');
-        await expect(filterButtons.nth(1), 'selected filter should be pressed').toHaveAttribute('aria-pressed', 'true');
-      }
     }
 
     await page.evaluate(async () => {

@@ -5,12 +5,13 @@ import { render } from 'astro:content';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog');
-	return posts
-		.filter(post => post.id.startsWith('en/'))
-		.map((post) => ({
-			params: { slug: post.id.replace('en/', '').replace(/\.mdx?$/, '') },
+	return posts.map((post) => {
+		const [lang, ...slugParts] = post.id.replace(/\.mdx?$/, '').split('/');
+		return {
+			params: { lang, slug: slugParts.join('/') },
 			props: post,
-		}));
+		};
+	});
 }
 type Props = CollectionEntry<'blog'>;
 
@@ -33,7 +34,7 @@ const { Content, headings } = await render(post);
     font-size: 0.8125rem;
     -webkit-overflow-scrolling: touch;
   }
-  
+
   /* Responsive typography for blog content */
   .prose h1 {
     font-size: 1.5rem;
@@ -43,7 +44,7 @@ const { Content, headings } = await render(post);
     margin-top: 1.5rem;
     margin-bottom: 0.75rem;
   }
-  
+
   .prose h2 {
     font-size: 1.375rem;
     margin-top: 1.75rem;
@@ -53,7 +54,7 @@ const { Content, headings } = await render(post);
     line-height: 1.3;
     scroll-margin-top: 80px; /* For anchor links */
   }
-  
+
   .prose h3 {
     font-size: 1.25rem;
     margin-top: 1.5rem;
@@ -63,7 +64,7 @@ const { Content, headings } = await render(post);
     line-height: 1.3;
     scroll-margin-top: 80px; /* For anchor links */
   }
-  
+
   /* Better image handling in blog posts */
   .prose img {
     max-width: 100%;
@@ -72,7 +73,7 @@ const { Content, headings } = await render(post);
     margin: 1rem auto;
     display: block;
   }
-  
+
   /* Better table handling */
   .prose table {
     width: 100%;
@@ -83,14 +84,14 @@ const { Content, headings } = await render(post);
     overflow-x: auto;
     white-space: nowrap;
   }
-  
+
   .prose table th,
   .prose table td {
     border: 1px solid hsl(var(--border));
     padding: 0.5rem;
     text-align: left;
   }
-  
+
   /* Better link handling */
   .prose a {
     color: hsl(var(--primary));
@@ -98,21 +99,21 @@ const { Content, headings } = await render(post);
     text-underline-offset: 2px;
     transition: color 0.2s ease, text-decoration-color 0.2s ease;
   }
-  
+
   .prose a:hover {
     text-decoration-color: hsl(var(--primary));
   }
-  
+
   /* Better list handling */
   .prose ul, .prose ol {
     padding-left: 1.5rem;
     margin: 0.5rem 0 1rem 0;
   }
-  
+
   .prose li {
     margin-bottom: 0.25rem;
   }
-  
+
   .prose blockquote {
     border-left: 4px solid hsl(var(--primary));
     margin-left: 0;
@@ -120,7 +121,7 @@ const { Content, headings } = await render(post);
     color: hsl(var(--muted-foreground));
     font-style: italic;
   }
-  
+
   /* Responsive adjustments */
   @media (min-width: 480px) {
     .astro-code {
@@ -128,58 +129,58 @@ const { Content, headings } = await render(post);
       padding: 0.875rem;
     }
   }
-  
+
   @media (min-width: 640px) {
     .prose h1 {
       font-size: 1.75rem;
     }
-    
+
     .prose h2 {
       font-size: 1.5rem;
     }
-    
+
     .prose h3 {
       font-size: 1.375rem;
     }
-    
+
     .prose table {
       white-space: normal;
       font-size: 0.9375rem;
     }
   }
-  
+
   @media (min-width: 768px) {
     .prose h1 {
       font-size: 2rem;
       margin-top: 2rem;
     }
-    
+
     .prose h2 {
       font-size: 1.75rem;
       margin-top: 2rem;
     }
-    
+
     .prose h3 {
       font-size: 1.5rem;
       margin-top: 1.75rem;
     }
-    
+
     .astro-code {
       font-size: 0.9375rem;
       padding: 1rem;
       margin: 1rem 0;
     }
   }
-  
+
   @media (min-width: 1024px) {
     .prose h1 {
       font-size: 2.25rem;
     }
-    
+
     .prose h2 {
       font-size: 2rem;
     }
-    
+
     .prose h3 {
       font-size: 1.75rem;
     }

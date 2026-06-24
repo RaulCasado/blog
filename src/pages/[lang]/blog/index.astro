@@ -5,21 +5,25 @@ import Footer from '../../../components/Footer.astro';
 import { getCollection } from 'astro:content';
 import BlogIndexContent from '../../../components/pages/BlogIndexContent.astro';
 import { useTranslations } from '../../../i18n/utils';
+import { languages } from '../../../i18n/ui';
 
-const lang = 'es';
+export function getStaticPaths() {
+	return Object.keys(languages).map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
 const t = useTranslations(lang);
 
 const allPosts = await getCollection('blog');
 const posts = allPosts
-  .filter(post => post.id.startsWith('es/'))
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+	.filter(post => post.id.startsWith(`${lang}/`))
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 const allTags = [...new Set(posts.flatMap(post => post.data.tags || []))];
-
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang={lang}>
 	<head>
 		<BaseHead title={t('blog.metaTitle')} description={t('blog.metaDescription')} lang={lang} />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">

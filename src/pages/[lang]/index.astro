@@ -3,14 +3,20 @@ import BaseHead from '../../components/BaseHead.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import { useTranslations, useTranslatedPath } from '../../i18n/utils';
+import { languages } from '../../i18n/ui';
 import HomePageContent from '../../components/pages/HomePageContent.astro';
-const lang = 'en';
+
+export function getStaticPaths() {
+	return Object.keys(languages).map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
 const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
 	<head>
 		<BaseHead title={t('home.metaTitle')} description={t('home.metaDescription')} lang={lang} pageType="home" />
 	</head>

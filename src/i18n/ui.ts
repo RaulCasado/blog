@@ -159,6 +159,12 @@ export const translations = {
         'blog.searchPlaceholder': 'Search articles...',
         'blog.noResults': 'No articles found',
         'blog.noResultsDescription': 'There are no articles matching your search. Try different terms.',
+        'blog.clearSearch': 'Clear search',
+        'blog.taggedWith': 'Posts tagged with',
+        'blog.backToPosts': '← Back to all posts',
+        'blog.previous': '← Previous',
+        'blog.next': 'Next →',
+        'blog.page': 'Page',
         // Uses page
         'uses.title': 'My Setup',
         'uses.description': 'Hardware, software, and gear I use daily.',
@@ -355,6 +361,11 @@ export const translations = {
         'blog.noResults': 'No se encontraron artículos',
         'blog.noResultsDescription': 'No hay artículos que coincidan con tu búsqueda. Intenta con otros términos.',
         'blog.clearSearch': 'Limpiar búsqueda',
+        'blog.taggedWith': 'Posts etiquetados con',
+        'blog.backToPosts': '← Volver a todos los posts',
+        'blog.previous': '← Anterior',
+        'blog.next': 'Siguiente →',
+        'blog.page': 'Página',
 
         // Página Uses
         'uses.title': 'Mi Setup',

@@ -2,45 +2,47 @@
 import { getCollection } from 'astro:content';
 import StandardPageLayout from '../../../../layouts/StandardPageLayout.astro';
 import { Picture } from 'astro:assets';
+import { useTranslations } from '../../../../i18n/utils';
+import { languages } from '../../../../i18n/ui';
 import fallbackHeroImage from '../../../../assets/blog/blog-placeholder-1.jpg';
 
 export async function getStaticPaths() {
-  const allPosts = await getCollection('blog', ({ id }) => id.startsWith('en/'));
+  const allPosts = await getCollection('blog');
+  const paths = [];
 
-  const allTags = [
-    ...new Set(allPosts.flatMap(post => post.data.tags || []))
-  ];
-  return allTags.map(tag => ({
-    params: { tag },
-    props: { tag }
-  }));
+  for (const lang of Object.keys(languages)) {
+    const langPosts = allPosts.filter(post => post.id.startsWith(`${lang}/`));
+    const tags = [...new Set(langPosts.flatMap(post => post.data.tags || []))];
+    for (const tag of tags) {
+      paths.push({ params: { lang, tag }, props: { tag } });
+    }
+  }
+
+  return paths;
 }
 
+const { lang } = Astro.params;
 const { tag } = Astro.props;
+const t = useTranslations(lang);
 
 const allPosts = await getCollection('blog', ({ id, data }) => {
-  return id.startsWith('en/') && (data.tags || []).includes(tag);
+  return id.startsWith(`${lang}/`) && (data.tags || []).includes(tag);
 });
-
-const allTags = [
-  ...new Set(
-    (await getCollection('blog', ({ id }) => id.startsWith('es/')))
-      .flatMap(post => post.data.tags || [])
-  )
-];
 
 const sortedPosts = allPosts.sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 
-const getPostUrl = (id: string) => `/en/blog/${id.replace(/^en\//, '').replace(/\.mdx?$/, '')}/`;
+const getPostUrl = (id: string) => `/${lang}/blog/${id.replace(new RegExp(`^${lang}/`), '').replace(/\.mdx?$/, '')}/`;
+const dateLocale = lang === 'es' ? 'es-ES' : 'en-US';
 const cardImageWidths = [360, 540, 720, 960];
 const cardImageSizes = '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw';
 ---
-<StandardPageLayout title={`Posts with tag "${tag}"`} description={`Posts related with tag "${tag}"`} lang="en">
+<StandardPageLayout title={`${t('blog.taggedWith')} "${tag}"`} description={`${t('blog.taggedWith')} "${tag}"`} lang={lang}>
   <div class="blog-container">
-    <h1>Posts etiquetados con "#{tag}"</h1>
-    <a href="/en/blog" class="back-link">← Back to all posts</a>
+    <h1>{t('blog.taggedWith')} "#{tag}"</h1>
+
+    <a href={`/${lang}/blog`} class="back-link">{t('blog.backToPosts')}</a>
 
     <div class="posts-grid">
       {sortedPosts.map(post => (
@@ -66,7 +68,7 @@ const cardImageSizes = '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw
             </h2>
             <p>{post.data.description}</p>
             <div class="post-meta">
-              <time>{post.data.pubDate.toLocaleDateString('en-US')}</time>
+              <time>{post.data.pubDate.toLocaleDateString(dateLocale)}</time>
             </div>
           </div>
         </article>
