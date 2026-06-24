@@ -38,15 +38,6 @@ const cardImageSizes = '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw
 				/>
 				<span class="search-icon">🔍</span>
 			</div>
-
-			<label class="weekly-toggle">
-				<input 
-					type="checkbox" 
-					id="hide-weekly-posts"
-					class="weekly-checkbox"
-				/>
-				<span>{t('blog.hideWeekly')}</span>
-			</label>
 		</div>
 	<TagFilter tags={allTags} />
 
@@ -64,7 +55,6 @@ const cardImageSizes = '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw
 		<div class="blog-grid" id="blog-grid">
 			{featuredPosts.map((post, index) => {
 				const readingTime = getReadingTime(post);
-				const isWeekly = post.data.tags?.includes('weekly');
 				return (
 					<div 
 						class="blog-card featured"
@@ -72,7 +62,6 @@ const cardImageSizes = '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw
 						data-title={post.data.title.toLowerCase()}
 						data-description={post.data.description?.toLowerCase() || ''}
 						data-content={post.body?.toLowerCase() || ''}
-						data-is-weekly={isWeekly}
 					>
 						<div class="blog-card-image">
 							<a href={`/${lang}/blog/${post.id.replace(`${lang}/`, '').replace(/\.mdx?$/, '')}/`}>
@@ -129,7 +118,6 @@ const cardImageSizes = '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw
 
 			{regularPosts.map((post, index) => {
 				const readingTime = getReadingTime(post);
-				const isWeekly = post.data.tags?.includes('weekly');
 				return (
 					<div 
 						class="blog-card"
@@ -137,7 +125,6 @@ const cardImageSizes = '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw
 						data-title={post.data.title.toLowerCase()}
 						data-description={post.data.description?.toLowerCase() || ''}
 						data-content={post.body?.toLowerCase() || ''}
-						data-is-weekly={isWeekly}
 					>
 						<div class="blog-card-image">
 							<a href={`/${lang}/blog/${post.id.replace(`${lang}/`, '').replace(/\.mdx?$/, '')}/`}>
@@ -194,7 +181,6 @@ const cardImageSizes = '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.getElementById('search-input');
-  const weeklyToggle = document.getElementById('hide-weekly-posts');
   const tagBtns = document.querySelectorAll('.tag-filter-btn');
   const cards = document.querySelectorAll('.blog-card');
   const noResultsMessage = document.getElementById('no-results');
@@ -203,7 +189,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let activeTags = [];
   let searchTerm = '';
-  let hideWeekly = false;
 
   function filterPosts() {
     let visibleCount = 0;
@@ -213,9 +198,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const cardTitle = card.dataset.title || '';
       const cardDescription = card.dataset.description || '';
       const cardContent = card.dataset.content || '';
-      const isWeekly = card.dataset.isWeekly === 'true';
 
-      const matchesSearch = searchTerm === '' || 
+      const matchesSearch = searchTerm === '' ||
         cardTitle.includes(searchTerm) || 
         cardDescription.includes(searchTerm) ||
         cardContent.includes(searchTerm);
@@ -223,8 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const matchesTags = activeTags.length === 0 || 
         activeTags.some(tag => cardTags.includes(tag));
       
-      const shouldHideWeekly = hideWeekly && isWeekly;
-      const shouldShow = matchesSearch && matchesTags && !shouldHideWeekly;
+      const shouldShow = matchesSearch && matchesTags;
       
       card.style.display = shouldShow ? '' : 'none';
       
@@ -244,11 +227,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   searchInput?.addEventListener('input', (e) => {
     searchTerm = (e.target as HTMLInputElement).value.toLowerCase();
-    filterPosts();
-  });
-
-  weeklyToggle?.addEventListener('change', (e) => {
-    hideWeekly = (e.target as HTMLInputElement).checked;
     filterPosts();
   });
 
@@ -521,19 +499,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	top: 50%;
 	transform: translateY(-50%);
 	color: hsl(var(--muted-foreground));
-	}
-
-	.weekly-toggle {
-	display: flex;
-	align-items: center;
-	gap: 0.5rem;
-	cursor: pointer;
-	font-size: 0.9rem;
-	}
-
-	.weekly-checkbox {
-	width: 1rem;
-	height: 1rem;
 	}
 
 	/* No results message */
