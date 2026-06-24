@@ -4,7 +4,7 @@ description: 'He estado ausente tres semanas, ¡pero por una buena razón! Te cu
 pubDate: '2025-09-30'
 heroImage: '../../../assets/blog/nasa.png'
 heroImageAlt: 'Un escritorio con un ordenador mostrando código'
-tags: ['weekly']
+tags: ['career']
 lang: 'es'
 ---
 

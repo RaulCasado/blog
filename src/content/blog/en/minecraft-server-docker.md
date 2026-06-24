@@ -4,7 +4,7 @@ description: 'Complete guide to deploying a Minecraft server with Cobblemon usin
 pubDate: '2026-02-08'
 heroImage: '../../../assets/blog/minecraft.webp'
 heroImageAlt: 'Minecraft server with Docker'
-tags: ['docker', 'linux', 'minecraft']
+tags: ['devops', 'linux']
 lang: 'en'
 ---
 

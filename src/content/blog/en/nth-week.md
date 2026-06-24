@@ -4,7 +4,7 @@ description: "I've been away for three weeks, but for a good reason! I'll tell y
 pubDate: '2025-09-30'
 heroImage: '../../../assets/blog/nasa.png'
 heroImageAlt: 'A desk with a computer showing code'
-tags: ['personal', 'career-development', 'php', 'firestore', 'javascript']
+tags: ['career']
 lang: 'en'
 ---
 

@@ -4,7 +4,7 @@ description: 'Por qué decidí construir desde cero un dashboard personal para u
 pubDate: '2026-02-08'
 heroImage: '../../../assets/blog/react.png'
 heroImageAlt: 'Titan Dashboard - Life OS'
-tags: ['python', 'react', 'project']
+tags: ['python', 'web_development']
 lang: 'es'
 ---
 

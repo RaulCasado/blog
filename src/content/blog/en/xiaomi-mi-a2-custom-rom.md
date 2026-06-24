@@ -4,7 +4,7 @@ description: 'Complete guide on how I installed a Custom ROM on a Xiaomi Mi A2 a
 pubDate: '2026-02-08'
 heroImage: '../../../assets/blog/mi_a2.jpg'
 heroImageAlt: 'Xiaomi Mi A2 with Custom ROM'
-tags: ['linux', 'android']
+tags: ['linux']
 lang: 'en'
 ---
 

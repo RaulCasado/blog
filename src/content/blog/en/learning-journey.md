@@ -4,7 +4,7 @@ description: "A retrospective of an intensive self-study period: machine learnin
 pubDate: "2025-09-15"
 heroImage: '../../../assets/blog/weekly/blog-meta.jpg'
 heroImageAlt: 'A workspace representing weeks of continuous learning and building'
-tags: ["career", "python", "web_development"]
+tags: ['career', 'python', 'web_development']
 lang: 'en'
 ---
 

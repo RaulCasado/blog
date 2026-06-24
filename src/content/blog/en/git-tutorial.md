@@ -3,7 +3,7 @@ title: "Git: A Complete Beginner's Guide"
 description: "A practical Git guide for developers: what it is, why you should use it, and every essential command you'll need on a daily basis."
 pubDate: "2026-03-21"
 heroImage: '../../../assets/blog/git-intro/git-logo.png'
-tags: ["git", "tutorial", "devtools"]
+tags: ['devops']
 featured: false
 ---
 

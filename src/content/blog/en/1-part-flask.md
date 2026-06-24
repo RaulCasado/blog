@@ -4,7 +4,7 @@ description: 'In this series of posts, we will explore Flask, a web microframewo
 pubDate: '2025-09-17'
 heroImage: '../../../assets/blog/api-flask-1/python.jpg'
 heroImageAlt: 'Python code on a computer screen'
-tags: ['python']
+tags: ['python', 'web_development']
 lang: 'en'
 ---
 

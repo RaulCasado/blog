@@ -4,7 +4,7 @@ description: 'Why I decided to build a personal dashboard from scratch to unify 
 pubDate: '2026-02-08'
 heroImage: '../../../assets/blog/react.png'
 heroImageAlt: 'Titan Dashboard - Life OS'
-tags: ['python', 'react', 'project']
+tags: ['python', 'web_development']
 lang: 'en'
 ---
 

@@ -4,7 +4,7 @@ description: 'Guía completa para desplegar un servidor de Minecraft con Cobblem
 pubDate: '2026-02-08'
 heroImage: '../../../assets/blog/minecraft.webp'
 heroImageAlt: 'Servidor de Minecraft con Docker'
-tags: ['docker', 'linux', 'minecraft']
+tags: ['devops', 'linux']
 lang: 'es'
 ---
 

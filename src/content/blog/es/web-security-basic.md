@@ -3,7 +3,7 @@ title: "Ciberseguridad Web: Conceptos Básicos"
 description: "Una introducción a los conceptos fundamentales de la ciberseguridad web, incluyendo amenazas comunes, mejores prácticas y herramientas esenciales."
 pubDate: "2025-08-12"
 heroImage: '../../../assets/blog/cibersecurity-basic/logo.jpg'
-tags: ["web_development"]
+tags: ['security', 'web_development']
 featured: true
 ---
 

@@ -4,7 +4,7 @@ description: "Una retrospectiva de un periodo intensivo de autoaprendizaje: mach
 pubDate: "2025-09-15"
 heroImage: '../../../assets/blog/weekly/blog-meta.jpg'
 heroImageAlt: 'Un espacio de trabajo que representa semanas de aprendizaje y desarrollo continuo'
-tags: ["career", "python", "web_development"]
+tags: ['career', 'python', 'web_development']
 lang: 'es'
 ---
 

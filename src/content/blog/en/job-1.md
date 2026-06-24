@@ -4,7 +4,7 @@ description: 'A short overview of my first months as a developer, what I learned
 pubDate: '2025-11-24'
 heroImage: '../../../assets/blog/trabajo1.jpg'
 heroImageAlt: 'Developer working on multiple projects'
-tags: ['job']
+tags: ['career']
 lang: 'en'
 ---
 

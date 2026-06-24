@@ -3,7 +3,7 @@ title: "Git: Guía completa para empezar desde cero"
 description: "Una guía práctica sobre Git para desarrolladores: qué es, por qué usarlo, y todos los comandos esenciales que necesitas en el día a día."
 pubDate: "2026-03-21"
 heroImage: '../../../assets/blog/git-intro/git-logo.png'
-tags: ["git", "tutorial", "devtools"]
+tags: ['devops']
 featured: false
 ---
 

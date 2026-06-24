@@ -4,7 +4,7 @@ description: 'Un resumen de mis primeros meses como desarrollador, lo que aprend
 pubDate: '2025-11-24'
 heroImage: '../../../assets/blog/trabajo1.jpg'
 heroImageAlt: 'Desarrollador trabajando en multiples proyectos'
-tags: ['job']
+tags: ['career']
 lang: 'es'
 ---
 
