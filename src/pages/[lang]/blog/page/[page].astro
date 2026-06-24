@@ -1,0 +1,57 @@
+---
+import BaseHead from '../../../../components/BaseHead.astro';
+import Header from '../../../../components/Header.astro';
+import Footer from '../../../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+import BlogIndexContent from '../../../../components/pages/BlogIndexContent.astro';
+import { useTranslations } from '../../../../i18n/utils';
+import { languages } from '../../../../i18n/ui';
+import { getLangPosts, PAGE_SIZE } from '../../../../utils/posts';
+
+export async function getStaticPaths() {
+	const allPosts = await getCollection('blog');
+	const paths = [];
+
+	for (const lang of Object.keys(languages)) {
+		const posts = getLangPosts(allPosts, lang);
+		const totalPages = Math.max(1, Math.ceil(posts.length / PAGE_SIZE));
+		// page 1 lives at /[lang]/blog; this route only covers pages 2..N
+		for (let page = 2; page <= totalPages; page++) {
+			paths.push({ params: { lang, page: String(page) } });
+		}
+	}
+
+	return paths;
+}
+
+const { lang, page } = Astro.params;
+const currentPage = Number(page);
+const t = useTranslations(lang);
+
+const posts = getLangPosts(await getCollection('blog'), lang);
+const totalPages = Math.max(1, Math.ceil(posts.length / PAGE_SIZE));
+const pagePosts = posts.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+const allTags = [...new Set(posts.flatMap(post => post.data.tags || []))];
+---
+
+<!doctype html>
+<html lang={lang}>
+	<head>
+		<BaseHead title={`${t('blog.metaTitle')} — ${t('blog.page')} ${currentPage}`} description={t('blog.metaDescription')} lang={lang} />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	</head>
+	<body>
+		<Header />
+		<main>
+			<BlogIndexContent
+				lang={lang}
+				posts={pagePosts}
+				allTags={allTags}
+				t={t}
+				currentPage={currentPage}
+				totalPages={totalPages}
+			/>
+		</main>
+		<Footer />
+	</body>
+</html>

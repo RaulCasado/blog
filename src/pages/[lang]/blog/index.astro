@@ -6,6 +6,7 @@ import { getCollection } from 'astro:content';
 import BlogIndexContent from '../../../components/pages/BlogIndexContent.astro';
 import { useTranslations } from '../../../i18n/utils';
 import { languages } from '../../../i18n/ui';
+import { getLangPosts, PAGE_SIZE } from '../../../utils/posts';
 
 export function getStaticPaths() {
 	return Object.keys(languages).map((lang) => ({ params: { lang } }));
@@ -14,11 +15,9 @@ export function getStaticPaths() {
 const { lang } = Astro.params;
 const t = useTranslations(lang);
 
-const allPosts = await getCollection('blog');
-const posts = allPosts
-	.filter(post => post.id.startsWith(`${lang}/`))
-	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-
+const posts = getLangPosts(await getCollection('blog'), lang);
+const totalPages = Math.max(1, Math.ceil(posts.length / PAGE_SIZE));
+const pagePosts = posts.slice(0, PAGE_SIZE);
 const allTags = [...new Set(posts.flatMap(post => post.data.tags || []))];
 ---
 
@@ -31,7 +30,14 @@ const allTags = [...new Set(posts.flatMap(post => post.data.tags || []))];
 	<body>
 		<Header />
 		<main>
-			<BlogIndexContent lang={lang} posts={posts} allTags={allTags} t={t} />
+			<BlogIndexContent
+				lang={lang}
+				posts={pagePosts}
+				allTags={allTags}
+				t={t}
+				currentPage={1}
+				totalPages={totalPages}
+			/>
 		</main>
 		<Footer />
 	</body>

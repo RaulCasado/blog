@@ -4,18 +4,17 @@ import FormattedDate from '../FormattedDate.astro';
 import TagFilter from '../TagFilter.astro';
 import fallbackHeroImage from '../../assets/blog/blog-placeholder-1.jpg';
 
-const { lang, posts, allTags, t } = Astro.props;
-
-const featuredPosts = posts.filter(post => post.data.featured);
-const regularPosts = posts.filter(post => !post.data.featured);
+const { lang, posts, allTags, t, currentPage = 1, totalPages = 1 } = Astro.props;
 
 function getReadingTime(post) {
 	const wordsPerMinute = 200;
 	if (!post.body) return 1;
 	const words = post.body.split(/\s+/).length;
-	const minutes = Math.ceil(words / wordsPerMinute);
-	return minutes;
+	return Math.ceil(words / wordsPerMinute);
 }
+
+const postUrl = (post) => `/${lang}/blog/${post.id.replace(`${lang}/`, '').replace(/\.mdx?$/, '')}/`;
+const pageUrl = (n) => (n <= 1 ? `/${lang}/blog` : `/${lang}/blog/page/${n}`);
 
 const cardImageWidths = [360, 540, 720, 960];
 const cardImageSizes = '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw';
@@ -23,23 +22,24 @@ const cardImageSizes = '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw
 
 <section class="blog-section">
 	<div class="container">
-	<div class="section-header">
+		<div class="section-header">
 			<h1>{t('blog.header')}</h1>
 			<p>{t('blog.subtitle')}</p>
 		</div>
 
 		<div class="blog-controls">
 			<div class="search-container">
-				<input 
-					type="text" 
-					id="search-input" 
+				<input
+					type="text"
+					id="search-input"
 					placeholder={t('blog.searchPlaceholder')}
 					class="search-input"
+					autocomplete="off"
 				/>
 				<span class="search-icon">🔍</span>
 			</div>
 		</div>
-	<TagFilter tags={allTags} />
+		<TagFilter tags={allTags} lang={lang} />
 
 		<div class="no-results-message" id="no-results" style="display: none;">
 			<div class="no-results-content">
@@ -51,83 +51,15 @@ const cardImageSizes = '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw
 				</button>
 			</div>
 		</div>
-		
-		<div class="blog-grid" id="blog-grid">
-			{featuredPosts.map((post, index) => {
-				const readingTime = getReadingTime(post);
-				return (
-					<div 
-						class="blog-card featured"
-						data-tags={post.data.tags?.join(',') || ''}
-						data-title={post.data.title.toLowerCase()}
-						data-description={post.data.description?.toLowerCase() || ''}
-						data-content={post.body?.toLowerCase() || ''}
-					>
-						<div class="blog-card-image">
-							<a href={`/${lang}/blog/${post.id.replace(`${lang}/`, '').replace(/\.mdx?$/, '')}/`}>
-								<Picture
-									width={720}
-									height={360}
-									src={post.data.heroImage || fallbackHeroImage}
-									alt={post.data.heroImageAlt || post.data.title}
-									formats={['avif', 'webp']}
-									fallbackFormat="jpg"
-									widths={cardImageWidths}
-									sizes={cardImageSizes}
-									quality={80}
-									loading="eager"
-								/>
-								<div class="featured-badge">{t('blog.featured')}</div>
-							</a>
-						</div>
-						<div class="blog-card-content">
-							<a href={`/${lang}/blog/${post.id.replace(`${lang}/`, '').replace(/\.mdx?$/, '')}/`}>
-								<h2 class="title">{post.data.title}</h2>
-							</a>
-							{post.data.tags?.length > 0 && (
-								<div class="blog-card-tags">
-									{post.data.tags.map((tag) => (
-										<a href={`/${lang}/blog/tag/${tag}`} class="tag-badge">
-											#{tag}
-										</a>
-									))}
-								</div>
-							)}
-							<div class="blog-card-meta">
-								<div class="meta-item">
-									<span class="meta-icon">
-										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-									</span>
-									<FormattedDate date={post.data.pubDate} />
-								</div>
-								<div class="meta-item">
-									<span class="meta-icon">
-										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-									</span>
-									{readingTime} {t('blog.readingTime')}
-								</div>
-							</div>
-							<p class="blog-card-description">
-								{post.data.description || t('blog.featuredDescription')}
-							</p>
-						</div>
-						<div class="card-hover-effect"></div>
-					</div>
-				);
-			})}
 
-			{regularPosts.map((post, index) => {
+		<div class="blog-grid" id="blog-grid">
+			{posts.map((post) => {
 				const readingTime = getReadingTime(post);
+				const isFeatured = post.data.featured;
 				return (
-					<div 
-						class="blog-card"
-						data-tags={post.data.tags?.join(',') || ''}
-						data-title={post.data.title.toLowerCase()}
-						data-description={post.data.description?.toLowerCase() || ''}
-						data-content={post.body?.toLowerCase() || ''}
-					>
+					<div class={`blog-card${isFeatured ? ' featured' : ''}`}>
 						<div class="blog-card-image">
-							<a href={`/${lang}/blog/${post.id.replace(`${lang}/`, '').replace(/\.mdx?$/, '')}/`}>
+							<a href={postUrl(post)}>
 								<Picture
 									width={720}
 									height={360}
@@ -138,12 +70,13 @@ const cardImageSizes = '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw
 									widths={cardImageWidths}
 									sizes={cardImageSizes}
 									quality={80}
-									loading="lazy"
+									loading={isFeatured ? 'eager' : 'lazy'}
 								/>
+								{isFeatured && <div class="featured-badge">{t('blog.featured')}</div>}
 							</a>
 						</div>
 						<div class="blog-card-content">
-							<a href={`/${lang}/blog/${post.id.replace(`${lang}/`, '').replace(/\.mdx?$/, '')}/`}>
+							<a href={postUrl(post)}>
 								<h2 class="title">{post.data.title}</h2>
 							</a>
 							{post.data.tags?.length > 0 && (
@@ -169,92 +102,160 @@ const cardImageSizes = '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw
 									{readingTime} {t('blog.readingTime')}
 								</div>
 							</div>
+							{isFeatured && (
+								<p class="blog-card-description">
+									{post.data.description || t('blog.featuredDescription')}
+								</p>
+							)}
 						</div>
 						<div class="card-hover-effect"></div>
 					</div>
 				);
 			})}
 		</div>
+
+		<div class="blog-grid search-results" id="search-results" style="display: none;"></div>
+
+		{totalPages > 1 && (
+			<nav class="blog-pagination" id="blog-pagination" aria-label="Blog pagination">
+				{currentPage > 1 && (
+					<a class="page-link" href={pageUrl(currentPage - 1)} rel="prev">{t('blog.previous')}</a>
+				)}
+				<div class="page-numbers">
+					{Array.from({ length: totalPages }, (_, i) => i + 1).map((n) =>
+						n === currentPage ? (
+							<span class="page-number active" aria-current="page">{n}</span>
+						) : (
+							<a class="page-number" href={pageUrl(n)}>{n}</a>
+						)
+					)}
+				</div>
+				{currentPage < totalPages && (
+					<a class="page-link" href={pageUrl(currentPage + 1)} rel="next">{t('blog.next')}</a>
+				)}
+			</nav>
+		)}
 	</div>
 </section>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  const searchInput = document.getElementById('search-input');
-  const tagBtns = document.querySelectorAll('.tag-filter-btn');
-  const cards = document.querySelectorAll('.blog-card');
-  const noResultsMessage = document.getElementById('no-results');
-  const blogGrid = document.getElementById('blog-grid');
+  const searchInput = document.getElementById('search-input') as HTMLInputElement | null;
   const clearSearchBtn = document.getElementById('clear-search');
+  const blogGrid = document.getElementById('blog-grid');
+  const pagination = document.getElementById('blog-pagination');
+  const noResults = document.getElementById('no-results');
+  const results = document.getElementById('search-results');
+  const lang = document.documentElement.lang || 'es';
 
-  let activeTags = [];
-  let searchTerm = '';
+  let fuse: any = null;
+  let loading: Promise<void> | null = null;
 
-  function filterPosts() {
-    let visibleCount = 0;
-    
-    cards.forEach(card => {
-      const cardTags = card.dataset.tags.split(',').filter(tag => tag.trim());
-      const cardTitle = card.dataset.title || '';
-      const cardDescription = card.dataset.description || '';
-      const cardContent = card.dataset.content || '';
-
-      const matchesSearch = searchTerm === '' ||
-        cardTitle.includes(searchTerm) || 
-        cardDescription.includes(searchTerm) ||
-        cardContent.includes(searchTerm);
-      
-      const matchesTags = activeTags.length === 0 || 
-        activeTags.some(tag => cardTags.includes(tag));
-      
-      const shouldShow = matchesSearch && matchesTags;
-      
-      card.style.display = shouldShow ? '' : 'none';
-      
-      if (shouldShow) {
-        visibleCount++;
-      }
-    });
-
-    if (visibleCount === 0) {
-      noResultsMessage.style.display = 'flex';
-      blogGrid.style.display = 'none';
-    } else {
-      noResultsMessage.style.display = 'none';
-      blogGrid.style.display = 'grid';
+  function ensureIndex() {
+    if (!loading) {
+      loading = (async () => {
+        const [{ default: Fuse }, data] = await Promise.all([
+          import('fuse.js'),
+          fetch(`/${lang}/blog-search.json`).then((r) => r.json()),
+        ]);
+        fuse = new Fuse(data, {
+          keys: [
+            { name: 'title', weight: 0.5 },
+            { name: 'tags', weight: 0.2 },
+            { name: 'description', weight: 0.2 },
+            { name: 'excerpt', weight: 0.1 },
+          ],
+          threshold: 0.4,
+          ignoreLocation: true,
+          minMatchCharLength: 2,
+        });
+      })();
     }
+    return loading;
   }
 
-  searchInput?.addEventListener('input', (e) => {
-    searchTerm = (e.target as HTMLInputElement).value.toLowerCase();
-    filterPosts();
+  function showBrowse() {
+    if (blogGrid) blogGrid.style.display = '';
+    if (pagination) pagination.style.display = '';
+    if (results) { results.style.display = 'none'; results.replaceChildren(); }
+    if (noResults) noResults.style.display = 'none';
+  }
+
+  function buildCard(item: any) {
+    const card = document.createElement('article');
+    card.className = 'blog-card search-card';
+
+    const link = document.createElement('a');
+    link.href = item.url;
+
+    const content = document.createElement('div');
+    content.className = 'blog-card-content';
+
+    const title = document.createElement('h2');
+    title.className = 'title';
+    title.textContent = item.title;
+    content.appendChild(title);
+
+    if (Array.isArray(item.tags) && item.tags.length) {
+      const tags = document.createElement('div');
+      tags.className = 'blog-card-tags';
+      item.tags.forEach((tg: string) => {
+        const span = document.createElement('span');
+        span.className = 'tag-badge';
+        span.textContent = `#${tg}`;
+        tags.appendChild(span);
+      });
+      content.appendChild(tags);
+    }
+
+    const text = item.description || item.excerpt;
+    if (text) {
+      const desc = document.createElement('p');
+      desc.className = 'blog-card-description';
+      desc.textContent = text;
+      content.appendChild(desc);
+    }
+
+    link.appendChild(content);
+    card.appendChild(link);
+    return card;
+  }
+
+  function renderResults(matches: any[]) {
+    if (!results) return;
+    if (blogGrid) blogGrid.style.display = 'none';
+    if (pagination) pagination.style.display = 'none';
+    results.replaceChildren();
+    if (!matches.length) {
+      results.style.display = 'none';
+      if (noResults) noResults.style.display = 'flex';
+      return;
+    }
+    if (noResults) noResults.style.display = 'none';
+    results.style.display = 'grid';
+    matches.forEach((m) => results.appendChild(buildCard(m.item)));
+  }
+
+  let debounce: number | undefined;
+  searchInput?.addEventListener('input', () => {
+    const term = searchInput.value.trim();
+    window.clearTimeout(debounce);
+    debounce = window.setTimeout(async () => {
+      if (term === '') { showBrowse(); return; }
+      await ensureIndex();
+      renderResults(fuse.search(term));
+    }, 150);
   });
+
+  // warm up the index as soon as the user intends to search
+  searchInput?.addEventListener('focus', () => { ensureIndex(); }, { once: true });
 
   clearSearchBtn?.addEventListener('click', () => {
     if (searchInput) {
-      (searchInput as HTMLInputElement).value = '';
-      searchTerm = '';
-      filterPosts();
+      searchInput.value = '';
+      showBrowse();
       searchInput.focus();
     }
-  });
-
-  tagBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const tag = (btn as HTMLElement).dataset.tag;
-
-      if (tag) {
-        if (activeTags.includes(tag)) {
-          activeTags = activeTags.filter(t => t !== tag);
-          btn.classList.remove('active');
-        } else {
-          activeTags.push(tag);
-          btn.classList.add('active');
-        }
-
-        filterPosts();
-      }
-    });
   });
 });
 </script>
@@ -337,8 +338,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	.card-hover-effect {
 		position: absolute;
 		inset: 0;
-		background: linear-gradient(to top, 
-			hsla(var(--primary) / 0.03) 0%, 
+		background: linear-gradient(to top,
+			hsla(var(--primary) / 0.03) 0%,
 			hsla(var(--primary) / 0) 100%);
 		opacity: 0;
 		transition: opacity 0.3s ease;
@@ -437,6 +438,11 @@ document.addEventListener('DOMContentLoaded', () => {
 		line-height: 1.3;
 	}
 
+	/* Search result cards have no hero image */
+	.search-card .blog-card-content {
+		padding: 1.5rem;
+	}
+
 	.blog-card-tags {
 		margin-top: 0.5rem;
 		display: flex;
@@ -460,45 +466,92 @@ document.addEventListener('DOMContentLoaded', () => {
 		color: hsl(var(--primary-foreground));
 	}
 
-		/* Filter controls */
+	/* Filter controls */
 	.blog-controls {
-	display: flex;
-	flex-direction: column;
-	gap: 1rem;
-	margin-bottom: 2rem;
-	padding: 1.5rem;
-	background-color: hsl(var(--card));
-	border-radius: var(--radius);
-	border: 1px solid hsl(var(--border));
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		margin-bottom: 2rem;
+		padding: 1.5rem;
+		background-color: hsl(var(--card));
+		border-radius: var(--radius);
+		border: 1px solid hsl(var(--border));
 	}
 
 	.search-container {
-	position: relative;
-	max-width: 400px;
+		position: relative;
+		max-width: 400px;
 	}
 
 	.search-input {
-	width: 100%;
-	padding: 0.75rem 2.5rem 0.75rem 1rem;
-	border: 1px solid hsl(var(--border));
-	border-radius: var(--radius);
-	background-color: hsl(var(--background));
-	color: hsl(var(--foreground));
-	font-size: 0.9rem;
+		width: 100%;
+		padding: 0.75rem 2.5rem 0.75rem 1rem;
+		border: 1px solid hsl(var(--border));
+		border-radius: var(--radius);
+		background-color: hsl(var(--background));
+		color: hsl(var(--foreground));
+		font-size: 0.9rem;
 	}
 
 	.search-input:focus {
-	outline: none;
-	border-color: hsl(var(--primary));
-	box-shadow: 0 0 0 2px hsl(var(--primary) / 0.2);
+		outline: none;
+		border-color: hsl(var(--primary));
+		box-shadow: 0 0 0 2px hsl(var(--primary) / 0.2);
 	}
 
 	.search-icon {
-	position: absolute;
-	right: 0.75rem;
-	top: 50%;
-	transform: translateY(-50%);
-	color: hsl(var(--muted-foreground));
+		position: absolute;
+		right: 0.75rem;
+		top: 50%;
+		transform: translateY(-50%);
+		color: hsl(var(--muted-foreground));
+	}
+
+	/* Pagination */
+	.blog-pagination {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		margin-top: 2.5rem;
+	}
+
+	.page-numbers {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+	}
+
+	.page-link,
+	.page-number {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 2.25rem;
+		height: 2.25rem;
+		padding: 0 0.75rem;
+		border-radius: var(--radius);
+		border: 1px solid hsl(var(--border));
+		background-color: hsl(var(--card));
+		color: hsl(var(--foreground));
+		font-size: 0.875rem;
+		font-weight: 500;
+		text-decoration: none;
+		transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+	}
+
+	.page-link:hover,
+	.page-number:hover {
+		background-color: hsl(var(--muted));
+		transform: translateY(-1px);
+	}
+
+	.page-number.active {
+		background-color: hsl(var(--primary));
+		color: hsl(var(--primary-foreground));
+		border-color: transparent;
+		cursor: default;
 	}
 
 	/* No results message */
@@ -565,17 +618,17 @@ document.addEventListener('DOMContentLoaded', () => {
 		.container {
 			padding: 0 1.5rem;
 		}
-		
+
 		.section-header h1 {
 			font-size: 2rem;
 		}
 	}
-	
+
 	@media (min-width: 640px) {
 		.blog-grid {
 			grid-template-columns: repeat(2, 1fr);
 		}
-		
+
 		.blog-card.featured {
 			grid-column: 1 / -1;
 		}
@@ -591,11 +644,11 @@ document.addEventListener('DOMContentLoaded', () => {
 		.container {
 			padding: 0 2rem;
 		}
-		
+
 		.blog-section {
 			padding: 3.5rem 0;
 		}
-		
+
 		.section-header {
 			margin-bottom: 2.5rem;
 		}
@@ -609,7 +662,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		.blog-section {
 			padding: 4rem 0;
 		}
-		
+
 		.blog-grid {
 			grid-template-columns: repeat(3, 1fr);
 		}

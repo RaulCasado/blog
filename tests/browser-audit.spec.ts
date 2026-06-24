@@ -146,28 +146,22 @@ test('seed pages do not expose broken internal links', async ({ page, request },
   expect(broken).toEqual([]);
 });
 
-test('every blog article exposes exactly one h1', async ({ page }, testInfo) => {
+test('every blog article exposes exactly one h1', async ({ page, request }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-chrome', 'Heading structure is viewport-independent.');
   const baseUrl = new URL(process.env.AUDIT_BASE_URL || 'http://127.0.0.1:4321');
-  const articleListPages = ['/es/blog/', '/en/blog/'];
   const articleUrls = new Set<string>();
 
-  for (const listPath of articleListPages) {
-    await page.goto(listPath, { waitUntil: 'domcontentloaded' });
-    const hrefs = await page.locator('a[href*="/blog/"]').evaluateAll(anchors =>
-      anchors.map(anchor => (anchor as HTMLAnchorElement).href),
-    );
-    for (const href of hrefs) {
-      const { origin, pathname } = new URL(href);
-      if (origin !== baseUrl.origin) continue;
-      // Keep article pages (/<lang>/blog/<slug>/); exclude the index and tag listings.
-      if (/^\/(es|en)\/blog\/[^/]+\/?$/.test(pathname) && !pathname.includes('/tag')) {
-        articleUrls.add(new URL(pathname, baseUrl).href);
-      }
+  // Use the search index endpoints: they list every post regardless of pagination.
+  for (const lang of ['es', 'en']) {
+    const response = await request.get(new URL(`/${lang}/blog-search.json`, baseUrl).href);
+    expect(response.ok(), `search index for ${lang} should be reachable`).toBeTruthy();
+    const entries = await response.json();
+    for (const entry of entries) {
+      articleUrls.add(new URL(entry.url, baseUrl).href);
     }
   }
 
-  expect(articleUrls.size, 'crawl should discover blog articles').toBeGreaterThan(0);
+  expect(articleUrls.size, 'search index should list blog articles').toBeGreaterThan(0);
 
   const offenders: Array<{ url: string; h1Count: number }> = [];
   for (const url of articleUrls) {
@@ -181,4 +175,28 @@ test('every blog article exposes exactly one h1', async ({ page }, testInfo) => 
     contentType: 'application/json',
   });
   expect(offenders, 'every article must expose exactly one h1').toEqual([]);
+});
+
+test('blog search returns fuzzy results from the lazy index', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-chrome', 'Search behaviour is viewport-independent.');
+
+  await page.goto('/es/blog/', { waitUntil: 'domcontentloaded' });
+
+  const grid = page.locator('#blog-grid');
+  const results = page.locator('#search-results');
+  await expect(grid, 'browse grid is visible before searching').toBeVisible();
+
+  // "ciber" should fuzzy-match the "Ciberseguridad" article via the JSON index.
+  await page.locator('#search-input').fill('ciber');
+
+  await expect(results, 'search results container becomes visible').toBeVisible();
+  await expect(grid, 'browse grid is hidden while searching').toBeHidden();
+  const cards = results.locator('.search-card');
+  expect(await cards.count(), 'at least one fuzzy match is rendered').toBeGreaterThan(0);
+  await expect(results).toContainText(/ciberseguridad/i);
+
+  // Clearing the field restores the paginated browse grid.
+  await page.locator('#search-input').fill('');
+  await expect(grid, 'browse grid returns after clearing search').toBeVisible();
+  await expect(results, 'results are hidden after clearing search').toBeHidden();
 });

@@ -1,5 +1,5 @@
 ---
-const { tags = [], selectedTags = [] } = Astro.props;
+const { tags = [], selectedTags = [], lang = 'es' } = Astro.props;
 ---
 
 <div class="tag-filter-wrapper">
@@ -25,14 +25,13 @@ const { tags = [], selectedTags = [] } = Astro.props;
   <div class="tag-filter">
     {
       tags.map((tag) => (
-        <button
+        <a
           class={`tag-filter-btn${selectedTags.includes(tag) ? " active" : ""}`}
-          type="button"
-          data-tag={tag}
-          aria-pressed={selectedTags.includes(tag)}
+          href={`/${lang}/blog/tag/${tag}`}
+          aria-current={selectedTags.includes(tag) ? "page" : undefined}
         >
           #{tag}
-        </button>
+        </a>
       ))
     }
   </div>
