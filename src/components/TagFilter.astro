@@ -167,27 +167,29 @@ const { tags = [], selectedTags = [], lang = 'es' } = Astro.props;
 
   .tag-filter-btn {
     flex-shrink: 0;
-    padding: 0.4rem 1rem;
-    border-radius: 999px;
-    background: hsl(var(--muted));
-    color: hsl(var(--foreground));
-    border: 1px solid hsl(var(--border) / 0.5);
+    padding: 0.35rem 0.9rem;
+    border-radius: var(--pill-radius);
+    background: hsl(var(--secondary));
+    color: hsl(var(--muted-foreground));
+    border: 1px solid hsl(var(--border));
     cursor: pointer;
-    font-size: 0.85rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    text-decoration: none;
     transition: all 0.2s ease;
   }
 
   .tag-filter-btn:hover {
-    background: hsl(var(--muted) / 0.8);
+    color: hsl(var(--foreground));
+    border-color: hsl(var(--muted-foreground) / 0.4);
     transform: translateY(-1px);
   }
 
   .tag-filter-btn.active,
   .tag-filter-btn:active {
-    background: hsl(var(--primary));
-    color: hsl(var(--primary-foreground));
-    border-color: transparent;
-    box-shadow: 0 4px 10px hsla(var(--primary) / 0.2);
+    background: hsl(var(--primary) / 0.1);
+    color: hsl(var(--primary));
+    border-color: hsl(var(--primary) / 0.35);
   }
 </style>
 
