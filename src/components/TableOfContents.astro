@@ -70,9 +70,9 @@ const filteredHeadings = headings.filter((heading) => heading.depth === 2);
 <style>
   .toc-container {
     position: relative;
-    background-color: hsl(var(--secondary) / 0.3);
+    background-color: hsl(var(--card));
     border-radius: var(--radius);
-    padding: 0.75rem;
+    padding: 1rem;
     margin-bottom: 1.5rem;
     border: 1px solid hsl(var(--border));
     scrollbar-width: thin;
@@ -159,10 +159,13 @@ const filteredHeadings = headings.filter((heading) => heading.depth === 2);
   }
 
   .toc-container h2 {
-    font-size: 1.125rem;
+    font-size: 0.75rem;
     font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: hsl(var(--muted-foreground));
     margin-top: 0;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.75rem;
   }
 
   .toc-list {
@@ -174,11 +177,11 @@ const filteredHeadings = headings.filter((heading) => heading.depth === 2);
   .toc-item {
     margin-bottom: 0.5rem;
     line-height: 1.4;
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
   }
 
   .toc-item a {
-    color: hsl(var(--foreground));
+    color: hsl(var(--muted-foreground));
     text-decoration: none;
     transition: color 0.2s ease;
     display: inline-block;
@@ -186,21 +189,20 @@ const filteredHeadings = headings.filter((heading) => heading.depth === 2);
     white-space: normal;
     word-break: break-word;
   }
-  
+
   @media (min-width: 768px) {
     .toc-container h2 {
-      font-size: 1.25rem;
+      font-size: 0.8125rem;
       margin-bottom: 0.75rem;
     }
-    
+
     .toc-item {
-      font-size: 1rem;
+      font-size: 0.9375rem;
     }
   }
 
   .toc-item a:hover {
     color: hsl(var(--primary));
-    text-decoration: underline;
   }
 
   .depth-2 {
