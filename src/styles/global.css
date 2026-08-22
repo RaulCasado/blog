@@ -19,111 +19,123 @@ body {
 	max-width: 100%;
 }
 
+/*
+ * Design tokens — inspired by refine.dev (zinc palette + green accent).
+ * Colors are stored as HSL channels so they compose with hsl(var(--x) / alpha).
+ */
 :root,
 .light {
 	/* Base colors */
 	--background: 0 0% 100%;
-	--foreground: 222.2 84% 4.9%;
-	
-	/* Primary colors */
-	--primary: 221.2 83.2% 53.3%;
-	--primary-foreground: 210 40% 98%;
-	
+	--foreground: 240 5.9% 10%;
+
+	/* Primary colors (green accent) */
+	--primary: 142.1 76.2% 36.3%;
+	--primary-foreground: 0 0% 100%;
+
 	/* Secondary colors */
-	--secondary: 210 40% 96.1%;
-	--secondary-foreground: 222.2 47.4% 11.2%;
-	
+	--secondary: 240 4.8% 95.9%;
+	--secondary-foreground: 240 5.9% 10%;
+
 	/* Muted colors */
-	--muted: 210 40% 96.1%;
-	--muted-foreground: 215.4 16.3% 46.9%;
-	
+	--muted: 240 4.8% 95.9%;
+	--muted-foreground: 240 3.8% 46.1%;
+
 	/* Accent colors */
-	--accent: 210 40% 96.1%;
-	--accent-foreground: 222.2 47.4% 11.2%;
-	
+	--accent: 240 4.8% 95.9%;
+	--accent-foreground: 240 5.9% 10%;
+
 	/* Card styles */
 	--card: 0 0% 100%;
-	--card-foreground: 222.2 84% 4.9%;
-	
+	--card-foreground: 240 5.9% 10%;
+
 	/* Border styles */
-	--border: 214.3 31.8% 91.4%;
-	--input: 214.3 31.8% 91.4%;
-	
+	--border: 240 5.9% 90%;
+	--input: 240 5.9% 90%;
+
 	/* Destructive */
 	--destructive: 0 84.2% 60.2%;
 	--destructive-foreground: 210 40% 98%;
-	
+
 	/* Ring */
-	--ring: 221.2 83.2% 53.3%;
-	
-	/* Border radius */
+	--ring: 142.1 76.2% 36.3%;
+
+	/* Code blocks & inline code */
+	--code-bg: 240 5.9% 3.9%;
+	--code-color: 240 4.8% 94.9%;
+	--inline-code-bg: 240 4.8% 94.9%;
+	--inline-code-color: 240 5.9% 10%;
+
+	/* Typography */
+	--font-sans: 'Inter', 'InterVariable', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+	--font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+
+	/* Layout */
 	--radius: 0.5rem;
-	
+	--radius-lg: 0.75rem;
+	--pill-radius: 999px;
+	--content-width: 45rem;
+
 	/* Legacy colors - kept for compatibility */
-	--black: 15, 18, 25;
-	--gray: 96, 115, 159;
-	--gray-light: 229, 233, 240;
-	--gray-dark: 34, 41, 57;
+	--black: 9, 9, 11;
+	--gray: 113, 113, 122;
+	--gray-light: 228, 228, 231;
+	--gray-dark: 39, 39, 42;
+	--gray-gradient: rgba(var(--gray-light), 0.6);
 	--box-shadow:
-		0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
-		0 16px 32px rgba(var(--gray), 33%);
+		0 1px 2px rgba(var(--black), 5%), 0 4px 12px rgba(var(--black), 8%);
 }
 
 /* Dark theme */
 .dark {
 	/* Base colors - dark mode */
-	--background: 222.2 84% 4.9%;
-	--foreground: 210 40% 98%;
-	
+	--background: 240 4.9% 11%;
+	--foreground: 240 20% 97%;
+
 	/* Primary colors - dark mode */
-	--primary: 217.2 91.2% 59.8%;
-	--primary-foreground: 222.2 47.4% 11.2%;
-	
+	--primary: 141.7 76.6% 58%;
+	--primary-foreground: 240 5.9% 10%;
+
 	/* Secondary colors - dark mode */
-	--secondary: 217.2 32.6% 17.5%;
-	--secondary-foreground: 210 40% 98%;
-	
+	--secondary: 240 3.7% 15.9%;
+	--secondary-foreground: 240 20% 97%;
+
 	/* Muted colors - dark mode */
-	--muted: 217.2 32.6% 17.5%;
-	--muted-foreground: 215 20.2% 65.1%;
-	
+	--muted: 240 3.7% 15.9%;
+	--muted-foreground: 240 4.9% 64.9%;
+
 	/* Accent colors - dark mode */
-	--accent: 217.2 32.6% 17.5%;
-	--accent-foreground: 210 40% 98%;
-	
+	--accent: 240 3.7% 15.9%;
+	--accent-foreground: 240 20% 97%;
+
 	/* Card styles - dark mode */
-	--card: 222.2 84% 4.9%;
-	--card-foreground: 210 40% 98%;
-	
+	--card: 240 5.9% 10%;
+	--card-foreground: 240 20% 97%;
+
 	/* Border styles - dark mode */
-	--border: 217.2 32.6% 17.5%;
-	--input: 217.2 32.6% 17.5%;
-	
+	--border: 240 3.7% 15.9%;
+	--input: 240 3.7% 15.9%;
+
+	/* Ring */
+	--ring: 141.7 76.6% 58%;
+
+	/* Code blocks & inline code */
+	--code-bg: 240 5.9% 3.9%;
+	--code-color: 240 4.8% 94.9%;
+	--inline-code-bg: 240 5.3% 26.1%;
+	--inline-code-color: 240 4.9% 83.9%;
+
 	/* Legacy colors - dark mode adaptations */
-	--black: 210, 220, 240;
-	--gray: 156, 175, 219;
-	--gray-light: 21, 23, 30;
-	--gray-dark: 194, 201, 217;
-	--box-shadow:
-		0 2px 6px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.5),
-		0 16px 32px rgba(0, 0, 0, 0.5);
+	--black: 244, 244, 245;
+	--gray: 161, 161, 170;
+	--gray-light: 39, 39, 42;
+	--gray-dark: 228, 228, 231;
+	--gray-gradient: rgba(24, 24, 27, 0.9);
+	--box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.45);
 }
-@font-face {
-	font-family: 'Atkinson';
-	src: url('/fonts/atkinson-regular.woff') format('woff');
-	font-weight: 400;
-	font-style: normal;
-	font-display: swap;
-}
-@font-face {
-	font-family: 'Atkinson';
-	src: url('/fonts/atkinson-bold.woff') format('woff');
-	font-weight: 700;
-	font-style: normal;
-	font-display: swap;
-}
+
 body {
-	font-family: 'Atkinson', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	font-family: var(--font-sans);
 	margin: 0;
 	padding: 0;
 	text-align: left;
@@ -133,14 +145,18 @@ body {
 	overflow-wrap: break-word;
 	font-size: 16px;
 	line-height: 1.5;
+	letter-spacing: 0.01em;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+	font-feature-settings: 'cv11', 'ss01';
 }
+
 main {
 	width: 100%;
 	margin: 0;
 	padding: 0;
 }
+
 h1,
 h2,
 h3,
@@ -148,40 +164,70 @@ h4,
 h5,
 h6 {
 	margin: 0 0 0.5rem 0;
-	color: rgb(var(--black));
-	line-height: 1.2;
+	color: hsl(var(--foreground));
+	line-height: 1.25;
+	font-weight: 600;
+	letter-spacing: -0.02em;
 }
 h1 {
-	font-size: 3.052em;
+	font-size: 2.5rem;   /* 40px / 48px */
+	line-height: 1.2;
 }
 h2 {
-	font-size: 2.441em;
+	font-size: 1.5rem;   /* 24px / 32px */
 }
 h3 {
-	font-size: 1.953em;
+	font-size: 1.25rem;  /* 20px / 28px */
 }
 h4 {
-	font-size: 1.563em;
+	font-size: 1.125rem;
 }
 h5 {
-	font-size: 1.25em;
+	font-size: 1rem;
 }
+h6 {
+	font-size: 1rem;
+	color: hsl(var(--primary));
+	letter-spacing: -0.005em;
+}
+
 strong,
 b {
-	font-weight: 700;
+	font-weight: 600;
 }
+
 a {
-	color: var(--accent);
+	color: hsl(var(--foreground));
+	text-decoration-thickness: 1px;
+	text-underline-offset: 3px;
 }
 a:hover {
-	color: var(--accent);
+	color: hsl(var(--primary));
 }
+
 p {
 	margin-bottom: 1em;
 }
 .prose p {
-	margin-bottom: 2em;
+	margin-bottom: 1.5em;
+	line-height: 1.75;
+	color: hsl(var(--muted-foreground));
 }
+.prose p strong {
+	color: hsl(var(--foreground));
+}
+.prose a {
+	color: hsl(var(--foreground));
+	font-weight: 500;
+	text-decoration: underline;
+	text-decoration-color: hsl(var(--border));
+	transition: text-decoration-color 0.2s ease, color 0.2s ease;
+}
+.prose a:hover {
+	color: hsl(var(--primary));
+	text-decoration-color: currentColor;
+}
+
 textarea {
 	width: 100%;
 	font-size: 16px;
@@ -189,37 +235,50 @@ textarea {
 input {
 	font-size: 16px;
 }
-table {
-	width: 100%;
-}
+
 img {
 	max-width: 100%;
 	height: auto;
-	border-radius: 8px;
+	border-radius: var(--radius);
 }
+
+/* Code — JetBrains-style mono stack */
 code {
+	font-family: var(--font-mono);
 	padding: 2px 5px;
-	background-color: rgb(var(--gray-light));
-	border-radius: 2px;
+	background-color: hsl(var(--inline-code-bg));
+	color: hsl(var(--inline-code-color));
+	border-radius: 4px;
+	font-size: 0.875em;
 }
+
 pre {
-	padding: 1.5em;
-	border-radius: 8px;
+	font-family: var(--font-mono);
+	background-color: hsl(var(--code-bg));
+	color: hsl(var(--code-color));
+	border-radius: var(--radius);
+	border: 1px solid hsl(var(--border));
 }
+
 pre > code {
 	all: unset;
+	display: block;
+	font-family: var(--font-mono);
 }
+
 blockquote {
-	border-left: 4px solid var(--accent);
-	padding: 0 0 0 20px;
-	margin: 0px;
-	font-size: 1.333em;
+	border-left: 3px solid hsl(var(--primary));
+	padding: 0.5rem 0 0.5rem 1rem;
+	margin: 0 0 1.5rem;
+	font-size: 1em;
+	color: hsl(var(--muted-foreground));
 }
+
 hr {
 	border: none;
-	border-top: 1px solid rgb(var(--gray-light));
+	border-top: 1px solid hsl(var(--border));
 }
-/* Add styles for code blocks and markdown content */
+
 pre, code {
 	overflow-x: auto;
 	white-space: pre-wrap;
@@ -229,9 +288,11 @@ pre, code {
 
 pre {
 	padding: 1rem;
-	border-radius: var(--radius);
-	background-color: hsl(var(--muted));
 	margin: 1rem 0;
+	white-space: pre;
+	word-wrap: normal;
+	font-size: 0.9375rem;
+	line-height: 1.55;
 }
 
 table {
@@ -240,16 +301,17 @@ table {
 	margin: 1rem 0;
 	overflow-x: auto;
 	display: block;
+	font-size: 0.9375rem;
+}
+
+table th {
+	font-weight: 600;
+	color: hsl(var(--foreground));
 }
 
 table th, table td {
-	padding: 0.5rem;
+	padding: 0.5rem 0.75rem;
 	border: 1px solid hsl(var(--border));
-}
-
-img {
-	max-width: 100%;
-	height: auto;
 }
 
 /* Mobile styles */
@@ -260,19 +322,19 @@ img {
 	main {
 		padding: 0.5em;
 	}
-	
+
 	/* Mobile menu styles */
 	body.menu-open {
 		overflow: hidden;
 	}
-	
+
 	/* Improve code block display on mobile */
 	pre {
 		font-size: 14px;
 		padding: 0.75rem;
 		margin: 0.75rem 0;
 	}
-	
+
 	table {
 		font-size: 14px;
 	}
