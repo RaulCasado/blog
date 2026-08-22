@@ -171,10 +171,10 @@ const { lang, t, translatePath } = Astro.props;
 
 	.hero-text h1 {
 		font-size: 1.75rem;
-		font-weight: 700;
+		font-weight: 600;
 		line-height: 1.2;
 		margin: 0;
-		letter-spacing: -0.025em;
+		letter-spacing: -0.02em;
 		word-break: break-word;
 	}
 
@@ -261,7 +261,8 @@ const { lang, t, translatePath } = Astro.props;
 
 	.section-header h2 {
 		font-size: 1.5rem;
-		font-weight: 700;
+		font-weight: 600;
+		letter-spacing: -0.02em;
 		margin: 0 0 0.75rem;
 		word-wrap: break-word;
 	}
@@ -284,9 +285,10 @@ const { lang, t, translatePath } = Astro.props;
 
 	.card {
 		background-color: hsl(var(--card));
-		border-radius: var(--radius);
-		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-		transition: all 0.3s ease;
+		border-radius: var(--radius-lg);
+		border: 1px solid hsl(var(--border));
+		box-shadow: none;
+		transition: border-color 0.2s ease, transform 0.2s ease;
 		height: 100%;
 		width: 100%;
 		overflow: hidden;
@@ -294,8 +296,8 @@ const { lang, t, translatePath } = Astro.props;
 	}
 
 	.card:hover {
-		box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-		transform: translateY(-5px);
+		border-color: hsl(var(--muted-foreground) / 0.4);
+		transform: translateY(-2px);
 	}
 
 	.card-content {

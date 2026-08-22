@@ -86,17 +86,19 @@ const cardImageSizes = '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw
 }
 
 .post-card {
-  background: hsl(var(--background));
-  border-radius: 1.2rem;
-  box-shadow: 0 2px 16px 0 rgba(0,0,0,0.08);
+  background: hsl(var(--card));
+  border-radius: var(--radius-lg);
+  border: 1px solid hsl(var(--border));
+  box-shadow: none;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: box-shadow 0.2s;
+  transition: border-color 0.2s ease, transform 0.2s ease;
 }
 
 .post-card:hover {
-  box-shadow: 0 4px 32px 0 rgba(0,0,0,0.13);
+  border-color: hsl(var(--muted-foreground) / 0.4);
+  transform: translateY(-2px);
 }
 
 .post-image-link {
@@ -147,13 +149,13 @@ const cardImageSizes = '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw
 .back-link {
   display: inline-block;
   margin-bottom: 1.5rem;
-  color: hsl(var(--primary));
+  color: hsl(var(--muted-foreground));
   text-decoration: none;
   font-weight: 500;
   transition: color 0.2s;
 }
 
 .back-link:hover {
-  color: hsl(var(--primary-foreground));
+  color: hsl(var(--primary));
 }
 </style>
