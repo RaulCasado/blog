@@ -8,8 +8,9 @@ const email = 'raul@raulcasado.com';
 ---
 
 <footer>
-	&copy; {today.getFullYear()} Raúl Casado Moreno. All rights reserved.
-	<div class="social-links">
+	<div class="footer-inner">
+		<p class="footer-copy">&copy; {today.getFullYear()} Raúl Casado Moreno. All rights reserved.</p>
+		<div class="social-links">
 		<a href="https://github.com/RaulCasado" target="_blank" rel="noopener noreferrer">
 			<span class="sr-only">Go to Astro's GitHub repo</span>
 			<svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" astro-icon="social/github"
@@ -33,25 +34,52 @@ const email = 'raul@raulcasado.com';
 </a>
 
 	</div>
+	</div>
 </footer>
 <style>
 	footer {
-		padding: 2em 1em 1em;
-		background: linear-gradient(var(--gray-gradient)) no-repeat;
-		color: rgb(var(--gray));
+		padding: 1.5rem 1rem;
+		margin-top: 3rem;
+		border-top: 1px solid hsl(var(--border));
+		background-color: hsl(var(--card));
+		color: hsl(var(--muted-foreground));
 		text-align: center;
+	}
+	.footer-inner {
+		max-width: 72rem;
+		margin: 0 auto;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.75rem;
+	}
+	.footer-copy {
+		margin: 0;
+		font-size: 0.875rem;
 	}
 	.social-links {
 		display: flex;
 		justify-content: center;
-		gap: 1em;
-		margin-top: 1em;
+		gap: 1.25em;
 	}
 	.social-links a {
+		display: inline-flex;
+		align-items: center;
 		text-decoration: none;
-		color: rgb(var(--gray));
+		color: hsl(var(--muted-foreground));
+		transition: color 0.2s ease;
 	}
 	.social-links a:hover {
-		color: rgb(var(--gray-dark));
+		color: hsl(var(--foreground));
+	}
+
+	@media (min-width: 768px) {
+		footer {
+			padding: 1.25rem 2rem;
+		}
+		.footer-inner {
+			flex-direction: row;
+			justify-content: space-between;
+		}
 	}
 </style>

@@ -13,30 +13,33 @@ const isActive = href === pathname || href === '/' + (subpath?.[0] || '');
 	<slot />
 </a>
 <style>
+a {
+	display: inline-block;
+	text-decoration: none;
+	transition: color 0.2s ease;
+}
+a.active {
+	font-weight: 600;
+	color: hsl(var(--foreground));
+}
+
+@media (max-width: 768px) {
 	a {
-		display: inline-block;
-		text-decoration: none;
-		transition: all 0.3s ease;
+		display: block;
+		text-align: center;
+		padding: 0.75rem 1rem;
+		border-radius: var(--radius);
+		color: hsl(var(--muted-foreground));
 	}
+
+	a:hover, a:focus {
+		background-color: hsl(var(--accent));
+		color: hsl(var(--foreground));
+	}
+
 	a.active {
-		font-weight: bolder;
-		text-decoration: underline;
+		background-color: hsl(var(--secondary));
+		color: hsl(var(--foreground));
 	}
-	
-	@media (max-width: 768px) {
-		a {
-			display: block;
-			text-align: center;
-			padding: 0.75rem;
-			border-radius: 0.25rem;
-		}
-		
-		a:hover, a:focus {
-			background-color: hsl(var(--accent));
-		}
-		
-		a.active {
-			background-color: hsl(var(--secondary));
-		}
-	}
+}
 </style>
