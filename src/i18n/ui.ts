@@ -164,6 +164,10 @@ export const translations = {
         'blog.previous': '← Previous',
         'blog.next': 'Next →',
         'blog.page': 'Page',
+        'blog.allPosts': '← ALL POSTS',
+        'blog.shareOn': 'SHARE ON:',
+        'blog.by': 'by',
+        'blog.minRead': 'MIN READ',
         // Uses page
         'uses.title': 'My Setup',
         'uses.description': 'Hardware, software, and gear I use daily.',
@@ -360,11 +364,14 @@ export const translations = {
         'blog.noResultsDescription': 'No hay artículos que coincidan con tu búsqueda. Intenta con otros términos.',
         'blog.clearSearch': 'Limpiar búsqueda',
         'blog.taggedWith': 'Posts etiquetados con',
-        'blog.backToPosts': '← Volver a todos los posts',
+'blog.backToPosts': '← Volver a todos los posts',
         'blog.previous': '← Anterior',
         'blog.next': 'Siguiente →',
         'blog.page': 'Página',
-
+        'blog.allPosts': '← TODOS LOS POSTS',
+        'blog.shareOn': 'COMPARTIR EN:',
+        'blog.by': 'por',
+        'blog.minRead': 'MIN LECTURA',
         // Página Uses
         'uses.title': 'Mi Setup',
         'uses.description': 'Hardware, software y herramientas que uso a diario.',

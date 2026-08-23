@@ -5,8 +5,9 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import TableOfContents from '../components/TableOfContents.astro';
-import SocialShare from '../components/SocialShare.astro';
+import SocialShareCompact from '../components/SocialShareCompact.astro';
 import { getLangFromUrl } from '../i18n/utils';
+import { getReadingTime } from '../utils/posts';
 import { Picture } from 'astro:assets';
 
 type Props = CollectionEntry<'blog'>['data'] & {
@@ -15,13 +16,38 @@ type Props = CollectionEntry<'blog'>['data'] & {
     slug: string;
     text: string;
   }[];
+  body?: string;
 };
 
-const { title, description, pubDate, updatedDate, heroImage, tags = [], headings = [] } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, tags = [], headings = [], body } = Astro.props;
 const currentPageUrl = Astro.url.href;
 const lang = getLangFromUrl(Astro.url);
-const copyText = lang === 'en' ? 'Copy' : 'Copiar';
-const copiedText = lang === 'en' ? 'Copied!' : '¡Copiado!';
+const t = (key: string) => {
+  const translations: Record<string, Record<string, string>> = {
+    en: {
+      'blog.allPosts': '← ALL POSTS',
+      'blog.shareOn': 'SHARE ON:',
+      'blog.by': 'by',
+      'blog.minRead': 'MIN READ',
+    },
+    es: {
+      'blog.allPosts': '← TODOS LOS POSTS',
+      'blog.shareOn': 'COMPARTIR EN:',
+      'blog.by': 'por',
+      'blog.minRead': 'MIN LECTURA',
+    },
+  };
+  return translations[lang]?.[key] || key;
+};
+
+const readingTime = getReadingTime({ body: body ?? '' });
+const formattedDate = pubDate.toLocaleDateString(lang === 'en' ? 'en-US' : 'es-ES', {
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric',
+}).toUpperCase();
+
+const firstTag = tags[0]?.toUpperCase() ?? '';
 ---
 
 <html lang={lang}>
@@ -46,85 +72,155 @@ const copiedText = lang === 'en' ? 'Copied!' : '¡Copiado!';
 				margin: 0;
 				padding: 0;
 			}
-			.hero-image {
-				width: 100%;
-				padding: 0 0.75rem;
-				margin: 0.75rem 0;
-			}
-			.hero-image img {
-				display: block;
+
+			/* Post Header */
+			.post-header {
+				max-width: 720px;
 				margin: 0 auto;
-				border-radius: var(--radius-lg);
-				box-shadow: var(--box-shadow);
-				max-width: 100%;
-				height: auto;
-				object-fit: cover;
-				aspect-ratio: 2/1;
+				padding: 0 1rem;
 			}
-			.blog-content-wrapper {
-				display: grid;
-				grid-template-columns: 1fr;
-				gap: 0.75rem;
-				max-width: 100%;
-				margin: 0.75rem auto 0;
-				padding: 0 0.5rem;
-				width: 100%;
-				overflow-x: hidden;
-			}
-			
-			.toc-placeholder {
-				margin-top: 0.5rem;
-				width: 100%;
-				order: 1;
-			}
-			
-			.prose {
-				width: 100%;
-				color: hsl(var(--foreground));
-				font-size: 0.9375rem;
-				line-height: 1.6;
-				overflow-x: hidden;
-				word-wrap: break-word;
-				hyphens: auto;
-				order: 0;
-			}
-			
-			.blog-content-wrapper .prose {
-				max-width: 100%;
-				margin: auto;
-				padding: 0.5rem;
-			}
-			
-			.standard-page {
-				max-width: 100%;
-				margin: 0 auto;
-				padding: 0 0.75rem;
-			}
-			.title {
+
+			.post-header-top {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
 				margin-bottom: 1.5rem;
-				padding: 0.5em 0 0;
-				width: 100%;
+				gap: 1rem;
+				flex-wrap: wrap;
 			}
-			.title h1 {
-				margin: 0 0 0.5rem 0;
-				font-size: 1.75rem;
-				line-height: 1.25;
+
+			.breadcrumb-link {
+				font-size: 0.75rem;
 				font-weight: 600;
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
+				color: hsl(var(--muted-foreground));
+				text-decoration: none;
+				transition: color 0.2s ease;
+				white-space: nowrap;
+			}
+
+			.breadcrumb-link:hover {
+				color: hsl(var(--primary));
+			}
+
+			.post-meta-top {
+				display: flex;
+				align-items: center;
+				gap: 1rem;
+				font-size: 0.8125rem;
+				color: hsl(var(--muted-foreground));
+				white-space: nowrap;
+			}
+
+			.post-meta-divider {
+				color: hsl(var(--border));
+			}
+
+			.post-title {
+				font-size: 2.25rem;
+				line-height: 1.2;
+				font-weight: 700;
 				letter-spacing: -0.02em;
 				color: hsl(var(--foreground));
+				margin: 0 0 1.5rem 0;
 				word-break: break-word;
 				hyphens: auto;
 			}
-			.title hr {
-				margin-top: 1.5rem;
+
+			.post-byline {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				gap: 1rem;
+				flex-wrap: wrap;
+				padding-bottom: 1.5rem;
+				border-bottom: 1px solid hsl(var(--border) / 0.5);
+				margin-bottom: 2rem;
 			}
-			.date {
-				margin-bottom: 0.75rem;
+
+			.byline-left {
+				display: flex;
+				align-items: center;
+				gap: 0.75rem;
+				flex-wrap: wrap;
+			}
+
+			.byline-category {
+				font-size: 0.75rem;
+				font-weight: 600;
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
+				color: hsl(var(--primary));
+			}
+
+			.byline-author {
+				font-size: 0.8125rem;
 				color: hsl(var(--muted-foreground));
-				font-size: 0.875rem;
 			}
-			.last-updated-on {
-				font-style: italic;
+
+			.byline-divider {
+				color: hsl(var(--border));
+			}
+
+			.byline-right {
+				display: flex;
+				align-items: center;
+				gap: 0.75rem;
+			}
+
+			.share-label {
+				font-size: 0.625rem;
+				font-weight: 600;
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+				color: hsl(var(--muted-foreground));
+				white-space: nowrap;
+			}
+
+			/* Hero Image */
+			.hero-image {
+				width: 100%;
+				max-width: 100%;
+				margin: 0 auto 3rem;
+			}
+
+			.hero-image img {
+				display: block;
+				width: 100%;
+				height: auto;
+				border-radius: var(--radius-lg);
+				box-shadow: var(--box-shadow);
+				object-fit: cover;
+				aspect-ratio: 2/1;
+			}
+
+			/* Content Wrapper */
+			.blog-content-wrapper {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 2rem;
+				max-width: 1200px;
+				margin: 0 auto;
+				padding: 0 1rem;
+			}
+
+			.toc-placeholder {
+				width: 100%;
+				order: 0;
+			}
+
+			.prose {
+				width: 100%;
+				color: hsl(var(--foreground));
+				font-size: 1.0625rem;
+				line-height: 1.75;
+				overflow-x: hidden;
+				word-wrap: break-word;
+				hyphens: auto;
+				order: 1;
+				max-width: 720px;
+				margin: 0 auto;
 			}
 
 			.prose :global(pre) {
@@ -137,7 +233,7 @@ const copiedText = lang === 'en' ? 'Copied!' : '¡Copiado!';
 				padding: 1rem;
 				white-space: pre;
 				word-wrap: normal;
-				margin: 1rem 0;
+				margin: 1.5rem 0;
 				max-width: 100%;
 				font-size: 0.9375rem;
 				line-height: 1.55;
@@ -179,141 +275,187 @@ const copiedText = lang === 'en' ? 'Copied!' : '¡Copiado!';
 				white-space: pre-wrap;
 				word-break: break-word;
 				font-size: 0.875em;
+				background-color: hsl(var(--muted) / 0.5);
+				padding: 0.125em 0.375em;
+				border-radius: 0.25rem;
 			}
-			
+
+			.prose :global(pre code) {
+				background-color: transparent;
+				padding: 0;
+				font-size: inherit;
+			}
+
 			.prose :global(p) {
-				margin-bottom: 1rem;
+				margin-bottom: 1.25rem;
 				width: 100%;
 			}
-			
+
 			.prose :global(img) {
 				max-width: 100%;
 				height: auto;
-				margin: 1rem auto;
+				margin: 1.5rem auto;
 				display: block;
+				border-radius: var(--radius);
 			}
-			
+
 			.prose :global(table) {
 				width: 100%;
 				border-collapse: collapse;
-				margin: 1rem 0;
+				margin: 1.5rem 0;
 				font-size: 0.875rem;
 				overflow-x: auto;
 				display: block;
 			}
-			
+
 			.prose :global(table th),
 			.prose :global(table td) {
 				border: 1px solid hsl(var(--border));
-				padding: 0.5rem;
+				padding: 0.75rem;
 				text-align: left;
 			}
-			
+
 			.prose :global(blockquote) {
 				border-left: 4px solid hsl(var(--primary));
-				padding-left: 1rem;
+				padding-left: 1.5rem;
 				margin-left: 0;
 				font-style: italic;
-			}
-			
-			.prose :global(table) {
-				display: block;
-				overflow-x: auto;
-				white-space: nowrap;
-				-webkit-overflow-scrolling: touch;
-			}
-			
-			@media (min-width: 480px) {
-				.title h1 {
-					font-size: 2rem;
-				}
-
-				.hero-image {
-					padding: 0 1rem;
-				}
-
-				.prose {
-					font-size: 1rem;
-				}
+				color: hsl(var(--muted-foreground));
 			}
 
+			.prose :global(h2) {
+				font-size: 1.5rem;
+				font-weight: 700;
+				margin-top: 3rem;
+				margin-bottom: 1rem;
+				line-height: 1.3;
+			}
+
+			.prose :global(h3) {
+				font-size: 1.125rem;
+				font-weight: 600;
+				margin-top: 2.5rem;
+				margin-bottom: 0.75rem;
+				line-height: 1.4;
+			}
+
+			.prose :global(h4) {
+				font-size: 1rem;
+				font-weight: 600;
+				margin-top: 2rem;
+				margin-bottom: 0.5rem;
+			}
+
+			.prose :global(ul), .prose :global(ol) {
+				margin: 1rem 0;
+				padding-left: 1.5rem;
+			}
+
+			.prose :global(li) {
+				margin-bottom: 0.5rem;
+			}
+
+			.prose :global(a) {
+				color: hsl(var(--primary));
+				text-decoration: underline;
+				text-underline-offset: 2px;
+			}
+
+			.prose :global(a:hover) {
+				color: hsl(var(--primary) / 0.8);
+			}
+
+			.prose :global(strong) {
+				font-weight: 600;
+			}
+
+			.prose :global(hr) {
+				border: none;
+				border-top: 1px solid hsl(var(--border));
+				margin: 3rem 0;
+			}
+
+			/* Comments */
+			.comments-section {
+				margin-top: 4rem;
+				padding-top: 2rem;
+				border-top: 1px solid hsl(var(--border));
+				max-width: 720px;
+				margin-left: auto;
+				margin-right: auto;
+			}
+
+			/* Responsive */
 			@media (min-width: 640px) {
-				.title h1 {
-					font-size: 2.25rem;
-				}
-				
-				.hero-image {
+				.post-header {
 					padding: 0 1.5rem;
 				}
-				
+
+				.post-title {
+					font-size: 2.75rem;
+				}
+
+				.hero-image {
+					padding: 0;
+				}
+
 				.blog-content-wrapper {
-					padding: 0 1rem;
-					gap: 1.25rem;
+					padding: 0 1.5rem;
 				}
-				
-				.blog-content-wrapper .prose {
-					padding: 0.75rem;
-				}
-				
+
 				.prose {
-					font-size: 1.0625rem;
-				}
-				
-				.prose :global(table) {
-					white-space: normal;
+					font-size: 1.125rem;
 				}
 			}
-			
+
 			@media (min-width: 768px) {
-				.blog-content-wrapper {
+				.post-header {
 					max-width: 90%;
-					margin: 1.5rem auto 0;
-					padding: 0 1.5rem;
 				}
-				
-				.blog-content-wrapper .prose {
-					max-width: 95%;
-					padding: 1em;
+
+				.post-title {
+					font-size: 3rem;
 				}
-				
-				.title h1 {
-					font-size: 2.25rem;
+
+				.blog-content-wrapper {
+					max-width: 1100px;
 				}
-				
+			}
+
+			@media (min-width: 1024px) {
+				.post-header {
+					max-width: 720px;
+					padding: 0;
+				}
+
+				.post-title {
+					font-size: 3.5rem;
+					line-height: 1.15;
+				}
+
+				.blog-content-wrapper {
+					grid-template-columns: 280px 1fr;
+					align-items: start;
+					gap: 3rem;
+					max-width: 1280px;
+					padding: 0 2rem;
+				}
+
 				.toc-placeholder {
+					position: static;
 					order: 0;
 				}
-				
+
 				.prose {
 					order: 1;
 				}
 			}
-			
-			@media (min-width: 1024px) {
+
+			@media (min-width: 1400px) {
 				.blog-content-wrapper {
-					grid-template-columns: 250px 1fr;
-					align-items: start;
-					max-width: 1200px;
-					gap: 2rem;
-					margin: 2rem auto 0;
-					overflow: visible;
-				}
-				
-				.blog-content-wrapper .prose {
-					max-width: 720px;
-				}
-				
-				.toc-placeholder {
-					position: sticky;
-					top: 2rem;
-					height: fit-content;
-					max-height: calc(100vh - 4rem);
-					overflow-y: auto;
-					align-self: start;
-				}
-				
-				.title h1 {
-					font-size: 2.5rem;
+					grid-template-columns: 340px 1fr;
+					max-width: 1400px;
+					gap: 4rem;
 				}
 			}
 		</style>
@@ -323,8 +465,34 @@ const copiedText = lang === 'en' ? 'Copied!' : '¡Copiado!';
 		<Header />
 		<main>
 			<article>
-				<div class="hero-image">
-					{heroImage && (
+				<header class="post-header">
+					<div class="post-header-top">
+						<a href={`/${lang}/blog`} class="breadcrumb-link">
+							{t('blog.allPosts')}
+						</a>
+						<div class="post-meta-top">
+							<time datetime={pubDate.toISOString()}>{formattedDate}</time>
+							<span class="post-meta-divider">•</span>
+							<span>{readingTime} {t('blog.minRead')}</span>
+						</div>
+					</div>
+
+					<h1 class="post-title">{title}</h1>
+
+					<div class="post-byline">
+						<div class="byline-left">
+							{firstTag && <span class="byline-category">{firstTag}</span>}
+							{firstTag && <span class="byline-divider">•</span>}
+							<span class="byline-author">{t('blog.by')} Raúl Casado</span>
+						</div>
+						<div class="byline-right">
+							<SocialShareCompact url={currentPageUrl} title={title} description={description} lang={lang} />
+						</div>
+					</div>
+				</header>
+
+				{heroImage && (
+					<div class="hero-image">
 						<Picture
 							width={1020}
 							height={510}
@@ -337,116 +505,60 @@ const copiedText = lang === 'en' ? 'Copied!' : '¡Copiado!';
 							quality={82}
 							loading="eager"
 						/>
-					)}
-				</div>
-				
-				{headings && headings.length > 0 ? (
-					<div class="blog-content-wrapper">
-						<div class="toc-placeholder">
-							<TableOfContents title="Tabla de contenidos" headings={headings} />
-						</div>
-						<div class="prose">
-							<div class="title">
-								<div class="date">
-									<FormattedDate date={pubDate} />
-									{
-										updatedDate && (
-											<div class="last-updated-on">
-												Última actualización <FormattedDate date={updatedDate} />
-											</div>
-										)
-									}
-								</div>
-								<h1>{title}</h1>
-								<hr />
-							</div>
-							<slot />
-
-                            <SocialShare url={currentPageUrl} title={title} description={description} lang={lang} />
-
-                            <!-- Comments section -->
-                            <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid hsl(var(--border));">
-                                <script src="https://giscus.app/client.js"
-                                        data-repo="RaulCasado/blog"
-                                        data-repo-id="R_kgDOOseBOw"
-                                        data-category="General"
-                                        data-category-id="DIC_kwDOOseBO84CvjDa"
-                                        data-mapping="pathname"
-                                        data-strict="0"
-                                        data-reactions-enabled="1"
-                                        data-emit-metadata="0"
-                                        data-input-position="bottom"
-                                        data-theme="preferred_color_scheme"
-                                        data-lang="es"
-                                        data-loading="lazy"
-                                        crossorigin="anonymous"
-                                        async>
-                                </script>
-                            </div>
-						</div>
-					</div>
-				) : (
-					<div class="prose standard-page">
-						<div class="title">
-							{pubDate && (
-								<div class="date">
-									<FormattedDate date={pubDate} />
-									{
-										updatedDate && (
-											<div class="last-updated-on">
-												Última actualización <FormattedDate date={updatedDate} />
-											</div>
-										)
-									}
-								</div>
-							)}
-							<h1>{title}</h1>
-							{title && <hr />}
-						</div>
-						<slot />
-
-                        <!-- Comments section -->
-                        <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid hsl(var(--border));">
-                            <script src="https://giscus.app/client.js"
-                                    data-repo="RaulCasado/blog"
-                                    data-repo-id="R_kgDOOseBOw"
-                                    data-category="General"
-                                    data-category-id="DIC_kwDOOseBO84CvjDa"
-                                    data-mapping="pathname"
-                                    data-strict="0"
-                                    data-reactions-enabled="1"
-                                    data-emit-metadata="0"
-                                    data-input-position="bottom"
-                                    data-theme="preferred_color_scheme"
-                                    data-lang="es"
-                                    data-loading="lazy"
-                                    crossorigin="anonymous"
-                                    async>
-                            </script>
-                        </div>
 					</div>
 				)}
+
+				<div class="blog-content-wrapper">
+					{headings && headings.length > 0 ? (
+						<div class="toc-placeholder">
+							<TableOfContents title="ON THIS PAGE" headings={headings} />
+						</div>
+					) : null}
+
+					<div class="prose">
+						<slot />
+
+						<div class="comments-section">
+							<script src="https://giscus.app/client.js"
+									data-repo="RaulCasado/blog"
+									data-repo-id="R_kgDOOseBOw"
+									data-category="General"
+									data-category-id="DIC_kwDOOseBO84CvjDa"
+									data-mapping="pathname"
+									data-strict="0"
+									data-reactions-enabled="1"
+									data-emit-metadata="0"
+									data-input-position="bottom"
+									data-theme="preferred_color_scheme"
+									data-lang={lang === 'en' ? 'en' : 'es'}
+									data-loading="lazy"
+									crossorigin="anonymous"
+									async>
+							</script>
+						</div>
+					</div>
+				</div>
 			</article>
 		</main>
 		<Footer />
-		<script define:vars={{ copyText, copiedText }}>
+		<script define:vars={{ copyText: lang === 'en' ? 'Copy' : 'Copiar', copiedText: lang === 'en' ? 'Copied!' : '¡Copiado!' }}>
 			const codeBlocks = document.querySelectorAll("pre");
 
 			codeBlocks.forEach(block => {
 				let button = document.createElement("button");
 				button.className = "copy-code-btn";
 				button.textContent = copyText;
-				
+
 				block.appendChild(button);
 
 				button.addEventListener("click", async () => {
 					const code = block.querySelector("code")?.innerText || block.textContent;
-					
+
 					await navigator.clipboard.writeText(code);
-					
+
 					button.textContent = copiedText;
 					button.classList.add("copied");
-					
+
 					setTimeout(() => {
 						button.textContent = copyText;
 						button.classList.remove("copied");

@@ -3,15 +3,9 @@ import { Picture } from 'astro:assets';
 import FormattedDate from '../FormattedDate.astro';
 import TagFilter from '../TagFilter.astro';
 import fallbackHeroImage from '../../assets/blog/blog-placeholder-1.jpg';
+import { getReadingTime } from '../../utils/posts';
 
 const { lang, posts, allTags, t, currentPage = 1, totalPages = 1 } = Astro.props;
-
-function getReadingTime(post) {
-	const wordsPerMinute = 200;
-	if (!post.body) return 1;
-	const words = post.body.split(/\s+/).length;
-	return Math.ceil(words / wordsPerMinute);
-}
 
 const postUrl = (post) => `/${lang}/blog/${post.id.replace(`${lang}/`, '').replace(/\.mdx?$/, '')}/`;
 const pageUrl = (n) => (n <= 1 ? `/${lang}/blog` : `/${lang}/blog/page/${n}`);

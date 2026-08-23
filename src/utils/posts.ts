@@ -1,8 +1,15 @@
 import type { CollectionEntry } from 'astro:content';
 
 export const PAGE_SIZE = 9;
+export const WORDS_PER_MINUTE = 200;
 
 type BlogPost = CollectionEntry<'blog'>;
+
+export function getReadingTime(post: BlogPost | { body?: string }): number {
+  if (!post.body) return 1;
+  const words = post.body.split(/\s+/).length;
+  return Math.ceil(words / WORDS_PER_MINUTE);
+}
 
 /**
  * Returns the posts for a given language, sorted with featured posts first
