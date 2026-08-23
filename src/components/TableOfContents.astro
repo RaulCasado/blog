@@ -145,12 +145,10 @@ const hasHeadings = filteredHeadings.length > 0;
 
 <style>
   .toc-container {
-    position: fixed;
-    top: 64px;
-    left: calc(50% + 260px);
-    width: 340px;
-    height: calc(100vh - 64px);
-    padding-top: 3rem;
+    position: sticky;
+    top: 5rem;
+    width: 100%;
+    height: calc(100vh - 6rem);
     z-index: 40;
     pointer-events: none;
   }
@@ -300,17 +298,4 @@ const hasHeadings = filteredHeadings.length > 0;
     }
   }
 
-  @media (min-width: 1024px) and (max-width: 1399px) {
-    .toc-container {
-      left: calc(50% + 200px);
-      width: 280px;
-    }
-  }
-
-  @media (min-width: 1400px) and (max-width: 1599px) {
-    .toc-container {
-      left: calc(50% + 240px);
-      width: 320px;
-    }
-  }
 </style>

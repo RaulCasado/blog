@@ -8,13 +8,13 @@
 /* Add theme transition for smoother theme switching */
 html {
 	transition: background-color 0.3s ease, color 0.3s ease;
-	overflow-x: hidden;
+	overflow-x: clip;
 	width: 100%;
 	max-width: 100%;
 }
 
 body {
-	overflow-x: hidden;
+	overflow-x: clip;
 	width: 100%;
 	max-width: 100%;
 }

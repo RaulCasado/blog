@@ -63,9 +63,6 @@ const firstTag = tags[0]?.toUpperCase() ?? '';
 			tags={tags}
 		/>
 		<style>
-			html {
-				overflow: visible;
-			}
 			main {
 				width: 100%;
 				max-width: 100%;
@@ -444,6 +441,7 @@ const firstTag = tags[0]?.toUpperCase() ?? '';
 				.toc-placeholder {
 					position: static;
 					order: 0;
+					align-self: stretch;
 				}
 
 				.prose {
@@ -511,7 +509,7 @@ const firstTag = tags[0]?.toUpperCase() ?? '';
 				<div class="blog-content-wrapper">
 					{headings && headings.length > 0 ? (
 						<div class="toc-placeholder">
-							<TableOfContents title="ON THIS PAGE" headings={headings} />
+							<TableOfContents title={lang === 'en' ? 'ON THIS PAGE' : 'EN ESTA PÁGINA'} headings={headings} />
 						</div>
 					) : null}
 
