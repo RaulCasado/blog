@@ -3,7 +3,6 @@ import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
 import TableOfContents from '../components/TableOfContents.astro';
 import SocialShareCompact from '../components/SocialShareCompact.astro';
 import { getLangFromUrl } from '../i18n/utils';
@@ -11,43 +10,49 @@ import { getReadingTime } from '../utils/posts';
 import { Picture } from 'astro:assets';
 
 type Props = CollectionEntry<'blog'>['data'] & {
-  headings?: {
-    depth: number;
-    slug: string;
-    text: string;
-  }[];
-  body?: string;
+	headings?: {
+		depth: number;
+		slug: string;
+		text: string;
+	}[];
+	body?: string;
 };
 
-const { title, description, pubDate, updatedDate, heroImage, tags = [], headings = [], body } = Astro.props;
+const {
+	title,
+	description,
+	pubDate,
+	updatedDate,
+	heroImage,
+	heroImageAlt,
+	author = 'Raúl Casado',
+	tags = [],
+	headings = [],
+	body,
+} = Astro.props;
+
 const currentPageUrl = Astro.url.href;
 const lang = getLangFromUrl(Astro.url);
-const t = (key: string) => {
-  const translations: Record<string, Record<string, string>> = {
-    en: {
-      'blog.allPosts': '← ALL POSTS',
-      'blog.shareOn': 'SHARE ON:',
-      'blog.by': 'by',
-      'blog.minRead': 'MIN READ',
-    },
-    es: {
-      'blog.allPosts': '← TODOS LOS POSTS',
-      'blog.shareOn': 'COMPARTIR EN:',
-      'blog.by': 'por',
-      'blog.minRead': 'MIN LECTURA',
-    },
-  };
-  return translations[lang]?.[key] || key;
+const isEnglish = lang === 'en';
+
+const copy = {
+	allPosts: isEnglish ? 'All posts' : 'Todos los posts',
+	minRead: isEnglish ? 'min read' : 'min lectura',
+	by: isEnglish ? 'by' : 'por',
+	onThisPage: isEnglish ? 'On this page' : 'En esta página',
+	updated: isEnglish ? 'Updated' : 'Actualizado',
+	copy: isEnglish ? 'Copy' : 'Copiar',
+	copied: isEnglish ? 'Copied!' : '¡Copiado!',
 };
 
 const readingTime = getReadingTime({ body: body ?? '' });
-const formattedDate = pubDate.toLocaleDateString(lang === 'en' ? 'en-US' : 'es-ES', {
-  month: 'short',
-  day: 'numeric',
-  year: 'numeric',
-}).toUpperCase();
+const dateFormat: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric', year: 'numeric' };
+const locale = isEnglish ? 'en-US' : 'es-ES';
+const formattedDate = pubDate.toLocaleDateString(locale, dateFormat);
+const formattedUpdated = updatedDate?.toLocaleDateString(locale, dateFormat);
 
-const firstTag = tags[0]?.toUpperCase() ?? '';
+const category = tags[0];
+const hasToc = headings.length > 0;
 ---
 
 <html lang={lang}>
@@ -62,507 +67,459 @@ const firstTag = tags[0]?.toUpperCase() ?? '';
 			updatedDate={updatedDate}
 			tags={tags}
 		/>
-		<style>
-			main {
-				width: 100%;
-				max-width: 100%;
-				margin: 0;
-				padding: 0;
+	<style>
+		/* ── Layout ────────────────────────────────────────────────
+		   Article column and TOC column sit inside one centred shell,
+		   pushed apart so the TOC hugs the right edge (refine.dev). */
+		.post-shell {
+			display: grid;
+			grid-template-columns: minmax(0, var(--post-col));
+			justify-content: center;
+			width: 100%;
+			max-width: var(--post-max);
+			margin: 0 auto;
+			padding: 2rem 1rem 4rem;
+		}
+
+		.post-column {
+			min-width: 0;
+		}
+
+		/* Single column: the article's children join the shell grid so the
+		   TOC card can sit between the hero and the body copy. */
+		@media (max-width: 1023px) {
+			.post-column {
+				display: contents;
 			}
 
-			/* Post Header */
-			.post-header {
-				max-width: 720px;
-				margin: 0 auto;
-				padding: 0 1rem;
-			}
+			.post-header { order: 1; }
+			.post-hero { order: 2; }
+			.post-aside { order: 3; }
+			.prose { order: 4; }
+			.post-updated { order: 4; }
+			.post-comments { order: 5; }
+		}
 
-			.post-header-top {
-				display: flex;
+		@media (min-width: 1024px) {
+			.post-shell {
+				grid-template-columns: minmax(0, var(--post-col)) var(--toc-col);
 				justify-content: space-between;
-				align-items: center;
-				margin-bottom: 1.5rem;
-				gap: 1rem;
-				flex-wrap: wrap;
+				gap: 3rem;
+				padding: 2.5rem 1.5rem 5rem;
 			}
 
-			.breadcrumb-link {
-				font-size: 0.75rem;
-				font-weight: 600;
-				text-transform: uppercase;
-				letter-spacing: 0.05em;
-				color: hsl(var(--muted-foreground));
-				text-decoration: none;
-				transition: color 0.2s ease;
-				white-space: nowrap;
+			.post-aside {
+				/* The sticky child measures its travel against this column,
+				   so it has to span the full article height. */
+				align-self: stretch;
 			}
+		}
 
-			.breadcrumb-link:hover {
-				color: hsl(var(--primary));
-			}
+		/* ── Post header ───────────────────────────────────────── */
+		.post-header-row {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			justify-content: space-between;
+			gap: 1rem;
+		}
 
-			.post-meta-top {
-				display: flex;
-				align-items: center;
-				gap: 1rem;
-				font-size: 0.8125rem;
-				color: hsl(var(--muted-foreground));
-				white-space: nowrap;
-			}
+		.eyebrow {
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+			font-size: var(--eyebrow-size);
+			font-weight: 600;
+			line-height: 1.6;
+			text-transform: uppercase;
+			letter-spacing: var(--eyebrow-tracking);
+			color: hsl(var(--muted-foreground));
+		}
 
-			.post-meta-divider {
-				color: hsl(var(--border));
-			}
+		.eyebrow-link {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.375rem;
+			color: inherit;
+			text-decoration: none;
+			transition: color 0.2s ease;
+		}
 
+		.eyebrow-link:hover {
+			color: hsl(var(--foreground));
+		}
+
+		.dot {
+			width: 3px;
+			height: 3px;
+			border-radius: var(--pill-radius);
+			background-color: currentColor;
+			opacity: 0.6;
+		}
+
+		.post-title {
+			margin: 1.5rem 0 0;
+			font-size: 1.875rem;
+			font-weight: 600;
+			line-height: 1.2;
+			letter-spacing: -0.02em;
+			color: hsl(var(--prose-heading));
+			overflow-wrap: break-word;
+		}
+
+		.post-byline {
+			margin-top: 1.25rem;
+		}
+
+		.byline-left .eyebrow-link {
+			color: hsl(var(--primary));
+		}
+
+		.post-hero {
+			margin: 2rem 0 0;
+		}
+
+		.post-hero :global(img) {
+			display: block;
+			width: 100%;
+			height: auto;
+			aspect-ratio: 16 / 9;
+			object-fit: cover;
+			border-radius: var(--radius-xl);
+		}
+
+		.post-updated {
+			margin: 1.5rem 0 0;
+			font-size: 0.8125rem;
+			font-style: italic;
+			color: hsl(var(--muted-foreground));
+		}
+
+		@media (min-width: 640px) {
 			.post-title {
 				font-size: 2.25rem;
+			}
+		}
+
+		@media (min-width: 1024px) {
+			.post-title {
+				font-size: 2.5rem;
 				line-height: 1.2;
-				font-weight: 700;
-				letter-spacing: -0.02em;
-				color: hsl(var(--foreground));
-				margin: 0 0 1.5rem 0;
-				word-break: break-word;
-				hyphens: auto;
 			}
+		}
 
-			.post-byline {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				gap: 1rem;
-				flex-wrap: wrap;
-				padding-bottom: 1.5rem;
-				border-bottom: 1px solid hsl(var(--border) / 0.5);
-				margin-bottom: 2rem;
-			}
+		/* ── Prose ─────────────────────────────────────────────── */
+		.prose {
+			margin-top: 2.5rem;
+			font-size: 1rem;
+			line-height: 1.6;
+			color: hsl(var(--prose-text));
+			overflow-wrap: break-word;
+		}
 
-			.byline-left {
-				display: flex;
-				align-items: center;
-				gap: 0.75rem;
-				flex-wrap: wrap;
-			}
+		.prose :global(h2),
+		.prose :global(h3),
+		.prose :global(h4) {
+			color: hsl(var(--prose-heading));
+			font-weight: 600;
+			letter-spacing: -0.01em;
+			scroll-margin-top: calc(var(--header-h) + 1.5rem);
+		}
 
-			.byline-category {
-				font-size: 0.75rem;
-				font-weight: 600;
-				text-transform: uppercase;
-				letter-spacing: 0.05em;
-				color: hsl(var(--primary));
-			}
+		.prose :global(h2) {
+			margin: 2.5rem 0 1.25rem;
+			font-size: 1.5rem;
+			line-height: 1.33;
+		}
 
-			.byline-author {
-				font-size: 0.8125rem;
-				color: hsl(var(--muted-foreground));
-			}
+		.prose :global(h3) {
+			margin: 1.875rem 0 1.25rem;
+			font-size: 1.25rem;
+			line-height: 1.4;
+		}
 
-			.byline-divider {
-				color: hsl(var(--border));
-			}
+		.prose :global(h4) {
+			margin: 1.5rem 0 0.75rem;
+			font-size: 1.0625rem;
+			line-height: 1.5;
+		}
 
-			.byline-right {
-				display: flex;
-				align-items: center;
-				gap: 0.75rem;
-			}
+		.prose :global(p) {
+			margin: 0 0 1.25rem;
+		}
 
-			.share-label {
-				font-size: 0.625rem;
-				font-weight: 600;
-				text-transform: uppercase;
-				letter-spacing: 0.1em;
-				color: hsl(var(--muted-foreground));
-				white-space: nowrap;
-			}
+		.prose :global(ul),
+		.prose :global(ol) {
+			margin: 1.25rem 0;
+			padding-left: 1.25rem;
+		}
 
-			/* Hero Image */
-			.hero-image {
-				width: 100%;
-				max-width: 100%;
-				margin: 0 auto 3rem;
-			}
+		.prose :global(li) {
+			margin-bottom: 0.5rem;
+		}
 
-			.hero-image img {
-				display: block;
-				width: 100%;
-				height: auto;
-				border-radius: var(--radius-lg);
-				box-shadow: var(--box-shadow);
-				object-fit: cover;
-				aspect-ratio: 2/1;
-			}
+		.prose :global(li::marker) {
+			color: hsl(var(--muted-foreground));
+		}
 
-			/* Content Wrapper */
-			.blog-content-wrapper {
-				display: grid;
-				grid-template-columns: 1fr;
-				gap: 2rem;
-				max-width: 1200px;
-				margin: 0 auto;
-				padding: 0 1rem;
-			}
+		.prose :global(a) {
+			color: hsl(var(--prose-link));
+			font-weight: 600;
+			text-decoration: none;
+			transition: color 0.2s ease;
+		}
 
-			.toc-placeholder {
-				width: 100%;
-				order: 0;
-			}
+		.prose :global(a:hover) {
+			color: hsl(var(--primary));
+			text-decoration: underline;
+			text-underline-offset: 0.2em;
+		}
 
-			.prose {
-				width: 100%;
-				color: hsl(var(--foreground));
-				font-size: 1.0625rem;
-				line-height: 1.75;
-				overflow-x: hidden;
-				word-wrap: break-word;
-				hyphens: auto;
-				order: 1;
-				max-width: 720px;
-				margin: 0 auto;
-			}
+		.prose :global(strong) {
+			color: hsl(var(--prose-heading));
+			font-weight: 600;
+		}
 
-			.prose :global(pre) {
-				position: relative;
-				overflow-x: auto;
-				border-radius: var(--radius);
-				background-color: hsl(var(--code-bg));
-				color: hsl(var(--code-color));
-				border: 1px solid hsl(var(--border));
-				padding: 1rem;
-				white-space: pre;
-				word-wrap: normal;
-				margin: 1.5rem 0;
-				max-width: 100%;
-				font-size: 0.9375rem;
-				line-height: 1.55;
-			}
+		.prose :global(img) {
+			display: block;
+			max-width: 100%;
+			height: auto;
+			margin: 1.5rem 0;
+			border-radius: var(--radius-xl);
+		}
 
-			:global(.copy-code-btn) {
-				position: absolute;
-				top: 0.5rem;
-				right: 0.5rem;
-				padding: 0.3rem 0.6rem;
-				font-size: 0.75rem;
-				font-family: var(--font-sans);
-				color: hsl(var(--code-color) / 0.7);
-				background-color: rgba(255, 255, 255, 0.06);
-				border: 1px solid rgba(255, 255, 255, 0.14);
-				border-radius: var(--radius);
-				cursor: pointer;
-				transition: all 0.2s ease;
-				backdrop-filter: blur(4px);
-				z-index: 10;
-				opacity: 0.85;
-			}
+		.prose :global(blockquote) {
+			margin: 1.5rem 0;
+			padding: 0.25rem 0 0.25rem 1rem;
+			border-left: 3px solid hsl(var(--primary));
+			color: hsl(var(--muted-foreground));
+		}
 
-			:global(.copy-code-btn:hover) {
-				opacity: 1;
-				color: hsl(var(--code-color));
-				background-color: rgba(255, 255, 255, 0.12);
-			}
+		.prose :global(blockquote p:last-child) {
+			margin-bottom: 0;
+		}
 
-			:global(.copy-code-btn.copied) {
-				opacity: 1;
-				color: hsl(var(--primary));
-				background-color: hsl(var(--primary) / 0.12);
-				border-color: hsl(var(--primary) / 0.4);
-			}
+		.prose :global(hr) {
+			margin: 2.5rem 0;
+			border: 0;
+			border-top: 1px solid hsl(var(--border));
+		}
 
-			.prose :global(code) {
-				font-family: var(--font-mono);
-				white-space: pre-wrap;
-				word-break: break-word;
-				font-size: 0.875em;
-				background-color: hsl(var(--muted) / 0.5);
-				padding: 0.125em 0.375em;
-				border-radius: 0.25rem;
-			}
+		/* Inline code — pill on a tinted surface, never the block styling */
+		.prose :global(:not(pre) > code) {
+			padding: 0.125rem 0.25rem;
+			font-family: var(--font-mono);
+			font-size: 0.875em;
+			color: hsl(var(--inline-code-color));
+			background-color: hsl(var(--inline-code-bg) / 0.5);
+			border-radius: 0.25rem;
+		}
 
-			.prose :global(pre code) {
-				background-color: transparent;
-				padding: 0;
-				font-size: inherit;
-			}
+		/* Code blocks — zinc-950 slab with a hairline border */
+		.prose :global(pre) {
+			position: relative;
+			margin: 0 0 1.5rem;
+			padding: 1rem;
+			overflow-x: auto;
+			font-family: var(--font-mono);
+			font-size: 0.875rem;
+			line-height: 1.55;
+			color: hsl(var(--code-color));
+			background-color: hsl(var(--code-bg));
+			border: 1px solid hsl(var(--border));
+			border-radius: var(--radius);
+		}
 
-			.prose :global(p) {
-				margin-bottom: 1.25rem;
-				width: 100%;
-			}
+		.prose :global(pre code) {
+			font-family: inherit;
+			font-size: inherit;
+			background: none;
+			padding: 0;
+			white-space: pre;
+		}
 
-			.prose :global(img) {
-				max-width: 100%;
-				height: auto;
-				margin: 1.5rem auto;
-				display: block;
-				border-radius: var(--radius);
-			}
+		.prose :global(table) {
+			display: block;
+			width: 100%;
+			margin: 1.5rem 0;
+			overflow-x: auto;
+			border-collapse: collapse;
+			font-size: 0.9375rem;
+		}
 
-			.prose :global(table) {
-				width: 100%;
-				border-collapse: collapse;
-				margin: 1.5rem 0;
-				font-size: 0.875rem;
-				overflow-x: auto;
-				display: block;
-			}
+		.prose :global(th),
+		.prose :global(td) {
+			padding: 0.5rem 0.75rem;
+			border: 1px solid hsl(var(--border));
+			text-align: left;
+		}
 
-			.prose :global(table th),
-			.prose :global(table td) {
-				border: 1px solid hsl(var(--border));
-				padding: 0.75rem;
-				text-align: left;
-			}
+		.prose :global(th) {
+			color: hsl(var(--prose-heading));
+			font-weight: 600;
+			background-color: hsl(var(--card));
+		}
 
-			.prose :global(blockquote) {
-				border-left: 4px solid hsl(var(--primary));
-				padding-left: 1.5rem;
-				margin-left: 0;
-				font-style: italic;
-				color: hsl(var(--muted-foreground));
-			}
+		:global(.copy-code-btn) {
+			position: absolute;
+			top: 0.5rem;
+			right: 0.5rem;
+			padding: 0.25rem 0.5rem;
+			font-family: var(--font-sans);
+			font-size: 0.6875rem;
+			font-weight: 500;
+			color: hsl(var(--code-color) / 0.7);
+			background-color: hsl(0 0% 100% / 0.06);
+			border: 1px solid hsl(0 0% 100% / 0.12);
+			border-radius: 0.375rem;
+			cursor: pointer;
+			opacity: 0;
+			transition: opacity 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+		}
 
-			.prose :global(h2) {
-				font-size: 1.5rem;
-				font-weight: 700;
-				margin-top: 3rem;
-				margin-bottom: 1rem;
-				line-height: 1.3;
-			}
+		.prose :global(pre:hover) .copy-code-btn,
+		:global(.copy-code-btn:focus-visible) {
+			opacity: 1;
+		}
 
-			.prose :global(h3) {
-				font-size: 1.125rem;
-				font-weight: 600;
-				margin-top: 2.5rem;
-				margin-bottom: 0.75rem;
-				line-height: 1.4;
-			}
+		:global(.copy-code-btn:hover) {
+			color: hsl(var(--code-color));
+			background-color: hsl(0 0% 100% / 0.12);
+		}
 
-			.prose :global(h4) {
-				font-size: 1rem;
-				font-weight: 600;
-				margin-top: 2rem;
-				margin-bottom: 0.5rem;
-			}
+		:global(.copy-code-btn.copied) {
+			opacity: 1;
+			color: hsl(var(--primary));
+			border-color: hsl(var(--primary) / 0.4);
+		}
 
-			.prose :global(ul), .prose :global(ol) {
-				margin: 1rem 0;
-				padding-left: 1.5rem;
-			}
-
-			.prose :global(li) {
-				margin-bottom: 0.5rem;
-			}
-
-			.prose :global(a) {
-				color: hsl(var(--primary));
-				text-decoration: underline;
-				text-underline-offset: 2px;
-			}
-
-			.prose :global(a:hover) {
-				color: hsl(var(--primary) / 0.8);
-			}
-
-			.prose :global(strong) {
-				font-weight: 600;
-			}
-
-			.prose :global(hr) {
-				border: none;
-				border-top: 1px solid hsl(var(--border));
-				margin: 3rem 0;
-			}
-
-			/* Comments */
-			.comments-section {
-				margin-top: 4rem;
-				padding-top: 2rem;
-				border-top: 1px solid hsl(var(--border));
-				max-width: 720px;
-				margin-left: auto;
-				margin-right: auto;
-			}
-
-			/* Responsive */
-			@media (min-width: 640px) {
-				.post-header {
-					padding: 0 1.5rem;
-				}
-
-				.post-title {
-					font-size: 2.75rem;
-				}
-
-				.hero-image {
-					padding: 0;
-				}
-
-				.blog-content-wrapper {
-					padding: 0 1.5rem;
-				}
-
-				.prose {
-					font-size: 1.125rem;
-				}
-			}
-
-			@media (min-width: 768px) {
-				.post-header {
-					max-width: 90%;
-				}
-
-				.post-title {
-					font-size: 3rem;
-				}
-
-				.blog-content-wrapper {
-					max-width: 1100px;
-				}
-			}
-
-			@media (min-width: 1024px) {
-				.post-header {
-					max-width: 720px;
-					padding: 0;
-				}
-
-				.post-title {
-					font-size: 3.5rem;
-					line-height: 1.15;
-				}
-
-				.blog-content-wrapper {
-					grid-template-columns: 280px 1fr;
-					align-items: start;
-					gap: 3rem;
-					max-width: 1280px;
-					padding: 0 2rem;
-				}
-
-				.toc-placeholder {
-					position: static;
-					order: 0;
-					align-self: stretch;
-				}
-
-				.prose {
-					order: 1;
-				}
-			}
-
-			@media (min-width: 1400px) {
-				.blog-content-wrapper {
-					grid-template-columns: 340px 1fr;
-					max-width: 1400px;
-					gap: 4rem;
-				}
-			}
-		</style>
+		.post-comments {
+			margin-top: 4rem;
+			padding-top: 2rem;
+			border-top: 1px solid hsl(var(--border));
+		}
+	</style>
 	</head>
 
 	<body>
 		<Header />
+
 		<main>
-			<article>
-				<header class="post-header">
-					<div class="post-header-top">
-						<a href={`/${lang}/blog`} class="breadcrumb-link">
-							{t('blog.allPosts')}
-						</a>
-						<div class="post-meta-top">
-							<time datetime={pubDate.toISOString()}>{formattedDate}</time>
-							<span class="post-meta-divider">•</span>
-							<span>{readingTime} {t('blog.minRead')}</span>
-						</div>
-					</div>
+			<div class="post-shell">
+				<article class="post-column">
+					<header class="post-header">
+						<div class="post-header-row">
+							<a href={`/${lang}/blog`} class="eyebrow eyebrow-link">
+								<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+									<path d="M13 8H3m0 0 4-4M3 8l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+								</svg>
+								{copy.allPosts}
+							</a>
 
-					<h1 class="post-title">{title}</h1>
-
-					<div class="post-byline">
-						<div class="byline-left">
-							{firstTag && <span class="byline-category">{firstTag}</span>}
-							{firstTag && <span class="byline-divider">•</span>}
-							<span class="byline-author">{t('blog.by')} Raúl Casado</span>
+							<div class="post-meta eyebrow">
+								<time datetime={pubDate.toISOString()}>{formattedDate}</time>
+								<span class="dot" aria-hidden="true"></span>
+								<span>{readingTime} {copy.minRead}</span>
+							</div>
 						</div>
-						<div class="byline-right">
-							<SocialShareCompact url={currentPageUrl} title={title} description={description} lang={lang} />
-						</div>
-					</div>
-				</header>
 
-				{heroImage && (
-					<div class="hero-image">
-						<Picture
-							width={1020}
-							height={510}
-							src={heroImage}
-							alt={title}
-							formats={['avif', 'webp']}
-							fallbackFormat="jpg"
-							widths={[640, 820, 1020, 1280]}
-							sizes="(min-width: 1024px) 1020px, 100vw"
-							quality={82}
-							loading="eager"
-						/>
-					</div>
-				)}
+						<h1 class="post-title">{title}</h1>
 
-				<div class="blog-content-wrapper">
-					{headings && headings.length > 0 ? (
-						<div class="toc-placeholder">
-							<TableOfContents title={lang === 'en' ? 'ON THIS PAGE' : 'EN ESTA PÁGINA'} headings={headings} />
+						<div class="post-header-row post-byline">
+							<div class="byline-left eyebrow">
+								{category && (
+									<>
+										<a href={`/${lang}/blog/tag/${category}`} class="eyebrow-link">{category}</a>
+										<span class="dot" aria-hidden="true"></span>
+									</>
+								)}
+								<span>{copy.by} {author}</span>
+							</div>
+
+							<SocialShareCompact
+								url={currentPageUrl}
+								title={title}
+								description={description}
+								lang={lang}
+							/>
 						</div>
-					) : null}
+					</header>
+
+					{heroImage && (
+						<figure class="post-hero">
+							<Picture
+								width={1440}
+								height={800}
+								src={heroImage}
+								alt={heroImageAlt ?? title}
+								formats={['avif', 'webp']}
+								fallbackFormat="jpg"
+								widths={[720, 1080, 1440]}
+								sizes="(min-width: 1024px) 720px, 100vw"
+								quality={82}
+								loading="eager"
+							/>
+						</figure>
+					)}
+
+					{formattedUpdated && (
+						<p class="post-updated">{copy.updated} {formattedUpdated}</p>
+					)}
 
 					<div class="prose">
 						<slot />
-
-						<div class="comments-section">
-							<script src="https://giscus.app/client.js"
-									data-repo="RaulCasado/blog"
-									data-repo-id="R_kgDOOseBOw"
-									data-category="General"
-									data-category-id="DIC_kwDOOseBO84CvjDa"
-									data-mapping="pathname"
-									data-strict="0"
-									data-reactions-enabled="1"
-									data-emit-metadata="0"
-									data-input-position="bottom"
-									data-theme="preferred_color_scheme"
-									data-lang={lang === 'en' ? 'en' : 'es'}
-									data-loading="lazy"
-									crossorigin="anonymous"
-									async>
-							</script>
-						</div>
 					</div>
-				</div>
-			</article>
+
+					<div class="post-comments">
+						<script src="https://giscus.app/client.js"
+							data-repo="RaulCasado/blog"
+							data-repo-id="R_kgDOOseBOw"
+							data-category="General"
+							data-category-id="DIC_kwDOOseBO84CvjDa"
+							data-mapping="pathname"
+							data-strict="0"
+							data-reactions-enabled="1"
+							data-emit-metadata="0"
+							data-input-position="bottom"
+							data-theme="preferred_color_scheme"
+							data-lang={isEnglish ? 'en' : 'es'}
+							data-loading="lazy"
+							crossorigin="anonymous"
+							async>
+						</script>
+					</div>
+				</article>
+
+				{hasToc && (
+					<aside class="post-aside">
+						<TableOfContents title={copy.onThisPage} headings={headings} />
+					</aside>
+				)}
+			</div>
 		</main>
+
 		<Footer />
-		<script define:vars={{ copyText: lang === 'en' ? 'Copy' : 'Copiar', copiedText: lang === 'en' ? 'Copied!' : '¡Copiado!' }}>
-			const codeBlocks = document.querySelectorAll("pre");
 
-			codeBlocks.forEach(block => {
-				let button = document.createElement("button");
-				button.className = "copy-code-btn";
+		<script define:vars={{ copyText: copy.copy, copiedText: copy.copied }}>
+			document.querySelectorAll('.prose pre').forEach((block) => {
+				const button = document.createElement('button');
+				button.className = 'copy-code-btn';
+				button.type = 'button';
 				button.textContent = copyText;
-
 				block.appendChild(button);
 
-				button.addEventListener("click", async () => {
-					const code = block.querySelector("code")?.innerText || block.textContent;
-
+				button.addEventListener('click', async () => {
+					const code = block.querySelector('code')?.innerText ?? block.textContent;
 					await navigator.clipboard.writeText(code);
-
 					button.textContent = copiedText;
-					button.classList.add("copied");
-
+					button.classList.add('copied');
 					setTimeout(() => {
 						button.textContent = copyText;
-						button.classList.remove("copied");
+						button.classList.remove('copied');
 					}, 2000);
 				});
 			});
 		</script>
+
 	</body>
 </html>

@@ -61,10 +61,15 @@ body {
 	--ring: 142.1 76.2% 36.3%;
 
 	/* Code blocks & inline code */
-	--code-bg: 240 5.9% 3.9%;
-	--code-color: 240 4.8% 94.9%;
-	--inline-code-bg: 240 4.8% 94.9%;
-	--inline-code-color: 240 5.9% 10%;
+	--code-bg: 240 10% 3.9%;
+	--code-color: 0 0% 83%;
+	--inline-code-bg: 240 5.9% 90%;
+	--inline-code-color: 240 5.2% 33.9%;
+
+	/* Prose (article body) — refine keeps body copy softer than headings */
+	--prose-text: 240 5.2% 33.9%;
+	--prose-heading: 240 5.9% 10%;
+	--prose-link: 240 3.8% 46.1%;
 
 	/* Typography */
 	--font-sans: 'Inter', 'InterVariable', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -73,8 +78,16 @@ body {
 	/* Layout */
 	--radius: 0.5rem;
 	--radius-lg: 0.75rem;
+	--radius-xl: 1rem;
 	--pill-radius: 999px;
 	--content-width: 45rem;
+	--post-col: 45rem;
+	--toc-col: 21.25rem;
+	--post-max: 75rem;
+	--header-h: 4rem;
+	/* Eyebrow: the 10px uppercase meta label refine uses everywhere */
+	--eyebrow-size: 0.625rem;
+	--eyebrow-tracking: -0.01em;
 
 	/* Legacy colors - kept for compatibility */
 	--black: 9, 9, 11;
@@ -88,9 +101,9 @@ body {
 
 /* Dark theme */
 .dark {
-	/* Base colors - dark mode */
-	--background: 240 4.9% 11%;
-	--foreground: 240 20% 97%;
+	/* Base colors - dark mode (zinc-900 surface, pure white headings) */
+	--background: 240 5.9% 10%;
+	--foreground: 0 0% 100%;
 
 	/* Primary colors - dark mode */
 	--primary: 141.7 76.6% 58%;
@@ -109,8 +122,8 @@ body {
 	--accent-foreground: 240 20% 97%;
 
 	/* Card styles - dark mode */
-	--card: 240 5.9% 10%;
-	--card-foreground: 240 20% 97%;
+	--card: 240 3.7% 15.9%;
+	--card-foreground: 0 0% 100%;
 
 	/* Border styles - dark mode */
 	--border: 240 3.7% 15.9%;
@@ -120,10 +133,15 @@ body {
 	--ring: 141.7 76.6% 58%;
 
 	/* Code blocks & inline code */
-	--code-bg: 240 5.9% 3.9%;
-	--code-color: 240 4.8% 94.9%;
+	--code-bg: 240 10% 3.9%;
+	--code-color: 0 0% 83%;
 	--inline-code-bg: 240 5.3% 26.1%;
 	--inline-code-color: 240 4.9% 83.9%;
+
+	/* Prose - dark mode */
+	--prose-text: 240 4.9% 83.9%;
+	--prose-heading: 0 0% 100%;
+	--prose-link: 240 5% 64.9%;
 
 	/* Legacy colors - dark mode adaptations */
 	--black: 244, 244, 245;
@@ -293,6 +311,32 @@ pre {
 	word-wrap: normal;
 	font-size: 0.9375rem;
 	line-height: 1.55;
+}
+
+/*
+ * Shiki dual-theme wiring. With `defaultColor: false` every token carries
+ * --shiki-light/--shiki-dark, so the active theme picks the colour here
+ * instead of Shiki inlining one. The slab keeps our own zinc-950 surface
+ * rather than the theme's background, matching refine.dev.
+ */
+.astro-code,
+.astro-code span {
+	color: var(--shiki-light);
+	font-style: var(--shiki-light-font-style);
+	font-weight: var(--shiki-light-font-weight);
+	text-decoration: var(--shiki-light-text-decoration);
+}
+
+.dark .astro-code,
+.dark .astro-code span {
+	color: var(--shiki-dark);
+	font-style: var(--shiki-dark-font-style);
+	font-weight: var(--shiki-dark-font-weight);
+	text-decoration: var(--shiki-dark-text-decoration);
+}
+
+.astro-code {
+	background-color: hsl(var(--code-bg)) !important;
 }
 
 table {

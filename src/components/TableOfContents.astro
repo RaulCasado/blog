@@ -15,287 +15,313 @@ const hasHeadings = filteredHeadings.length > 0;
 ---
 
 {hasHeadings && (
-  <nav class="toc-container" data-toc>
-    <div class="toc-header">
-      <svg class="toc-book-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+  <nav class="toc" data-toc aria-label={title}>
+    <div class="toc-label">
+      <svg class="toc-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M8 4.667A2.667 2.667 0 0 0 5.333 2h-4v10H6a2 2 0 0 1 2 2m0-9.333V14m0-9.333A2.667 2.667 0 0 1 10.667 2h4v10H10a2 2 0 0 0-2 2M4 5.333h1.333M4 8h1.333m5.334-2.667H12M10.667 8H12"></path>
       </svg>
-      <span class="toc-title">{title}</span>
+      <span>{title}</span>
+
+      <button type="button" class="toc-toggle" data-toc-toggle aria-expanded="false">
+        <span class="sr-only">{title}</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </button>
     </div>
 
-    <div class="toc-rail" aria-hidden="true">
-      <div class="toc-rail-track"></div>
-      <div class="toc-rail-thumb" data-toc-thumb></div>
-    </div>
+    <div class="toc-body">
+      <div class="toc-rail" aria-hidden="true">
+        <div class="toc-rail-track"></div>
+        <div class="toc-rail-thumb" data-toc-thumb></div>
+      </div>
 
-    <div class="toc-links" data-toc-links>
-      {filteredHeadings.map((heading) => (
-        <a
-          href={`#${heading.slug}`}
-          class={`toc-link depth-${heading.depth}`}
-          data-toc-link
-          data-heading-slug={heading.slug}
-        >
-          {heading.text}
-        </a>
-      ))}
+      <div class="toc-list" data-toc-list>
+        {filteredHeadings.map((heading) => (
+          <a
+            href={`#${heading.slug}`}
+            class={`toc-item depth-${heading.depth}`}
+            data-toc-item
+            data-slug={heading.slug}
+          >
+            {heading.text}
+          </a>
+        ))}
+      </div>
     </div>
   </nav>
 )}
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const tocContainer = document.querySelector('[data-toc]');
-    const tocLinks = document.querySelectorAll('[data-toc-link]');
-    const tocThumb = document.querySelector('[data-toc-thumb]');
-    const tocLinksContainer = document.querySelector('[data-toc-links]');
+  function initToc() {
+    const nav = document.querySelector<HTMLElement>('[data-toc]');
+    const list = document.querySelector<HTMLElement>('[data-toc-list]');
+    const thumb = document.querySelector<HTMLElement>('[data-toc-thumb]');
+    const items = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-toc-item]'));
+    if (!nav || !list || !thumb || !items.length) return;
 
-    if (!tocContainer || !tocLinks.length || !tocThumb || !tocLinksContainer) return;
+    const headings = items
+      .map((item) => document.getElementById(item.dataset.slug ?? ''))
+      .filter((el): el is HTMLElement => Boolean(el));
+    if (!headings.length) return;
 
-    const isDesktop = window.innerWidth >= 1024;
-    const headerOffset = 64;
+    // Keep the sticky offset in sync with the site header height.
+    const headerOffset =
+      parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) * 16 || 64;
 
-    if (!isDesktop) {
-      tocContainer.style.display = 'none';
-      return;
-    }
+    let current = '';
 
-    const headingElements = Array.from(tocLinks).map((link) => {
-      const slug = link.getAttribute('data-heading-slug');
-      return document.getElementById(slug);
-    }).filter(Boolean);
+    const paint = (slug: string) => {
+      if (slug === current) return;
+      current = slug;
 
-    if (!headingElements.length) return;
+      items.forEach((item) => {
+        const isActive = item.dataset.slug === slug;
+        item.classList.toggle('active', isActive);
+        if (!isActive) return;
 
-    const updateActiveLink = (activeSlug: string) => {
-      tocLinks.forEach((link) => {
-        const slug = link.getAttribute('data-heading-slug');
-        if (slug === activeSlug) {
-          link.classList.add('active');
-          const linkRect = link.getBoundingClientRect();
-          const containerRect = tocLinksContainer.getBoundingClientRect();
-          const top = linkRect.top - containerRect.top + tocLinksContainer.scrollTop;
-          const height = linkRect.height;
-          tocThumb.style.top = `${top}px`;
-          tocThumb.style.height = `${height}px`;
-        } else {
-          link.classList.remove('active');
-        }
+        // Match the rail thumb to the active item's box inside the list.
+        thumb.style.top = `${item.offsetTop}px`;
+        thumb.style.height = `${item.offsetHeight}px`;
       });
     };
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const slug = entry.target.id;
-            updateActiveLink(slug);
-          }
-        });
-      },
-      {
-        rootMargin: `-${headerOffset}px 0px -80% 0px`,
-        threshold: 0,
+    const sync = () => {
+      const line = window.scrollY + headerOffset + 24;
+      let active = headings[0];
+      for (const heading of headings) {
+        if (heading.offsetTop <= line) active = heading;
+        else break;
       }
-    );
-
-    headingElements.forEach((el) => observer.observe(el));
-
-    let activeSlug = '';
-    const checkActive = () => {
-      const scrollY = window.scrollY + headerOffset + 10;
-      for (let i = headingElements.length - 1; i >= 0; i--) {
-        const el = headingElements[i];
-        if (el && el.offsetTop <= scrollY) {
-          if (el.id !== activeSlug) {
-            activeSlug = el.id;
-            updateActiveLink(activeSlug);
-          }
-          break;
-        }
+      // Near the bottom the last section may never cross the line on short pages.
+      if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 4) {
+        active = headings[headings.length - 1];
       }
+      paint(active.id);
     };
 
-    window.addEventListener('scroll', checkActive, { passive: true });
-    checkActive();
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        sync();
+        ticking = false;
+      });
+    };
 
-    tocLinks.forEach((link) => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const slug = link.getAttribute('data-heading-slug');
-        const target = document.getElementById(slug);
-        if (target) {
-          const targetPosition = target.getBoundingClientRect().top + window.scrollY - headerOffset;
-          window.scrollTo({ top: targetPosition, behavior: 'smooth' });
-          history.pushState(null, '', `#${slug}`);
-        }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    sync();
+
+    const toggle = document.querySelector<HTMLButtonElement>('[data-toc-toggle]');
+    const setOpen = (open: boolean) => {
+      nav.classList.toggle('open', open);
+      toggle?.setAttribute('aria-expanded', String(open));
+    };
+
+    toggle?.addEventListener('click', () => setOpen(!nav.classList.contains('open')));
+
+    items.forEach((item) => {
+      item.addEventListener('click', (event) => {
+        const target = document.getElementById(item.dataset.slug ?? '');
+        if (!target) return;
+        event.preventDefault();
+        window.scrollTo({
+          top: target.getBoundingClientRect().top + window.scrollY - headerOffset - 16,
+          behavior: 'smooth',
+        });
+        history.pushState(null, '', `#${item.dataset.slug}`);
+        // On the collapsed mobile card, jumping should also close the list.
+        if (window.matchMedia('(max-width: 1023px)').matches) setOpen(false);
       });
     });
+  }
 
-    const handleResize = () => {
-      const newIsDesktop = window.innerWidth >= 1024;
-      if (newIsDesktop !== isDesktop) {
-        location.reload();
-      }
-    };
-    window.addEventListener('resize', handleResize);
-  });
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initToc);
+  } else {
+    initToc();
+  }
 </script>
 
 <style>
-  .toc-container {
+  .toc {
     position: sticky;
-    top: 5rem;
-    width: 100%;
-    height: calc(100vh - 6rem);
-    z-index: 40;
-    pointer-events: none;
+    top: calc(var(--header-h) + 1.5rem);
+    max-height: calc(100vh - var(--header-h) - 3rem);
+    display: flex;
+    flex-direction: column;
   }
 
-  .toc-header {
+  .toc-label {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0 0.75rem;
-    margin-bottom: 1.5rem;
-    pointer-events: auto;
-  }
-
-  .toc-book-icon {
     flex-shrink: 0;
-    color: hsl(var(--muted-foreground));
-    opacity: 0.7;
-  }
-
-  .toc-title {
-    font-size: 0.625rem;
+    margin-bottom: 1rem;
+    font-size: var(--eyebrow-size);
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: hsl(var(--muted-foreground));
     line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    color: hsl(var(--muted-foreground));
   }
 
+  .toc-icon {
+    flex-shrink: 0;
+  }
+
+  /* Collapse control — only meaningful on the mobile card */
+  .toc-toggle {
+    display: none;
+    margin-left: auto;
+    padding: 0;
+    color: inherit;
+    background: none;
+    border: 0;
+    cursor: pointer;
+  }
+
+  .toc-toggle svg {
+    display: block;
+    transition: transform 0.2s ease;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .toc-body {
+    position: relative;
+    min-height: 0;
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+
+  .toc-body::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* The 10px guide rail: a static track with a thumb that tracks the
+     active item's box, matching refine's scroll indicator. */
   .toc-rail {
     position: absolute;
     left: 0;
     top: 0;
     bottom: 0;
     width: 10px;
-    overflow: hidden;
     pointer-events: none;
   }
 
   .toc-rail-track {
     position: absolute;
-    inset: 0;
-    background-color: hsl(var(--muted) / 0.5);
-  }
-
-  .dark .toc-rail-track {
-    background-color: hsl(var(--muted) / 0.3);
+    left: 1px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: hsl(var(--border));
   }
 
   .toc-rail-thumb {
     position: absolute;
     left: 0;
-    width: 100%;
-    background-color: hsl(var(--foreground));
-    border-radius: 9999px;
-    transition: top 0.2s ease, height 0.2s ease;
-    pointer-events: none;
     top: 0;
+    width: 3px;
     height: 0;
+    border-radius: var(--pill-radius);
+    background-color: hsl(var(--foreground));
+    transition: top 0.2s ease, height 0.2s ease;
   }
 
-  .toc-links {
+  .toc-list {
     position: relative;
-    padding-left: 1.5rem;
-    height: calc(100% - 4rem);
-    overflow-y: auto;
-    pointer-events: auto;
-    scrollbar-width: thin;
-    scrollbar-color: hsl(var(--muted-foreground) / 0.3) transparent;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 3rem;
   }
 
-  .toc-links::-webkit-scrollbar {
-    width: 4px;
-  }
-
-  .toc-links::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  .toc-links::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--muted-foreground) / 0.3);
-    border-radius: 9999px;
-  }
-
-  .toc-link {
+  .toc-item {
     display: block;
-    font-size: 0.8125rem;
-    line-height: 1.5;
+    padding: 0.5rem 1rem 0.5rem 1.5rem;
+    font-size: 0.875rem;
+    line-height: 1.4;
     color: hsl(var(--muted-foreground));
     text-decoration: none;
-    padding: 0.125rem 0;
-    transition: color 0.15s ease;
-    white-space: normal;
-    word-break: break-word;
+    transition: color 0.2s ease;
   }
 
-  .toc-link:hover {
+  .toc-item.depth-3 {
+    padding-left: 2.25rem;
+    font-size: 0.8125rem;
+  }
+
+  .toc-item:hover {
     color: hsl(var(--foreground));
   }
 
-  .toc-link.active {
+  .toc-item.active {
     color: hsl(var(--foreground));
-    font-weight: 500;
   }
 
-  .depth-2 {
-    padding-left: 0;
-  }
-
-  .depth-3 {
-    padding-left: 24px;
-    font-size: 0.75rem;
-  }
-
+  /* Below the two-column breakpoint the TOC becomes a normal card above
+     the article, so the rail and sticky behaviour are dropped. */
   @media (max-width: 1023px) {
-    .toc-container {
-      position: relative;
-      top: auto;
-      left: auto;
-      width: 100%;
-      height: auto;
-      padding-top: 0;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-      pointer-events: auto;
+    .toc {
+      position: static;
+      max-height: none;
+      padding: 1rem 1.25rem;
+      margin-bottom: 2rem;
       background-color: hsl(var(--card));
-      border-radius: var(--radius);
       border: 1px solid hsl(var(--border));
+      border-radius: var(--radius-lg);
     }
 
-    .toc-header {
-      margin-bottom: 1rem;
+    .toc-label {
+      margin-bottom: 0;
+    }
+
+    .toc-toggle {
+      display: block;
+    }
+
+    /* Collapsed by default so a long outline doesn't bury the article */
+    .toc-body {
+      display: none;
+      overflow-y: visible;
+    }
+
+    .toc.open .toc-body {
+      display: block;
+      margin-top: 1rem;
+    }
+
+    .toc.open .toc-toggle svg {
+      transform: rotate(180deg);
     }
 
     .toc-rail {
       display: none;
     }
 
-    .toc-links {
-      height: auto;
-      max-height: none;
-      padding-left: 1rem;
-      overflow: visible;
+    .toc-list {
+      padding-bottom: 0;
     }
 
-    .depth-3 {
-      padding-left: 1.5rem;
+    .toc-item {
+      padding-left: 0;
+    }
+
+    .toc-item.depth-3 {
+      padding-left: 1rem;
     }
   }
-
 </style>

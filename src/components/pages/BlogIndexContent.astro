@@ -259,13 +259,14 @@ document.addEventListener('DOMContentLoaded', () => {
 		min-height: calc(100vh - 4rem);
 	}
 
-	/* Container */
+	/* Container — same measure as the post page so the two line up */
 	.container {
 		width: 100%;
-		max-width: 1400px;
+		max-width: var(--post-max);
 		margin: 0 auto;
 		padding: 0 1rem;
 	}
+
 
 	/* Blog Section */
 	.blog-section {
@@ -373,6 +374,12 @@ document.addEventListener('DOMContentLoaded', () => {
 		display: flex;
 		flex-direction: column;
 		gap: 0.75rem;
+	}
+
+	/* The title link only wraps the heading; as a block it picked up ~90px
+	   of phantom height inside the flex column, so let the h2 be the item. */
+	.blog-card-content > a {
+		display: contents;
 	}
 
 	.blog-card .title {
@@ -637,7 +644,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	@media (min-width: 768px) {
 		.container {
-			padding: 0 2rem;
+			padding: 0 1.5rem;
 		}
 
 		.blog-section {
