@@ -295,27 +295,10 @@ pre {
 }
 
 /*
- * Shiki dual-theme wiring. With `defaultColor: false` every token carries
- * --shiki-light/--shiki-dark, so the active theme picks the colour here
- * instead of Shiki inlining one. The slab keeps our own zinc-950 surface
- * rather than the theme's background, matching refine.dev.
+ * Shiki inlines the theme's own background on .astro-code; override it so
+ * code sits on our zinc-950 slab. Token colours come from dark-plus and are
+ * light-on-dark, which is why the slab stays dark in the light theme too.
  */
-.astro-code,
-.astro-code span {
-	color: var(--shiki-light);
-	font-style: var(--shiki-light-font-style);
-	font-weight: var(--shiki-light-font-weight);
-	text-decoration: var(--shiki-light-text-decoration);
-}
-
-.dark .astro-code,
-.dark .astro-code span {
-	color: var(--shiki-dark);
-	font-style: var(--shiki-dark-font-style);
-	font-weight: var(--shiki-dark-font-weight);
-	text-decoration: var(--shiki-dark-text-decoration);
-}
-
 .astro-code {
 	background-color: hsl(var(--code-bg)) !important;
 }

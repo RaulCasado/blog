@@ -9,14 +9,9 @@ export default defineConfig({
 	integrations: [mdx(), sitemap()],
 	markdown: {
 		shikiConfig: {
-			// Dual themes emit --shiki-light/--shiki-dark custom properties instead
-			// of a hardcoded colour, so code blocks follow the site theme toggle.
-			// dark-plus matches the VS Code palette refine.dev uses.
-			themes: {
-				light: 'github-light',
-				dark: 'dark-plus',
-			},
-			defaultColor: false,
+			// The code slab stays zinc-950 in both themes, so syntax colours must
+			// be light-on-dark in both too. dark-plus matches refine.dev's palette.
+			theme: 'dark-plus',
 		},
 	},
 	i18n : {

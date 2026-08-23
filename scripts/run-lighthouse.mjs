@@ -23,7 +23,9 @@ try {
       detached: true,
       stdio: 'ignore',
     });
-    await waitForServer(baseUrl);
+    // `/` only 301-redirects via Netlify _redirects, which the local preview
+    // server doesn't process, so probe a real page for the readiness check.
+    await waitForServer(new URL('/es/', baseUrl).href);
   }
 
   for (const route of routes) {

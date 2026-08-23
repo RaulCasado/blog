@@ -105,7 +105,7 @@ function getTextColor(hex: string) {
       return (
         <div class="project-card">
           <div class="project-header">
-            <div class="project-icon" style={`background-color: ${color}22; color: ${color};`}>
+            <div class="project-icon" style={`background-color: ${color}22;`}>
               <span aria-hidden="true">{getIcon(project.language)}</span>
             </div>
             <div class="project-title-container">
@@ -189,6 +189,9 @@ function getTextColor(hex: string) {
   }
 
   .project-icon {
+    /* The tint carries the language colour; the glyph itself uses the text
+       token, since a raw brand colour can't clear AA on a dark surface. */
+    color: hsl(var(--foreground));
     width: 40px;
     height: 40px;
     flex-shrink: 0;
