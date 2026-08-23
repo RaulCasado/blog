@@ -226,25 +226,6 @@ a:hover {
 p {
 	margin-bottom: 1em;
 }
-.prose p {
-	margin-bottom: 1.5em;
-	line-height: 1.75;
-	color: hsl(var(--muted-foreground));
-}
-.prose p strong {
-	color: hsl(var(--foreground));
-}
-.prose a {
-	color: hsl(var(--foreground));
-	font-weight: 500;
-	text-decoration: underline;
-	text-decoration-color: hsl(var(--border));
-	transition: text-decoration-color 0.2s ease, color 0.2s ease;
-}
-.prose a:hover {
-	color: hsl(var(--primary));
-	text-decoration-color: currentColor;
-}
 
 textarea {
 	width: 100%;
