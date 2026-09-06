@@ -1,6 +1,6 @@
 ---
 title: 'How I Gave My Xiaomi Mi A2 a Second Life with a Custom ROM'
-description: 'Complete guide on how I installed a Custom ROM on a Xiaomi Mi A2 abandoned by the manufacturer. From unlocking the bootloader to installing alternative apps like NewPipe, Spotube, and Aurora Store.'
+description: 'Complete guide on how I installed a Custom ROM on a Xiaomi Mi A2 abandoned by the manufacturer. From unlocking the bootloader to installing alternative apps like NewPipe and Aurora Store.'
 pubDate: '2026-02-08'
 heroImage: '../../../assets/blog/mi_a2.jpg'
 heroImageAlt: 'Xiaomi Mi A2 with Custom ROM'
@@ -114,7 +114,7 @@ Searching through forums, I found a link that looked promising. I downloaded it,
 
 Finally, I did what I should have done from the start: search directly on **XDA Developers** for the codename `jasmine_sprout`.
 
-I found a thread for **LineageOS 22.1 Unofficial** maintained by a community developer. It's not official, but it has regular updates and good user reviews.
+I found a thread for **LineageOS 18.1 Unofficial** maintained by a community developer. It's not official, but it has regular updates and good user reviews.
 
 ## Step 3: Installing the Recovery
 
@@ -155,7 +155,7 @@ Once in recovery, the process is relatively straightforward:
 # (select "Apply update" → "Apply from ADB")
 
 # From your PC, send the ROM
-adb sideload lineageos-22.1-jasmine_sprout.zip
+adb sideload lineage-18.1-jasmine_sprout.zip
 ```
 
 Wait for it to finish (it can take a few minutes) and **don't reboot yet**.
@@ -240,16 +240,6 @@ This was the most surprising part of the process. I discovered that you can have
 - Import your subscriptions from YouTube
 
 Honestly, the experience is better than the official YouTube app in many ways.
-
-### Spotube - Spotify Without Premium
-
-**Spotube** is an open-source Spotify client that combines Spotify's catalog with free audio sources:
-
-- Listen to music from Spotify's catalog **for free**
-- No ads
-- Download for offline listening
-- Similar interface to Spotify
-- No Premium account needed
 
 ### Other Useful Apps
 

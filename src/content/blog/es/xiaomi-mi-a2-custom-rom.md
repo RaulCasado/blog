@@ -1,6 +1,6 @@
 ---
 title: 'Cómo le di una segunda vida a mi Xiaomi Mi A2 con una Custom ROM'
-description: 'Guía completa sobre cómo instalé una Custom ROM en un Xiaomi Mi A2 abandonado por el fabricante. Desde desbloquear el bootloader hasta instalar apps alternativas como NewPipe, Spotube y Aurora Store.'
+description: 'Guía completa sobre cómo instalé una Custom ROM en un Xiaomi Mi A2 abandonado por el fabricante. Desde desbloquear el bootloader hasta instalar apps alternativas como NewPipe y Aurora Store.'
 pubDate: '2026-02-08'
 heroImage: '../../../assets/blog/mi_a2.jpg'
 heroImageAlt: 'Xiaomi Mi A2 con Custom ROM'
@@ -114,7 +114,7 @@ Buscando en foros, encontré un enlace que parecía prometedor. Lo descargué, e
 
 Finalmente, hice lo que debería haber hecho desde el principio: buscar directamente en **XDA Developers** el nombre en código `jasmine_sprout`.
 
-Encontré un thread de **LineageOS 22.1 Unofficial** mantenido por un desarrollador de la comunidad. No es oficial, pero tiene actualizaciones regulares y buenas reviews de usuarios.
+Encontré un thread de **LineageOS 18.1 Unofficial** mantenido por un desarrollador de la comunidad. No es oficial, pero tiene actualizaciones regulares y buenas reviews de usuarios.
 
 ## Paso 3: Instalar el Recovery
 
@@ -155,7 +155,7 @@ Una vez en el recovery, el proceso es relativamente sencillo:
 # (seleccionar "Apply update" → "Apply from ADB")
 
 # Desde tu PC, enviar la ROM
-adb sideload lineageos-22.1-jasmine_sprout.zip
+adb sideload lineage-18.1-jasmine_sprout.zip
 ```
 
 Espera a que termine (puede tardar unos minutos) y **no reinicies todavía**.
@@ -240,16 +240,6 @@ Esta fue la parte más sorprendente del proceso. Descubrí que puedes tener un t
 - Importa tus suscripciones desde YouTube
 
 Honestamente, la experiencia es mejor que la app oficial de YouTube en muchos aspectos.
-
-### Spotube - Spotify sin Premium
-
-**Spotube** es un cliente de Spotify de código abierto que combina el catálogo de Spotify con fuentes de audio gratuitas:
-
-- Escucha música del catálogo de Spotify **gratis**
-- Sin anuncios
-- Descarga para escuchar offline
-- Interfaz similar a Spotify
-- No necesitas cuenta Premium
 
 ### Otras apps útiles
 
