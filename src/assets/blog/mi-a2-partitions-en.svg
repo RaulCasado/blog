@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 940" role="img" aria-labelledby="title desc">
+  <title id="title">Partition map of an A/B Android device</title>
+  <desc id="desc">The internal storage of a Xiaomi Mi A2 split into partitions: duplicated boot, system and vendor for slots A and B, plus a single shared userdata partition, showing which filesystem each one uses.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#101827"/>
+      <stop offset="1" stop-color="#1d2940"/>
+    </linearGradient>
+    <linearGradient id="boot" x1="0" x2="1">
+      <stop offset="0" stop-color="#8b5cf6"/>
+      <stop offset="1" stop-color="#6366f1"/>
+    </linearGradient>
+    <linearGradient id="system" x1="0" x2="1">
+      <stop offset="0" stop-color="#0ea5e9"/>
+      <stop offset="1" stop-color="#2563eb"/>
+    </linearGradient>
+    <linearGradient id="vendor" x1="0" x2="1">
+      <stop offset="0" stop-color="#10b981"/>
+      <stop offset="1" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="data" x1="0" x2="1">
+      <stop offset="0" stop-color="#f59e0b"/>
+      <stop offset="1" stop-color="#ea580c"/>
+    </linearGradient>
+    <linearGradient id="other" x1="0" x2="1">
+      <stop offset="0" stop-color="#475569"/>
+      <stop offset="1" stop-color="#334155"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#000" flood-opacity=".28"/>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="940" fill="url(#bg)"/>
+
+  <text x="60" y="70" fill="#f1f5f9" font-family="system-ui, sans-serif" font-size="40" font-weight="700">Inside the Mi A2's storage</text>
+  <text x="60" y="108" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="23">A single eMMC chip split into 69 partitions. These are the ones that matter here.</text>
+
+  <!-- SLOT A -->
+  <rect x="60" y="150" width="700" height="300" rx="18" fill="#0b1220" stroke="#334155" stroke-width="2"/>
+  <text x="90" y="195" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="27" font-weight="700">SLOT A</text>
+  <text x="215" y="195" fill="#22c55e" font-family="system-ui, sans-serif" font-size="20" font-weight="600">← active, ArrowOS 12.1 lives here</text>
+
+  <rect x="90" y="215" width="640" height="62" rx="10" fill="url(#boot)" filter="url(#shadow)"/>
+  <text x="112" y="245" fill="#fff" font-family="ui-monospace, monospace" font-size="22" font-weight="700">boot_a</text>
+  <text x="112" y="268" fill="#e9e5ff" font-family="system-ui, sans-serif" font-size="17">kernel + recovery + ramdisk · 26 MB · raw image, no filesystem</text>
+
+  <rect x="90" y="288" width="640" height="62" rx="10" fill="url(#system)" filter="url(#shadow)"/>
+  <text x="112" y="318" fill="#fff" font-family="ui-monospace, monospace" font-size="22" font-weight="700">system_a</text>
+  <text x="112" y="341" fill="#dbeafe" font-family="system-ui, sans-serif" font-size="17">Android itself · 3 GB · read-only ext4</text>
+
+  <rect x="90" y="361" width="640" height="62" rx="10" fill="url(#vendor)" filter="url(#shadow)"/>
+  <text x="112" y="391" fill="#fff" font-family="ui-monospace, monospace" font-size="22" font-weight="700">vendor_a</text>
+  <text x="112" y="414" fill="#d1fae5" font-family="system-ui, sans-serif" font-size="17">Qualcomm drivers + the fstab · 2 GB · read-only ext4</text>
+
+  <!-- SLOT B -->
+  <rect x="840" y="150" width="700" height="300" rx="18" fill="#0b1220" stroke="#334155" stroke-width="2"/>
+  <text x="870" y="195" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="27" font-weight="700">SLOT B</text>
+  <text x="995" y="195" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="20">← spare copy, so updates are safe</text>
+
+  <rect x="870" y="215" width="640" height="62" rx="10" fill="url(#boot)" opacity=".38"/>
+  <text x="892" y="245" fill="#fff" font-family="ui-monospace, monospace" font-size="22" font-weight="700">boot_b</text>
+  <text x="892" y="268" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="17">same size, old content or empty</text>
+
+  <rect x="870" y="288" width="640" height="62" rx="10" fill="url(#system)" opacity=".38"/>
+  <text x="892" y="318" fill="#fff" font-family="ui-monospace, monospace" font-size="22" font-weight="700">system_b</text>
+  <text x="892" y="341" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="17">the next update gets written here</text>
+
+  <rect x="870" y="361" width="640" height="62" rx="10" fill="url(#vendor)" opacity=".38"/>
+  <text x="892" y="391" fill="#fff" font-family="ui-monospace, monospace" font-size="22" font-weight="700">vendor_b</text>
+  <text x="892" y="414" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="17">if it fails, the bootloader falls back</text>
+
+  <!-- USERDATA -->
+  <rect x="60" y="490" width="1480" height="150" rx="18" fill="#1a1206" stroke="#f59e0b" stroke-width="3"/>
+  <rect x="90" y="522" width="1420" height="86" rx="12" fill="url(#data)" filter="url(#shadow)"/>
+  <text x="115" y="558" fill="#fff" font-family="ui-monospace, monospace" font-size="25" font-weight="700">userdata</text>
+  <text x="115" y="586" fill="#fff7ed" font-family="system-ui, sans-serif" font-size="18">Your apps, photos and settings · 50 GB · NOT duplicated: one partition, shared by both slots</text>
+  <text x="1180" y="558" fill="#fff" font-family="system-ui, sans-serif" font-size="19" font-weight="700">This is where the problem was</text>
+  <text x="1180" y="586" fill="#fff7ed" font-family="system-ui, sans-serif" font-size="17">formatted f2fs, the fstab asked for ext4</text>
+
+  <!-- OTRAS -->
+  <text x="60" y="700" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="21">And 60 more partitions nobody touches, each with its own job:</text>
+
+  <rect x="60" y="720" width="280" height="72" rx="10" fill="url(#other)"/>
+  <text x="82" y="750" fill="#e2e8f0" font-family="ui-monospace, monospace" font-size="19" font-weight="700">modem_a / modem_b</text>
+  <text x="82" y="774" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="16">4G modem firmware</text>
+
+  <rect x="360" y="720" width="280" height="72" rx="10" fill="url(#other)"/>
+  <text x="382" y="750" fill="#e2e8f0" font-family="ui-monospace, monospace" font-size="19" font-weight="700">persist</text>
+  <text x="382" y="774" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="16">sensor and camera calibration</text>
+
+  <rect x="660" y="720" width="280" height="72" rx="10" fill="url(#other)"/>
+  <text x="682" y="750" fill="#e2e8f0" font-family="ui-monospace, monospace" font-size="19" font-weight="700">vbmeta_a / vbmeta_b</text>
+  <text x="682" y="774" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="16">verified boot signatures</text>
+
+  <rect x="960" y="720" width="280" height="72" rx="10" fill="url(#other)"/>
+  <text x="982" y="750" fill="#e2e8f0" font-family="ui-monospace, monospace" font-size="19" font-weight="700">misc</text>
+  <text x="982" y="774" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="16">which slot to boot, and retries left</text>
+
+  <rect x="1260" y="720" width="280" height="72" rx="10" fill="url(#other)"/>
+  <text x="1282" y="750" fill="#e2e8f0" font-family="ui-monospace, monospace" font-size="19" font-weight="700">xbl / abl / tz</text>
+  <text x="1282" y="774" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="16">Qualcomm early boot</text>
+
+  <!-- NOTA -->
+  <rect x="60" y="828" width="1480" height="78" rx="12" fill="#0b1220" stroke="#475569" stroke-width="2"/>
+  <text x="88" y="862" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="19" font-weight="600">What this 2018 phone does NOT have:</text>
+  <text x="88" y="890" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="18">no <tspan font-family="ui-monospace, monospace" fill="#f87171">product</tspan>, ni <tspan font-family="ui-monospace, monospace" fill="#f87171">system_ext</tspan>, ni <tspan font-family="ui-monospace, monospace" fill="#f87171">odm</tspan>, ni <tspan font-family="ui-monospace, monospace" fill="#f87171">super</tspan> — which is why ArrowOS 13.1 failed with Error 7</text>
+</svg>

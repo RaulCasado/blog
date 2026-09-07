@@ -34,7 +34,7 @@ Each chunk has one job, and the layout can't be changed without rewriting the pa
 an operation with a real chance of killing the phone for good. The Mi A2 has **69 partitions**.
 Most of them nobody ever touches.
 
-![Partition map of the Mi A2: duplicated A and B slots, the shared userdata partition, and the partitions this device doesn't have](../../../assets/blog/mi-a2-partitions.svg)
+![Partition map of the Mi A2: duplicated A and B slots, the shared userdata partition, and the partitions this device doesn't have](../../../assets/blog/mi-a2-partitions-en.svg)
 
 The four that matter for this story:
 
