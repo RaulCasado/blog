@@ -23,6 +23,89 @@ First lesson, and I learned it before touching anything: **check what you're act
 
 After comparing options I went with **ArrowOS**: it still had official builds for `jasmine_sprout` and the feedback was good.
 
+### First, what a partition actually is, and why it explains everything
+
+Worth stopping here, because everything that follows depends on this, and I glossed over it in
+the original post.
+
+A phone's internal storage **isn't a disk with folders** like a computer's. It's a single memory
+chip (an eMMC, 64 GB in this case) that ships **split into fixed-size chunks called partitions**.
+Each chunk has one job, and the layout can't be changed without rewriting the partition table —
+an operation with a real chance of killing the phone for good. The Mi A2 has **69 partitions**.
+Most of them nobody ever touches.
+
+![Partition map of the Mi A2: duplicated A and B slots, the shared userdata partition, and the partitions this device doesn't have](../../../assets/blog/mi-a2-partitions.svg)
+
+The four that matter for this story:
+
+- **`boot`** — holds the Linux kernel and the initial ramdisk. On this phone it also holds the
+  recovery, and we'll get to why that's unusual.
+- **`system`** — Android itself: the framework, system apps, libraries. Mounted **read-only**,
+  which is why a normal app can't modify the system.
+- **`vendor`** — everything specific to the manufacturer and the chipset: Qualcomm drivers, WiFi
+  firmware, and — this will matter — **the `fstab` file that says how each partition should be
+  mounted**.
+- **`userdata`** — your stuff: installed apps, photos, settings, accounts. By far the largest,
+  around 50 of the 64 GB.
+
+And then the ones I didn't know existed until I went looking: `modem` (4G modem firmware),
+`persist` (sensor and camera calibration — wipe it and you lose auto-rotate), `vbmeta` (verified
+boot signatures), `misc` (where the bootloader notes which slot to boot), and a dozen Qualcomm
+early-boot partitions with cryptic names: `xbl`, `abl`, `tz`, `hyp`, `rpm`.
+
+### A partition and a filesystem are not the same thing
+
+This distinction is exactly where the problem hid from me for two days, so let me take it slowly.
+
+A **partition** is the reserved space: "from this byte to that byte, this is called userdata."
+It's an empty container.
+
+A **filesystem** is how data is organised *inside* that container: where the index lives, how
+directories point at things, how free space is tracked. It's a format, the same way `.pdf` and
+`.docx` are different ways of storing a document.
+
+A partition can hold any filesystem, but **whoever reads it has to know which one it is**. Think
+of a VHS tape and a DVD: both are "a film", but putting the DVD in the VCR does nothing. Neither
+one is broken. The machine just can't read that format.
+
+The two in this story:
+
+- **ext4** — Linux's standard filesystem since 2008. Mature, reliable, boring in the good way.
+  It's what most Android ROMs use for `system`, `vendor` and `userdata`.
+- **f2fs** — *Flash-Friendly File System*, built by Samsung in 2012 specifically for flash memory.
+  In theory it performs better on phones, because it's designed around how NAND physically works.
+  Some ROMs prefer it for `userdata`.
+
+Neither is "the good one". What matters is that **what's inside the partition matches what the
+system expects to find**.
+
+### And now: what A/B partitions are
+
+The Mi A2 is an **A/B** device, also called *seamless updates*. Google introduced it with Android 7
+and made it mandatory for Android One phones.
+
+The idea: instead of one `system`, you get **two complete copies** — `system_a` and `system_b`.
+Same for `boot` and `vendor`. The phone boots from one set (the *active slot*) while the other
+sits in reserve.
+
+When an update arrives, it isn't installed over the system you're using: it's **written to the
+inactive slot**, in the background, while you carry on using the phone. On reboot the bootloader
+switches the active slot and you come up updated. If the update is broken and won't boot, the
+bootloader **falls back to the previous slot on its own**, still intact.
+
+It's an elegant design, and it has three practical consequences that hit me directly:
+
+1. **There's no recovery partition.** With two copies of everything already, two more recovery
+   partitions was too much space. So the recovery lives **inside `boot`**. That's why I flash TWRP
+   to `boot` later on, and why I can boot it from RAM with `fastboot boot` without installing it.
+2. **`userdata` is NOT duplicated.** There's only one, shared by both slots. It makes sense — you
+   wouldn't want a system update to leave you with last week's photos. But it means **if `userdata`
+   is broken, it doesn't matter which slot you switch to: the problem follows you**. Which is
+   exactly what happened, and explains why reflashing the system over and over fixed nothing.
+3. **The bootloader keeps a retry counter per slot.** If a slot fails several times in a row, it's
+   marked unbootable and the bootloader jumps to the other one. I'll come back to this, because it
+   cost me hours.
+
 ### Error 7, or when a ROM asks for partitions that don't exist
 
 I downloaded ArrowOS 13.1, verified the checksum, made a backup, and on sideload:
@@ -190,6 +273,68 @@ ro.arrow.version = Arrow-v12.1-jasmine_sprout-OFFICIAL-20221119-VANILLA
 sys.boot_completed = 1
 /dev/block/mmcblk0p69 on /data type ext4
 ```
+
+### How I knew ext4 was the right side to fix
+
+A nuance worth spelling out, because there were two ways to resolve the mismatch and only one was
+valid.
+
+The conflict was: partition in f2fs, fstab asking for ext4. In principle you fix that by changing
+either side. I could have edited the fstab to ask for f2fs and left the partition alone.
+
+You can't, for three reasons:
+
+1. **`vendor` is mounted read-only**, and not arbitrarily: it's part of the image the ROM verifies
+   at boot. Touching it means stepping into verified-boot territory.
+2. Even if I managed to write there, **the next ROM change would overwrite it**, and the same
+   problem would come back with no memory of why.
+3. And the underlying reason: the fstab **isn't a preference, it's a declaration of what that ROM
+   knows how to handle**. If ArrowOS 12.1 says ext4, it was built with ext4 support for `userdata`.
+   Nothing guarantees its kernel has f2fs compiled in. Forcing it to mount something it may not be
+   able to read trades a known failure for an unknown one.
+
+So the partition adapts to the ROM, not the other way round. **The installed ROM's fstab is the
+source of truth**, and that's the rule I'm keeping.
+
+### What I didn't do, and why
+
+Documenting the paths I rejected feels as useful as documenting the one that worked, because when
+you're stuck, half the job is deciding what **not** to try.
+
+**I didn't hand-write the ADB key into `/data/misc/adb/adb_keys`.** That was my clever plan for
+getting a live logcat: pre-authorise the PC, and the moment `adbd` comes up I can connect even if
+the system hangs afterwards. Good idea, impossible to execute: writing to `/data` means mounting
+it, and it wouldn't mount. The plan died at step one. The funny part is that the reason I couldn't
+mount it **was precisely the problem I was trying to diagnose**.
+
+**I didn't repartition to create `product`, `system_ext` and `odm`.** It would have let ArrowOS
+13.1 install. Rewriting the eMMC's GPT is possible, but there's no free space to put them — you'd
+have to steal it from another partition — and a mistake there is one of the few that kills a phone
+with no way back. The prize was Android 12 to Android 13. Nowhere near worth it.
+
+**I didn't convert the phone into a Mi 6X.** Identical hardware, and it opens the door to more
+ROMs. But it means flashing MIUI and another device's firmware, with anti-rollback in play: skip a
+version by accident and the bootloader stays a 6X permanently. On top of that, while researching I
+found that many ROMs for this phone are unified builds targeting `jasmine_sprout` and `wayne` at
+once, so converting opens fewer doors than it promises.
+
+**I didn't let the ROM reformat it itself.** And this one still nags at me. The fstab carries the
+`formattable` flag, which in theory lets `init` reformat `/data` when the mount fails. It should
+have fixed itself. It didn't. My hunch is that file-based encryption (`fileencryption=ice`)
+complicates that path, but I haven't confirmed it and I'm not going to invent the explanation.
+It's an honest loose end.
+
+**I didn't use my PC's `mke2fs`.** I could have built the ext4 image on the laptop and flashed it
+over fastboot. I chose to run the `mke2fs` that ships inside TWRP instead, because its
+`/etc/mke2fs.conf` uses Android's conservative profile: no `64bit`, no `metadata_csum`. A modern
+Ubuntu `mke2fs` turns those on by default, and an Android 12 kernel on 2018 hardware may not
+support them. I'd have created a technically correct ext4 that the phone couldn't mount — the same
+mistake again, wearing a different hat.
+
+**I didn't restore LineageOS 18.1.** It was the safe exit and I had it the whole time: zip
+downloaded, process proven, a ROM that worked. I passed because the point was to understand the
+failure, not dodge it. If this had been someone's work phone on a deadline, the right call would
+have been the opposite.
 
 ### What I took away from this
 

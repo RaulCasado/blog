@@ -23,6 +23,93 @@ Primera lección, y me la llevé antes de tocar nada: **comprueba qué tienes in
 
 Después de comparar opciones me decidí por **ArrowOS**: seguía teniendo builds oficiales para `jasmine_sprout` y las críticas eran buenas.
 
+### Antes de seguir: qué es una partición, y por qué esto lo explica todo
+
+Aquí conviene parar, porque todo lo que viene después depende de entender esto, y en el post
+original lo pasé por encima.
+
+La memoria interna de un móvil **no es un disco con carpetas**, como el de un ordenador. Es un
+único chip de memoria (una eMMC, en este caso de 64 GB) que viene **dividido de fábrica en trozos
+de tamaño fijo llamados particiones**. Cada trozo tiene un trabajo concreto y el reparto no se
+puede cambiar sin reescribir la tabla de particiones, que es una operación con muchas papeletas
+de dejarte el móvil muerto para siempre. En el Mi A2 hay **69 particiones**. La mayoría no las
+toca nadie nunca.
+
+![Mapa de particiones del Mi A2: los slots A y B duplicados, la userdata compartida, y las particiones que no existen en este dispositivo](../../../assets/blog/mi-a2-partitions.svg)
+
+Las cuatro que importan para esta historia:
+
+- **`boot`** — lleva el kernel de Linux y el ramdisk inicial. En este móvil también lleva dentro
+  el recovery, y ahora veremos por qué eso es raro.
+- **`system`** — Android en sí: el framework, las apps del sistema, las bibliotecas. Se monta en
+  **solo lectura**, y por eso una app normal no puede modificar el sistema.
+- **`vendor`** — todo lo específico del fabricante y del chip: los drivers de Qualcomm, el firmware
+  del WiFi, y —esto será importante— **el fichero `fstab` que dice cómo hay que montar cada
+  partición**.
+- **`userdata`** — tus datos: apps instaladas, fotos, ajustes, cuentas. Es con diferencia la más
+  grande, unos 50 GB de los 64.
+
+Y luego están las que ni sabía que existían hasta que me puse a mirar: `modem` (el firmware del
+módem 4G), `persist` (calibración de sensores y cámara, que si se borra te quedas sin
+autorrotación), `vbmeta` (firmas del arranque verificado), `misc` (donde el bootloader anota qué
+slot arrancar), y una docena de particiones del arranque temprano de Qualcomm con nombres
+crípticos: `xbl`, `abl`, `tz`, `hyp`, `rpm`.
+
+### Partición y sistema de ficheros no son lo mismo
+
+Esta distinción es exactamente donde se me escapó el problema durante dos días, así que la explico
+despacio.
+
+Una **partición** es el espacio reservado: "desde este byte hasta este otro, esto se llama
+userdata". Es un contenedor vacío.
+
+Un **sistema de ficheros** es cómo se organizan los datos *dentro* de ese contenedor: dónde está
+el índice, cómo se apuntan los directorios, cómo se marca el espacio libre. Es un formato, igual
+que un `.pdf` y un `.docx` son formas distintas de guardar un documento.
+
+Una partición puede tener cualquier sistema de ficheros dentro, pero **quien la vaya a leer tiene
+que saber cuál es**. Es como una cinta VHS y un DVD: los dos son "una película", pero si metes el
+DVD en el vídeo no pasa nada. No está roto ninguno de los dos. Simplemente el aparato no sabe leer
+ese formato.
+
+Los dos que aparecen en esta historia:
+
+- **ext4** — el sistema de ficheros estándar de Linux desde 2008. Maduro, fiable, aburrido en el
+  buen sentido. Es lo que usan la mayoría de ROMs de Android para `system`, `vendor` y `userdata`.
+- **f2fs** — *Flash-Friendly File System*, creado por Samsung en 2012 específicamente para memoria
+  flash. En teoría rinde mejor en móviles, porque está diseñado alrededor de cómo funciona
+  físicamente la memoria NAND. Algunas ROMs lo prefieren para `userdata`.
+
+Ninguno es "el bueno". Lo que importa es que **coincida lo que hay dentro de la partición con lo
+que el sistema espera encontrar**.
+
+### Y ahora sí: qué son las particiones A/B
+
+El Mi A2 es un dispositivo **A/B**, también llamado *seamless updates*. Google lo introdujo con
+Android 7 y es obligatorio en los móviles del programa Android One.
+
+La idea: en vez de tener una `system`, tienes **dos copias completas** — `system_a` y `system_b`.
+Lo mismo con `boot` y `vendor`. El móvil arranca desde uno de los dos juegos (el *slot activo*)
+mientras el otro queda de reserva.
+
+Cuando llega una actualización, no se instala encima del sistema que estás usando: **se escribe
+en el slot inactivo**, en segundo plano, mientras tú sigues usando el móvil con normalidad. Al
+reiniciar, el bootloader cambia el slot activo y arrancas ya actualizado. Si la actualización
+está rota y no arranca, el bootloader **vuelve solo al slot anterior**, que sigue intacto.
+
+Es un diseño elegante y tiene tres consecuencias prácticas que me afectaron directamente:
+
+1. **No hay partición de recovery.** Como ya hay dos copias de todo, meter dos recovery más era
+   demasiado espacio. Así que el recovery vive **dentro de `boot`**. Por eso más adelante flasheo
+   TWRP a `boot`, y por eso puedo arrancarlo en RAM con `fastboot boot` sin instalar nada.
+2. **`userdata` NO está duplicada.** Solo hay una, compartida por los dos slots. Tiene sentido: no
+   querrías que actualizar el sistema te dejara con las fotos de la semana pasada. Pero significa
+   que **si `userdata` está mal, da igual el slot al que vayas: el problema te sigue**. Esto es
+   exactamente lo que me pasó, y explica por qué reflashear el sistema una y otra vez no arreglaba
+   nada.
+3. **El bootloader lleva un contador de intentos por slot.** Si un slot falla varias veces
+   seguidas, se declara no arrancable y salta al otro. Volveré a esto, porque me costó horas.
+
 ### Error 7, o cuando la ROM pide particiones que no existen
 
 Descargué ArrowOS 13.1, verifiqué el checksum, hice backup, y al hacer el sideload:
@@ -190,6 +277,70 @@ ro.arrow.version = Arrow-v12.1-jasmine_sprout-OFFICIAL-20221119-VANILLA
 sys.boot_completed = 1
 /dev/block/mmcblk0p69 on /data type ext4
 ```
+
+### Cómo supe que ext4 era lo correcto, y no al revés
+
+Un matiz que merece la pena, porque tenía dos formas de resolver el desajuste y solo una era
+válida.
+
+El conflicto era: la partición en f2fs, el fstab pidiendo ext4. En principio se arregla cambiando
+cualquiera de los dos lados. Podría haber editado el fstab para que pidiera f2fs, y dejar la
+partición como estaba.
+
+No se puede, por tres razones:
+
+1. **`vendor` se monta en solo lectura**, y no por capricho: forma parte de la imagen que la ROM
+   verifica al arrancar. Tocarla es meterse en el terreno del arranque verificado.
+2. Aunque lograra escribir ahí, **el siguiente cambio de ROM me lo pisaría**, y volvería el mismo
+   problema sin recordar por qué.
+3. Y la razón de fondo: el fstab **no es una preferencia, es una declaración de lo que esa ROM
+   sabe manejar**. Si ArrowOS 12.1 dice ext4, es que se compiló con soporte ext4 para `userdata`.
+   Nada garantiza que su kernel lleve f2fs compilado. Obligarla a montar algo que quizá no sabe
+   leer es cambiar un fallo conocido por uno desconocido.
+
+Así que la partición se adapta a la ROM, no al revés. **El fstab de la ROM instalada es la fuente
+de la verdad**, y esa es la regla que me llevo.
+
+### Lo que no hice, y por qué
+
+Documentar los caminos descartados me parece tan útil como documentar el que funcionó, porque
+cuando estás atascado la mitad del trabajo es decidir qué **no** vas a intentar.
+
+**No escribí la clave de ADB a mano en `/data/misc/adb/adb_keys`.** Era mi plan estrella para
+sacar un logcat en vivo: si pre-autorizo el PC, en cuanto arranque `adbd` puedo conectarme aunque
+el sistema se cuelgue después. Buena idea, imposible de ejecutar: para escribir en `/data` hay que
+montarla, y no montaba. La idea moría en el primer paso. Lo gracioso es que el motivo por el que
+no podía montarla **era exactamente el problema que buscaba diagnosticar**.
+
+**No reparticioné para crear `product`, `system_ext` y `odm`.** Habría permitido instalar ArrowOS
+13.1. Reescribir la tabla de particiones GPT de la eMMC es posible, pero no hay espacio libre
+donde meterlas —habría que robárselo a otra partición— y un error ahí es de los pocos que dejan
+un móvil muerto sin vuelta atrás. El premio era pasar de Android 12 a Android 13. No compensa
+ni de lejos.
+
+**No convertí el móvil en Mi 6X.** Es hardware idéntico y abre la puerta a más ROMs. Pero implica
+flashear MIUI y firmware de otro dispositivo, con el anti-rollback de por medio: si saltas de
+versión sin querer, el bootloader se queda como 6X permanentemente. Además, investigando descubrí
+que muchas ROMs para este teléfono son builds unificadas para `jasmine_sprout` y `wayne` a la vez,
+así que convertir abre menos puertas de lo que promete.
+
+**No dejé que la ROM reformateara sola.** Y esto me sigue picando. El fstab lleva la bandera
+`formattable`, que en teoría autoriza a `init` a reformatear `/data` si el montaje falla. Debería
+haberse arreglado solo. No pasó. Mi sospecha es que el cifrado por ficheros (`fileencryption=ice`)
+complica ese camino, pero no lo he confirmado y no me voy a inventar la explicación. Es un cabo
+suelto honesto.
+
+**No usé el `mke2fs` de mi PC.** Podría haber creado la imagen ext4 en el portátil y flashearla
+por fastboot. Preferí ejecutar el `mke2fs` que trae TWRP dentro del propio móvil, porque su
+`/etc/mke2fs.conf` usa el perfil conservador de Android: sin `64bit` ni `metadata_csum`. Un
+`mke2fs` moderno de Ubuntu activa esas opciones por defecto, y el kernel de Android 12 en hardware
+de 2018 puede no llevarlas. Habría creado un ext4 técnicamente correcto que el móvil no sabría
+montar — el mismo error de nuevo, con otro disfraz.
+
+**No restauré LineageOS 18.1.** Era la salida segura y la tuve en la mano todo el rato: el zip
+descargado, el proceso probado, la ROM que funcionaba. La descarté porque el objetivo era
+entender el fallo, no esquivarlo. Si esto hubiera sido el móvil de trabajo de alguien con prisa,
+la decisión correcta habría sido la contraria.
 
 ### Lo que me llevo de todo esto
 
