@@ -521,5 +521,13 @@ const hasToc = headings.length > 0;
 			});
 		</script>
 
+		<script>
+			document.querySelectorAll('.prose a[href^="http://"], .prose a[href^="https://"]').forEach((link) => {
+				const anchor = link as HTMLAnchorElement;
+				anchor.target = '_blank';
+				anchor.rel = 'noopener noreferrer';
+			});
+		</script>
+
 	</body>
 </html>
