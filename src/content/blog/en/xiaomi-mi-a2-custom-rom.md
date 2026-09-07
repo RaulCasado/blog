@@ -1,12 +1,241 @@
 ---
 title: 'How I Gave My Xiaomi Mi A2 a Second Life with a Custom ROM'
-description: 'Complete guide on how I installed a Custom ROM on a Xiaomi Mi A2 abandoned by the manufacturer. From unlocking the bootloader to installing alternative apps like NewPipe and Aurora Store.'
-pubDate: '2026-02-08'
+description: 'Complete guide on how I installed a Custom ROM on a Xiaomi Mi A2 abandoned by the manufacturer. Updated September 2026 with two days of debugging: Error 7, slot retry counters, fastboot 768 MB limit, and a boot hang that turned out to be the wrong filesystem.'
+pubDate: '2026-09-07'
+updatedDate: '2026-09-07'
 heroImage: '../../../assets/blog/mi_a2.jpg'
 heroImageAlt: 'Xiaomi Mi A2 with Custom ROM'
 tags: ['linux']
 lang: 'en'
 ---
+
+## Update: September 7th, 2026
+
+I wrote this post back in February. Seven months later I decided to update the phone, and what was supposed to be a quiet afternoon turned into two days fighting a device that flatly refused to boot. It came down to **a single line in a config file**, but getting there meant ruling out half a dozen wrong theories first.
+
+The original post is below, untouched. Here's what happened next.
+
+### Where I started
+
+I was still on LineageOS 18.1, an unofficial build from December 2023. Android 11. It worked fine, but it had gone two years without a security patch and it was starting to show.
+
+First lesson, and I learned it before touching anything: **check what you're actually running**. I assumed I had something newer. One `getprop ro.build.display.id` settled it in a second. I'd been wrong about my own phone for months.
+
+After comparing options I went with **ArrowOS**: it still had official builds for `jasmine_sprout` and the feedback was good.
+
+### Error 7, or when a ROM asks for partitions that don't exist
+
+I downloaded ArrowOS 13.1, verified the checksum, made a backup, and on sideload:
+
+```
+Error 7 (kInstallDeviceOpenError)
+```
+
+Tried the Lineage Recovery. Same error. Flashed a fresh TWRP. Same error.
+
+Rather than keep guessing, I pulled `payload.bin` out of the zip with `payload_dumper` and looked at which partitions it expected:
+
+```
+boot, system, vendor, product, system_ext, odm
+```
+
+And what my phone physically has:
+
+```
+boot, system, vendor
+```
+
+`product`, `system_ext` and `odm` **don't exist on the Mi A2**. It's a 2018 phone that shipped with Android 8.1, before those partitions were standard. It doesn't support dynamic partitions either, so they can't be created on the fly. `update_engine` was trying to open three block devices that weren't there, and gave up.
+
+I confirmed it by listing all of `/dev/block/bootdevice/by-name/`. Other users reported the same thing on XDA, usually followed by "doesn't happen on 12.1". A packaging bug in that specific build.
+
+### Second attempt: ArrowOS 12.1
+
+This time I checked the manifest **before** flashing anything. Only `boot`, `system` and `vendor`, with sizes that matched. A clean build for this hardware.
+
+The install was flawless. "Step 1/2, Step 2/2, Done processing script file." Not a single error.
+
+I rebooted. ArrowOS logo. And that's where it stayed.
+
+### A dumb detour: fastboot was missing a binary
+
+Before that I ran `fastboot -w` to wipe userdata, and got this:
+
+```
+Erasing 'userdata'   OKAY
+mke2fs failed with status 1
+```
+
+The wipe worked, but rebuilding the filesystem didn't. It turns out **the Debian/Ubuntu `fastboot` package is missing the `mke2fs` binary** it's supposed to ship in `/usr/lib/android-sdk/platform-tools/`. Not the phone's fault, not the ROM's fault: a distro packaging bug.
+
+I worked around it by building an ext4 image by hand, sized exactly to the partition, using the system's own `mke2fs`, then flashing it with `fastboot flash userdata`. Half an hour burned on something completely unrelated to the real problem.
+
+### The retry counter I didn't know existed
+
+At some point the phone started showing me contradictory screens: "Can't load Android system", and sometimes claiming the active slot was B when I'd installed everything to A.
+
+That had me going in circles until I checked:
+
+```bash
+fastboot getvar slot-retry-count:a
+# slot-retry-count:a: 0
+```
+
+On an A/B device, the bootloader gives each slot a limited number of boot attempts. When they run out, **it switches to the other slot on its own** — which in my case had no system at all. Hence the confusing screens: I thought I was debugging ArrowOS while the phone was trying to boot an empty partition.
+
+The fix is one line, and it's the kind of thing that costs you hours if you don't know it:
+
+```bash
+fastboot set_active a   # sets the slot and resets the counter back to 7
+```
+
+If you're debugging a failing boot, reset that counter **before** drawing conclusions about the ROM. I'd written off builds that were probably fine.
+
+### 768 MB, the limit nobody warns you about
+
+To rule out leftover bits of 13.1, I extracted `boot.img`, `system.img` and `vendor.img` from the 12.1 payload and flashed them straight over fastboot, skipping the installer.
+
+`boot` and `vendor` went fine. `system` (3 GB) hung. No error, no timeout, nothing. The command just never finished.
+
+```bash
+fastboot getvar max-download-size
+# max-download-size: 805306368   → 768 MB
+```
+
+The bootloader can't take more than 768 MB in one transfer. The fix is converting the image to *sparse* format, which splits the transfer up:
+
+```bash
+sudo apt install android-sdk-libsparse-utils
+img2simg system.img system_sparse.img
+fastboot flash system system_sparse.img
+```
+
+What bothers me here isn't the limit, it's that **fastboot says nothing**. It sits there silently and you assume it's just slow.
+
+### Logs that ruled out everything except the actual problem
+
+Clean verified partitions, counter at 7, userdata freshly formatted: still no boot. Ten minutes on the logo. Twenty. Nothing.
+
+I needed logs. The catch is that on a phone that won't boot you can't use `adb` normally, and logcat only lives in that boot session's RAM — so rebooting into TWRP to investigate wipes exactly what you wanted to read.
+
+The only thing that survives a reboot is the kernel log, in `pstore`. I got at it with a trick I rather liked:
+
+```bash
+fastboot boot twrp.img   # boots TWRP from RAM, flashing nothing
+adb pull /sys/fs/pstore/console-ramoops-0
+```
+
+The log cut off cleanly around second 17. No panic. No error. Nothing.
+
+I repeated it with the USB cable unplugged during boot, in case the USB controller was hanging while talking to the PC. Identical.
+
+That left me with two facts: **the kernel boots perfectly**, and the hang happens later, in Android's own init, which doesn't get recorded there. Meanwhile `adb devices` showed the phone as `unauthorized`, steadily, with no disconnects. Meaning `adbd` was running. The boot was getting far, and then stopping.
+
+### The real cause was a filesystem
+
+The next day, with the phone in TWRP, I tried to mount `/data` to write the ADB key manually and get a live logcat. I got this:
+
+```
+mount: '/dev/block/bootdevice/by-name/userdata'->'/data': No such device
+```
+
+"No such device" sounds like a corrupt partition. It wasn't. I looked at the raw superblock:
+
+```bash
+blkid /dev/block/mmcblk0p69
+# TYPE="f2fs"
+```
+
+Then I mounted the `vendor` partition read-only to read the installed ROM's own fstab:
+
+```bash
+mount -o ro /dev/block/bootdevice/by-name/vendor_a /vendor
+cat /vendor/etc/fstab.qcom
+```
+
+```
+/dev/block/bootdevice/by-name/userdata  /data  ext4  ...  wait,check,formattable,fileencryption=ice
+```
+
+**ext4.** The partition was **f2fs**.
+
+That was the whole problem. `init` was trying to mount `/data` as ext4, couldn't, and without `/data` there's no Zygote, no SystemServer, no launcher. The kernel booted perfectly (hence the clean log), `adbd` came up from the ramdisk (hence the `unauthorized`), and there it sat forever.
+
+The f2fs was inherited from LineageOS 18.1. And here's the detail that let it survive everything: **"format data" and factory resets reformat while keeping the existing filesystem type**. It doesn't matter how many times you reset. It was never going to fix it.
+
+As for why the error was so unhelpful: the official TWRP kernel for this device **has no f2fs support compiled in**. You can see it in a second:
+
+```bash
+cat /proc/filesystems
+# ext3, ext2, ext4, vfat, msdos... and no sign of f2fs
+```
+
+When the kernel doesn't know a filesystem, `mount` returns `ENODEV`, which prints as "No such device". It doesn't mean the device isn't there. It means it has no idea what to do with it.
+
+### The fix, two days later
+
+```bash
+adb shell "mke2fs -F -t ext4 -b 4096 -L data -M /data /dev/block/mmcblk0p69"
+adb shell "e2fsck -fp /dev/block/mmcblk0p69"
+fastboot set_active a
+fastboot reboot
+```
+
+I used the `mke2fs` that ships with TWRP, because its `/etc/mke2fs.conf` profile is Android's conservative one: no `64bit`, no `metadata_csum`, which is exactly what an Android 12 kernel on 2018 hardware expects.
+
+Four minutes of first boot — normal after formatting `/data`, since the whole structure has to be created and encryption applied — and the welcome wizard showed up.
+
+```
+ro.arrow.version = Arrow-v12.1-jasmine_sprout-OFFICIAL-20221119-VANILLA
+sys.boot_completed = 1
+/dev/block/mmcblk0p69 on /data type ext4
+```
+
+### What I took away from this
+
+**Always compare what's there against what the ROM expects.** If an A/B ROM hangs on the logo and the kernel boots clean, check each partition's type with `blkid` and hold it against the installed ROM's `fstab`. It's three commands, and it would have saved me two days. I kept reflashing `boot`, `system` and `vendor` when the problem was in none of them.
+
+**An error message can mislead you without lying.** "No such device" had me thinking corruption. It was a missing capability in the recovery's kernel.
+
+**A factory reset doesn't fix everything.** It doesn't change the filesystem. That runs against the intuition that resetting makes things new.
+
+**Kernel logs only cover the kernel.** A clean `console-ramoops` doesn't mean the boot went well. It means the problem is further along, where that log isn't looking.
+
+### So why not Android 15?
+
+While I was at it, I looked into whether I could aim higher. The state of `jasmine_sprout` as of September 2026:
+
+| ROM | Latest | Status |
+|---|---|---|
+| ArrowOS | 13.1 | Project stalled; that build broken on this phone |
+| crDroid | Android 12 | No builds since January 2022 |
+| PixelExperience | Android 13 | Project shut down in 2024 |
+| LineageOS official | 18.1 | No maintainer, no builds |
+| LineageOS 22.1 unofficial | **Android 15** | Exists, but the thread is closed and the dev moved on |
+
+The interesting part is that **the device can absolutely handle Android 15**. LineageOS's official device tree has a `lineage-22.2` branch, and its `BoardConfig.mk` declares exactly this:
+
+```makefile
+AB_OTA_PARTITIONS += boot system vendor
+```
+
+Only the three partitions the Mi A2 has. `product` and `system_ext` go inside `system` as folders with symlinks, which is how you do it properly on older devices. ArrowOS 12.1 already does it: right now my phone has a `/product -> /system/product`.
+
+So the 13.1 failure was never a hardware ceiling. It was a badly packaged build.
+
+One correction to what I wrote in the original post about converting the Mi A2 into a Mi 6X: it's still a real option, but I'd temper it. Many ROMs for this phone are unified builds targeting `jasmine_sprout` and `wayne` at once, so converting doesn't always open as many doors as it sounds. And the process involves anti-rollback, which can leave your bootloader stuck as a 6X with no way back.
+
+Build LineageOS 22.2 myself? Technically doable, and the tree is ready. It's around 300 GB between source and build objects — Android carries the kernel, Chromium for the WebView, and its own toolchain — and AOSP wants 32 GB of RAM. My laptop has 13 GB and no swap, so the build would die on memory about three hours in. Parked for now.
+
+### Where I am now
+
+ArrowOS 12.1, Android 12, working. The security patch is from October 2022, which isn't great, but this is my dad's daily phone and I'd rather have something stable and proven than an abandoned build with known WiFi problems.
+
+Two days to change one line in an fstab. But now I know why it failed, which is what I was after.
+
+---
+
+# The original post (February 2026)
 
 ## Introduction
 
