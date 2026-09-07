@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Why benchmarks need an empty machine between runs</title>
+  <desc id="desc">A comparison between a clean sequential benchmark and a contaminated benchmark where two runtimes keep models in memory.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#111827"/><stop offset="1" stop-color="#26334b"/></linearGradient>
+    <linearGradient id="good" x1="0" x2="1"><stop offset="0" stop-color="#10b981"/><stop offset="1" stop-color="#059669"/></linearGradient>
+    <linearGradient id="bad" x1="0" x2="1"><stop offset="0" stop-color="#f59e0b"/><stop offset="1" stop-color="#dc2626"/></linearGradient>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#bdc9dd"/></marker>
+  </defs>
+  <rect width="1600" height="900" rx="34" fill="url(#bg)"/>
+  <text x="90" y="90" fill="#f8fafc" font-family="Inter,Arial,sans-serif" font-size="44" font-weight="700">A benchmark needs a clean starting point</text>
+  <text x="90" y="138" fill="#bdc9dd" font-family="Inter,Arial,sans-serif" font-size="25">Otherwise the second run is also measuring the first run's leftovers.</text>
+
+  <rect x="90" y="210" width="670" height="520" rx="28" fill="#0b1220" stroke="#16845f" stroke-width="3"/>
+  <rect x="840" y="210" width="670" height="520" rx="28" fill="#0b1220" stroke="#b84a35" stroke-width="3"/>
+  <text x="425" y="275" text-anchor="middle" fill="#6ee7b7" font-family="Inter,Arial,sans-serif" font-size="32" font-weight="700">Clean run</text>
+  <text x="1175" y="275" text-anchor="middle" fill="#fdba74" font-family="Inter,Arial,sans-serif" font-size="32" font-weight="700">Contaminated run</text>
+
+  <g font-family="Inter,Arial,sans-serif" text-anchor="middle">
+    <rect x="155" y="340" width="210" height="100" rx="18" fill="url(#good)"/>
+    <text x="260" y="382" fill="#fff" font-size="22" font-weight="700">Unload Ollama</text>
+    <text x="260" y="414" fill="#fff" font-size="18">empty memory</text>
+    <path d="M375 390 H465" stroke="#bdc9dd" stroke-width="5" fill="none" marker-end="url(#arrow)"/>
+    <rect x="485" y="340" width="210" height="100" rx="18" fill="#0e7490"/>
+    <text x="590" y="382" fill="#fff" font-size="22" font-weight="700">Run llama.cpp</text>
+    <text x="590" y="414" fill="#fff" font-size="18">measure result</text>
+    <text x="425" y="530" fill="#d1fae5" font-size="24">One model owns the machine.</text>
+    <text x="425" y="570" fill="#d1fae5" font-size="22">The number answers the question</text>
+    <text x="425" y="603" fill="#d1fae5" font-size="22">we intended to ask.</text>
+
+    <rect x="905" y="340" width="210" height="100" rx="18" fill="#b45309"/>
+    <text x="1010" y="382" fill="#fff" font-size="22" font-weight="700">Ollama stays loaded</text>
+    <text x="1010" y="414" fill="#fff" font-size="18">uses RAM/VRAM</text>
+    <path d="M1125 390 H1215" stroke="#bdc9dd" stroke-width="5" fill="none" marker-end="url(#arrow)"/>
+    <rect x="1235" y="340" width="210" height="100" rx="18" fill="url(#bad)"/>
+    <text x="1340" y="382" fill="#fff" font-size="22" font-weight="700">Run llama.cpp</text>
+    <text x="1340" y="414" fill="#fff" font-size="18">measure result</text>
+    <text x="1175" y="530" fill="#fed7aa" font-size="24">Two models share the machine.</text>
+    <text x="1175" y="570" fill="#fed7aa" font-size="22">The number includes leftovers</text>
+    <text x="1175" y="603" fill="#fed7aa" font-size="22">from a different experiment.</text>
+  </g>
+
+  <rect x="205" y="785" width="1190" height="58" rx="16" fill="#f8fafc"/>
+  <text x="800" y="823" text-anchor="middle" fill="#111827" font-family="Inter,Arial,sans-serif" font-size="23" font-weight="700">If the starting state is different, the comparison is not fair.</text>
+</svg>

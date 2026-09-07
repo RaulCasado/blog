@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">How local RAG works</title>
+  <desc id="desc">A diagram showing a question searched against local notes, selected evidence sent to a small model, and a cited answer returned.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#101827"/><stop offset="1" stop-color="#24324b"/></linearGradient>
+    <linearGradient id="q" x1="0" x2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#6366f1"/></linearGradient>
+    <linearGradient id="search" x1="0" x2="1"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#0284c7"/></linearGradient>
+    <linearGradient id="model" x1="0" x2="1"><stop offset="0" stop-color="#10b981"/><stop offset="1" stop-color="#059669"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#000" flood-opacity=".25"/></filter>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#bdc9dd"/></marker>
+  </defs>
+  <rect width="1600" height="900" rx="34" fill="url(#bg)"/>
+  <text x="90" y="92" fill="#f8fafc" font-family="Inter,Arial,sans-serif" font-size="44" font-weight="700">RAG is a search step before the answer</text>
+  <text x="90" y="140" fill="#bdc9dd" font-family="Inter,Arial,sans-serif" font-size="25">The model is only as grounded as the fragments it receives.</text>
+
+  <g filter="url(#shadow)">
+    <rect x="90" y="235" width="260" height="190" rx="24" fill="url(#q)"/>
+    <rect x="430" y="205" width="370" height="250" rx="24" fill="url(#search)"/>
+    <rect x="880" y="205" width="300" height="250" rx="24" fill="#334155"/>
+    <rect x="1260" y="235" width="250" height="190" rx="24" fill="url(#model)"/>
+  </g>
+  <g fill="#fff" font-family="Inter,Arial,sans-serif" text-anchor="middle">
+    <text x="220" y="292" font-size="27" font-weight="700">Question</text>
+    <text x="220" y="340" font-size="20">“What did I decide</text>
+    <text x="220" y="370" font-size="20">about the setup?”</text>
+
+    <text x="615" y="260" font-size="27" font-weight="700">Search local notes</text>
+    <text x="615" y="310" font-size="20">SQLite / FTS5</text>
+    <text x="615" y="345" font-size="20">+ optional embeddings</text>
+    <text x="615" y="397" font-size="18">Find the relevant fragments,</text>
+    <text x="615" y="425" font-size="18">not the whole archive.</text>
+
+    <text x="1030" y="260" font-size="27" font-weight="700">Evidence</text>
+    <text x="1030" y="310" font-size="19">REVIEW.md — exact result</text>
+    <text x="1030" y="346" font-size="19">DECISIONS.md — context</text>
+    <text x="1030" y="397" font-size="18">If this column is wrong,</text>
+    <text x="1030" y="425" font-size="18">the answer can be wrong.</text>
+
+    <text x="1385" y="292" font-size="27" font-weight="700">Small model</text>
+    <text x="1385" y="340" font-size="20">Reads evidence</text>
+    <text x="1385" y="370" font-size="20">and writes an answer.</text>
+  </g>
+  <g stroke="#bdc9dd" stroke-width="5" fill="none" marker-end="url(#arrow)">
+    <path d="M355 330 H415"/>
+    <path d="M805 330 H865"/>
+    <path d="M1185 330 H1245"/>
+  </g>
+
+  <rect x="140" y="555" width="1320" height="205" rx="26" fill="#0b1220" stroke="#40516e" stroke-width="2"/>
+  <text x="185" y="620" fill="#f8fafc" font-family="Inter,Arial,sans-serif" font-size="29" font-weight="700">What went wrong in my first RAG question?</text>
+  <text x="185" y="675" fill="#dce7f5" font-family="Inter,Arial,sans-serif" font-size="23">One vague question retrieved two different documents.</text>
+  <text x="185" y="713" fill="#dce7f5" font-family="Inter,Arial,sans-serif" font-size="23">The model answered the part backed by evidence and guessed the rest.</text>
+  <text x="185" y="751" fill="#67e8f9" font-family="Inter,Arial,sans-serif" font-size="23" font-weight="700">Splitting the question into two concrete searches fixed the retrieval.</text>
+</svg>

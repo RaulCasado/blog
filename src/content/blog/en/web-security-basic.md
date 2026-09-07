@@ -4,7 +4,7 @@ description: "An introduction to the fundamental concepts of web security, inclu
 pubDate: "2025-08-12"
 heroImage: '../../../assets/blog/cibersecurity-basic/logo.jpg'
 tags: ['security', 'web_development']
-featured: true
+featured: false
 ---
 
 ## 1. Introduction
