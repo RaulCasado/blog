@@ -336,6 +336,192 @@ downloaded, process proven, a ROM that worked. I passed because the point was to
 failure, not dodge it. If this had been someone's work phone on a deadline, the right call would
 have been the opposite.
 
+### Epilogue: the USB problem that wasn't the USB
+
+The next day, with the phone working, something happened that's worth telling because **I got the
+diagnosis wrong, and the mistake is more instructive than the fix**.
+
+I plugged the phone into the computer and nothing showed up. It charged, screen on, but the PC
+couldn't see it — not as a file device, not at all. Same cable, same port as the day before.
+
+The kernel log said this:
+
+```bash
+dmesg | grep -i usb
+# usb 3-1: new full-speed USB device number 86 using xhci_hcd
+# usb 3-1: Device not responding to setup address.
+# usb 3-1: device not accepting address 86, error -71
+```
+
+And comparing it against the previous day produced a contrast that looked conclusive:
+
+| | Negotiated speed | Result |
+|---|---|---|
+| Day before | `high-speed` (480 Mbps) | Everything worked |
+| That day | `full-speed` (12 Mbps) | `error -71` |
+
+My reasoning: USB speed is negotiated by electrical signalling on the data lines, in hardware,
+before the operating system gets involved. If a device that negotiated 480 Mbps now negotiates 12,
+the signal has degraded. `error -71` is `EPROTO`, a physical-layer protocol failure. And searching
+turned up **whole XDA threads about the Mi A2 with exactly that symptom**: charges but won't
+transfer, with the USB port or the daughterboard as the culprit.
+
+It all fit. I said it was the connector, explained how compacted lint pushes the cable out just far
+enough that the central data pins lose contact while the outer power pins keep it, and recommended
+cleaning it with a wooden toothpick.
+
+I was wrong.
+
+The test that took it apart was entering fastboot. The reasoning: in fastboot **Android isn't
+running**, only the bootloader. If the problem were the ROM, fastboot would work; if it were the
+connector, it would fail just the same.
+
+```bash
+# phone off: Volume Down + Power
+fastboot devices
+# d9cb7e   fastboot
+
+fastboot boot twrp.img
+# Sending 'boot.img' (32164 KB)   OKAY [ 0.923s]
+```
+
+32 MB in 0.9 seconds is about **35 MB/s**, real USB 2.0 speed. And this time the kernel said
+`new high-speed USB device`. The connector was fine.
+
+There were **two separate problems stacked on top of each other**, and neither was physical:
+
+1. **Android's USB gadget had got stuck.** The `error -71` and the drop to full-speed came from the
+   system's USB controller in a bad state, not from the cable. That's why it failed with two
+   different cables: the problem travelled with the phone, not the cable. A reboot cleared it.
+2. **The USB mode didn't include file transfer**, which was the original symptom:
+
+```bash
+adb shell getprop sys.usb.config
+# adb
+```
+
+Just `adb`, no `mtp`. Android always boots into "no data transfer" and you have to enable it by
+hand from the USB notification — easy to miss on a GApps-free build, where that notification is
+more discreet. You change it like this:
+
+```bash
+adb shell svc usb setFunctions mtp
+```
+
+And the USB identifier went from `18d1:4ee7` (ADB only) to `18d1:4ee2` (MTP + ADB), with the phone
+mounting as a file device. To make it stick:
+**Settings → System → Developer options → Default USB configuration → File transfer**.
+
+**What I take from being wrong**, which is the point: I had real evidence (the speed drop), a
+correct technical explanation of that evidence (signalling is physical-layer), and external
+confirmation (XDA threads with the same symptom). Three things pointing the same way. And the
+conclusion was still false.
+
+The mistake was that **a symptom consistent with an explanation doesn't confirm that explanation**.
+Those XDA threads described a similar symptom, not my case. What was missing wasn't more supporting
+evidence: it was **a test capable of telling the two hypotheses apart**. Entering fastboot did
+exactly that, because it cleanly separates hardware from software, and it took thirty seconds.
+
+Now, when a theory feels airtight, I try to ask what experiment would kill it if it were false. If
+I can't think of one, I'm not diagnosing: I'm collecting clues that agree with me.
+
+### Rooting with Magisk, while fastboot was up
+
+With the phone sitting in fastboot, I installed Magisk. On an A/B device with no recovery
+partition, the trick is booting TWRP in memory without flashing it:
+
+```bash
+# TWRP in RAM: touches no partition
+fastboot boot twrp.img
+
+# back up the current boot, just in case
+adb shell "dd if=/dev/block/bootdevice/by-name/boot_a of=/tmp/boot_backup.img bs=1048576"
+adb pull /tmp/boot_backup.img
+
+# install Magisk
+adb push magisk.zip /tmp/magisk.zip
+adb shell "twrp install /tmp/magisk.zip"
+```
+
+The installer detects the active slot on its own and patches the right `boot`:
+
+```text
+- Current boot slot: _a
+- Stock boot image detected
+- Patching ramdisk
+- Flashing new boot image
+- Done
+```
+
+One detail specific to this device: since the recovery lives inside `boot`, flashing Magisk
+overwrites that partition. That's why it's worth backing up `boot` first — and why TWRP gets booted
+from RAM rather than installed.
+
+### All the commands, in one place
+
+For anyone landing here with the same problem, the operational summary.
+
+**Diagnosis:**
+
+```bash
+# which ROM and version is actually running
+adb shell getprop ro.build.display.id
+
+# the real filesystem type of a partition
+adb shell blkid /dev/block/mmcblk0p69
+
+# what the installed ROM expects to mount (the source of truth)
+adb shell "mount -o ro /dev/block/bootdevice/by-name/vendor_a /vendor"
+adb shell cat /vendor/etc/fstab.qcom
+
+# which filesystems the recovery's kernel can mount
+adb shell cat /proc/filesystems
+
+# which partitions physically exist
+adb shell ls /dev/block/bootdevice/by-name/
+
+# boot attempts the slot has left
+fastboot getvar slot-retry-count:a
+fastboot getvar slot-successful:a
+
+# kernel log from the previous boot (survives a reboot)
+fastboot boot twrp.img
+adb pull /sys/fs/pstore/console-ramoops-0
+```
+
+**The fix:**
+
+```bash
+# format userdata to ext4 with Android's conservative profile
+adb shell "mke2fs -F -t ext4 -b 4096 -L data -M /data /dev/block/mmcblk0p69"
+adb shell "e2fsck -fp /dev/block/mmcblk0p69"
+
+# reset the slot's retry counter (back to 7)
+fastboot set_active a
+fastboot reboot
+```
+
+**Flashing large images over fastboot:**
+
+```bash
+# the bootloader won't take more than 768 MB at once
+fastboot getvar max-download-size
+# max-download-size: 805306368
+
+# convert to sparse format to chunk the transfer
+sudo apt install android-sdk-libsparse-utils
+img2simg system.img system_sparse.img
+fastboot flash system system_sparse.img
+```
+
+**Inspecting a ROM before flashing it**, which would have saved me the Error 7:
+
+```bash
+pip install payload_dumper
+payload_dumper payload.bin
+# then check the payload's partitions actually exist on the device
+```
+
 ### What I took away from this
 
 **Always compare what's there against what the ROM expects.** If an A/B ROM hangs on the logo and the kernel boots clean, check each partition's type with `blkid` and hold it against the installed ROM's `fstab`. It's three commands, and it would have saved me two days. I kept reflashing `boot`, `system` and `vendor` when the problem was in none of them.
@@ -374,7 +560,7 @@ Build LineageOS 22.2 myself? Technically doable, and the tree is ready. It's aro
 
 ### Where I am now
 
-ArrowOS 12.1, Android 12, working. The security patch is from October 2022, which isn't great, but this is my dad's daily phone and I'd rather have something stable and proven than an abandoned build with known WiFi problems.
+ArrowOS 12.1, Android 12, working, and rooted with Magisk. The security patch is from October 2022, which isn't great, but this is my dad's daily phone and I'd rather have something stable and proven than an abandoned build with known WiFi problems.
 
 Two days to change one line in an fstab. But now I know why it failed, which is what I was after.
 

@@ -342,6 +342,194 @@ descargado, el proceso probado, la ROM que funcionaba. La descarté porque el ob
 entender el fallo, no esquivarlo. Si esto hubiera sido el móvil de trabajo de alguien con prisa,
 la decisión correcta habría sido la contraria.
 
+### Epílogo: el USB que no era el USB
+
+Al día siguiente, con el móvil ya funcionando, pasó algo que merece contarse porque **me equivoqué
+de diagnóstico y el error es más instructivo que el acierto**.
+
+Conecté el móvil al ordenador y no aparecía. Cargaba, la pantalla encendida, pero el PC no lo veía
+ni como dispositivo de archivos ni para nada. Mismo cable, mismo puerto que el día anterior.
+
+El log del kernel decía esto:
+
+```bash
+dmesg | grep -i usb
+# usb 3-1: new full-speed USB device number 86 using xhci_hcd
+# usb 3-1: Device not responding to setup address.
+# usb 3-1: device not accepting address 86, error -71
+```
+
+Y comparándolo con el día anterior salía un contraste que parecía definitivo:
+
+| | Velocidad negociada | Resultado |
+|---|---|---|
+| El día antes | `high-speed` (480 Mbps) | Todo funcionaba |
+| Ese día | `full-speed` (12 Mbps) | `error -71` |
+
+Mi razonamiento fue: la velocidad USB se negocia por señalización eléctrica en las líneas de datos,
+en el hardware, antes de que el sistema operativo intervenga. Si un dispositivo que negociaba a 480
+Mbps pasa a negociar a 12, es que la señal se ha degradado. El `error -71` es `EPROTO`, un fallo de
+protocolo de capa física. Y buscando encontré **hilos enteros de XDA sobre el Mi A2 con exactamente
+ese síntoma**: carga pero no transfiere, con el puerto USB o la placa auxiliar como culpables.
+
+Todo encajaba. Dije que era el conector, que la pelusa compactada empuja el cable lo justo para que
+los pines de datos del centro no hagan contacto mientras los de alimentación de los extremos sí, y
+recomendé limpiarlo con un palillo de madera.
+
+Estaba equivocado.
+
+La prueba que lo desmontó fue entrar en fastboot. Razonamiento: en fastboot **Android no está
+corriendo**, solo el bootloader. Si el problema fuera de la ROM, en fastboot funcionaría; si fuera
+del conector, fallaría igual.
+
+```bash
+# móvil apagado: Volumen abajo + Encendido
+fastboot devices
+# d9cb7e   fastboot
+
+fastboot boot twrp.img
+# Sending 'boot.img' (32164 KB)   OKAY [ 0.923s]
+```
+
+32 MB en 0,9 segundos son unos **35 MB/s**, velocidad de USB 2.0 real. Y el kernel esta vez dijo
+`new high-speed USB device`. El conector estaba perfecto.
+
+Eran **dos problemas distintos superpuestos**, y ninguno era físico:
+
+1. **El gadget USB de Android se había quedado colgado.** Los `error -71` y la caída a full-speed
+   venían del controlador USB del sistema en mal estado, no del cable. Por eso fallaba con dos
+   cables distintos: el problema viajaba con el móvil, no con el cable. Un reinicio lo arregló.
+2. **El modo USB no incluía transferencia de archivos**, que era el síntoma original:
+
+```bash
+adb shell getprop sys.usb.config
+# adb
+```
+
+Solo `adb`, sin `mtp`. Android arranca siempre en "sin transferencia de datos" y hay que activarlo
+a mano en la notificación de USB — fácil de pasar por alto en una build sin GApps, donde esa
+notificación es más discreta. Se cambia así:
+
+```bash
+adb shell svc usb setFunctions mtp
+```
+
+Y el identificador USB pasó de `18d1:4ee7` (solo ADB) a `18d1:4ee2` (MTP + ADB), con el móvil ya
+montado como dispositivo de archivos. Para que sea permanente:
+**Ajustes → Sistema → Opciones de desarrollador → Configuración USB predeterminada → Transferencia
+de archivos**.
+
+**Lo que me llevo de haberme equivocado**, que es lo importante: tenía evidencia real (la caída de
+velocidad), una explicación técnica correcta de esa evidencia (la señalización es de capa física) y
+confirmación externa (los hilos de XDA con el mismo síntoma). Tres cosas que apuntaban al mismo
+sitio. Y aun así la conclusión era falsa.
+
+El fallo fue que **un síntoma compatible con una explicación no confirma esa explicación**. Los
+hilos de XDA describían un síntoma parecido, no mi caso. Lo que faltaba no era más evidencia a
+favor: era **una prueba capaz de distinguir entre las dos hipótesis**. Entrar en fastboot lo hacía,
+porque separa limpiamente hardware de software, y costaba treinta segundos.
+
+Ahora, cuando una teoría me parece redonda, intento preguntarme qué experimento la mataría si fuera
+falsa. Si no se me ocurre ninguno, es que no estoy diagnosticando: estoy acumulando pistas que me
+dan la razón.
+
+### Root con Magisk, ya que el fastboot estaba vivo
+
+Aprovechando que el móvil estaba en fastboot, instalé Magisk. En un dispositivo A/B sin partición
+de recovery, el truco es arrancar TWRP en memoria sin flashearlo:
+
+```bash
+# TWRP en RAM: no toca ninguna partición
+fastboot boot twrp.img
+
+# copia de seguridad del boot actual, por si acaso
+adb shell "dd if=/dev/block/bootdevice/by-name/boot_a of=/tmp/boot_backup.img bs=1048576"
+adb pull /tmp/boot_backup.img
+
+# instalar Magisk
+adb push magisk.zip /tmp/magisk.zip
+adb shell "twrp install /tmp/magisk.zip"
+```
+
+El instalador detecta solo el slot activo y parchea el `boot` correcto:
+
+```text
+- Current boot slot: _a
+- Stock boot image detected
+- Patching ramdisk
+- Flashing new boot image
+- Done
+```
+
+Un detalle de este dispositivo: como el recovery vive dentro de `boot`, flashear Magisk sobrescribe
+esa partición. Por eso conviene guardar antes una copia del `boot` — y por eso TWRP se arranca en
+RAM en vez de instalarlo.
+
+### Todos los comandos, juntos
+
+Para quien llegue aquí con el mismo problema, el resumen operativo.
+
+**Diagnóstico:**
+
+```bash
+# qué ROM y qué versión corre de verdad
+adb shell getprop ro.build.display.id
+
+# tipo de sistema de ficheros real de cada partición
+adb shell blkid /dev/block/mmcblk0p69
+
+# qué espera montar la ROM instalada (la fuente de la verdad)
+adb shell "mount -o ro /dev/block/bootdevice/by-name/vendor_a /vendor"
+adb shell cat /vendor/etc/fstab.qcom
+
+# qué sistemas de ficheros sabe montar el kernel del recovery
+adb shell cat /proc/filesystems
+
+# qué particiones existen físicamente
+adb shell ls /dev/block/bootdevice/by-name/
+
+# intentos de arranque que le quedan al slot
+fastboot getvar slot-retry-count:a
+fastboot getvar slot-successful:a
+
+# log del kernel del arranque anterior (sobrevive al reinicio)
+fastboot boot twrp.img
+adb pull /sys/fs/pstore/console-ramoops-0
+```
+
+**El arreglo:**
+
+```bash
+# formatear userdata a ext4 con el perfil conservador de Android
+adb shell "mke2fs -F -t ext4 -b 4096 -L data -M /data /dev/block/mmcblk0p69"
+adb shell "e2fsck -fp /dev/block/mmcblk0p69"
+
+# resetear el contador de reintentos del slot (vuelve a 7)
+fastboot set_active a
+fastboot reboot
+```
+
+**Flashear imágenes grandes por fastboot:**
+
+```bash
+# el bootloader no acepta más de 768 MB de una vez
+fastboot getvar max-download-size
+# max-download-size: 805306368
+
+# convertir a formato sparse para trocear la transferencia
+sudo apt install android-sdk-libsparse-utils
+img2simg system.img system_sparse.img
+fastboot flash system system_sparse.img
+```
+
+**Inspeccionar una ROM antes de flashearla**, que es lo que me habría ahorrado el Error 7:
+
+```bash
+pip install payload_dumper
+payload_dumper payload.bin
+# y comprobar que las particiones del payload existen en el dispositivo
+```
+
 ### Lo que me llevo de todo esto
 
 **Compara siempre lo que hay con lo que la ROM espera.** Si una ROM A/B se cuelga en el logo y el kernel arranca limpio, mira el tipo de cada partición con `blkid` y contrástalo con el `fstab` de la ROM instalada. Se hace en tres comandos y a mí me habría ahorrado dos días. Estuve reflasheando `boot`, `system` y `vendor` una y otra vez cuando el problema no estaba en ninguna de las tres.
@@ -380,7 +568,7 @@ Un apunte sobre lo que escribí en el post original acerca de convertir el Mi A2
 
 ### Dónde estoy ahora
 
-ArrowOS 12.1, Android 12, funcionando. El parche de seguridad es de octubre de 2022, que no es ideal, pero es el móvil de uso diario de mi padre y prefiero algo estable y probado antes que una build abandonada con problemas de WiFi conocidos.
+ArrowOS 12.1, Android 12, funcionando y con root vía Magisk. El parche de seguridad es de octubre de 2022, que no es ideal, pero es el móvil de uso diario de mi padre y prefiero algo estable y probado antes que una build abandonada con problemas de WiFi conocidos.
 
 Dos días para cambiar una línea de un fstab. Pero ahora sé por qué falla, que era lo que quería.
 
