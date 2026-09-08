@@ -27,7 +27,7 @@
   </defs>
 
   <rect width="1600" height="900" fill="url(#bg)"/>
-  <text x="60" y="66" fill="#f1f5f9" font-family="system-ui, sans-serif" font-size="38" font-weight="700">How servidorcito is put together</text>
+  <text x="60" y="66" fill="#f1f5f9" font-family="system-ui, sans-serif" font-size="38" font-weight="700">How the server is put together</text>
   <text x="60" y="102" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="22">Nothing open to the internet. Everything comes in over a private network.</text>
 
   <!-- DISPOSITIVOS -->
@@ -59,7 +59,7 @@
 
   <!-- SERVIDOR -->
   <rect x="60" y="460" width="1480" height="330" rx="18" fill="#0b1220" stroke="#334155" stroke-width="2"/>
-  <text x="90" y="505" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="26" font-weight="700">servidorcito</text>
+  <text x="90" y="505" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="26" font-weight="700">The server</text>
   <text x="255" y="505" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="19">HP ProDesk 400 G6 Mini · i5-10500T · 16 GB · NVMe 476 GB · Ubuntu 26.04</text>
 
   <rect x="90" y="530" width="272" height="112" rx="12" fill="url(#svc)" filter="url(#shadow)"/>
