@@ -3,7 +3,7 @@ title: 'A Server at Home: What I Took Back From the Cloud, and What I Didn''t'
 description: 'How I turned a second-hand mini PC into a home server for photos, music, books and passwords. The alternatives I rejected and why, the honest downsides of each service, and why right now is a bad time to buy hardware.'
 pubDate: '2026-09-08'
 heroImage: '../../../assets/blog/homelab-cover-en.jpg'
-heroImageAlt: 'Architecture diagram of the home server'
+heroImageAlt: 'A compact desktop mini PC, the kind of machine that runs a home server'
 tags: ['linux', 'devops', 'security']
 lang: 'en'
 ---

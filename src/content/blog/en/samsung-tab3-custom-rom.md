@@ -3,7 +3,7 @@ title: 'The ROM That Was Not LineageOS: Two Days With My Dad''s Tablet'
 description: 'A 2013 Samsung Galaxy Tab 3, a USB handshake that always failed, a hub I bought because of a wrong diagnosis, and a ROM that turned out to be something other than what its filename claimed. I ended up restoring stock Android, and that was the right call.'
 pubDate: '2026-09-09'
 heroImage: '../../../assets/blog/tab3-cover-en.jpg'
-heroImageAlt: 'Diagram of the ODIN handshake failing because of a USB reset'
+heroImageAlt: 'A Samsung Galaxy Tab 3 showing its stock home screen, with ChatON, Dropbox, Polaris Office and Samsung Apps'
 tags: ['linux']
 lang: 'en'
 ---
@@ -217,3 +217,7 @@ The tablet is back in the car. Running the same Android it left the factory with
 ---
 
 *If you have fought with Heimdall and an old Samsung, or want to share your own experience, reach me on [LinkedIn](https://linkedin.com/in/raul-casado) or [GitHub](https://github.com/RaulCasado).*
+
+---
+
+*Cover: Samsung Galaxy Tab 3, photo by [Intel Free Press](https://commons.wikimedia.org/wiki/File:Samsung_Galaxy_Tab_3_10.1-inch_Android_Tablet.jpg), [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0).*

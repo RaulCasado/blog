@@ -3,7 +3,7 @@ title: 'Un servidor en casa: qué le he quitado a la nube y qué no'
 description: 'Cómo monté un mini PC de segunda mano como servidor doméstico para fotos, música, libros y contraseñas. Las alternativas que descarté y por qué, los contras honestos de cada servicio, y por qué ahora mismo es mal momento para comprar hardware.'
 pubDate: '2026-09-08'
 heroImage: '../../../assets/blog/homelab-cover.jpg'
-heroImageAlt: 'Diagrama de la arquitectura del servidor doméstico'
+heroImageAlt: 'Un mini PC compacto de sobremesa, el tipo de máquina que hace de servidor doméstico'
 tags: ['linux', 'devops', 'security']
 lang: 'es'
 ---
