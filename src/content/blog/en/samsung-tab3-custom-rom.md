@@ -1,7 +1,8 @@
 ---
 title: 'The ROM That Was Not LineageOS: Two Days With My Dad''s Tablet'
-description: 'A 2013 Samsung Galaxy Tab 3, a USB handshake that always failed, a hub I bought because of a wrong diagnosis, and a ROM that turned out to be something other than what its filename claimed. I ended up restoring stock Android, and that was the right call.'
+description: 'A 2013 Samsung Galaxy Tab 3, a USB handshake that always failed, a hub I bought because of a wrong diagnosis, and a ROM that turned out to be something other than what its filename claimed. I ended up restoring stock Android, and that was the right call. Updated September 11th: why it kept booting into recovery, why no app store can work on Android 4.4, and how its flash storage died in front of me.'
 pubDate: '2026-09-09'
+updatedDate: '2026-09-11'
 heroImage: '../../../assets/blog/tab3-cover-en.jpg'
 heroImageAlt: 'A Samsung Galaxy Tab 3 showing its stock home screen, with ChatON, Dropbox, Polaris Office and Samsung Apps'
 tags: ['linux']
@@ -213,6 +214,124 @@ And an unexpected gift: Samsung's official `system.img` does not include `instal
 **Sometimes the right goal is not the one you set.** I wanted Android 7 on a 2013 tablet. That did not exist. What did exist was stripping a hundred junk packages off the Android it already had and handing back 106 MB of RAM. Less glamorous, far more useful, and my dad says it feels faster.
 
 The tablet is back in the car. Running the same Android it left the factory with in 2015, minus Samsung's cloud, ChatON and the Yahoo widgets. And I learned more from the project that failed than from the one that went well.
+
+*(That is what I wrote on September 9th. Two days later it stopped being true: keep reading.)*
+
+## Update: September 11th, 2026
+
+Two days after writing this I went back to the tablet, because my dad told me the Play Store was not working and I assumed my cleanup had broken it. It had not. And pulling on that thread led me to something considerably worse.
+
+### First: the tablet was stuck booting into TWRP
+
+Android would not boot. It did not matter how I asked — `adb reboot`, `adb reboot system`, plain `reboot` — it always came back to recovery. `uptime` confirmed it really was rebooting, and the kernel command line arrived carrying `recovery_mode=1`, meaning Samsung's own bootloader was choosing recovery.
+
+I ruled out the obvious with evidence: the kernel partition was intact (same MD5 as the official firmware), the BCB in the `MISC` partition was all zeros, there was no pending `/cache/recovery/command`, and no stuck hardware key.
+
+The cause turned out to be something I did not know: **Samsung does not store the boot mode in the `MISC` partition the way stock Android does. It stores it in the `PARAM` partition.** Comparing a dump of `PARAM` against the backup I had taken before starting, a new record showed up, literally named `samsung_bootmode_setting.inf`.
+
+What had happened: someone ran a "Factory data reset" from Settings. Android writes the "boot into recovery" flag there and reboots. **Samsung's recovery would have done the wipe and cleared the flag; but the recovery was now TWRP, which knows nothing about that flag and left it set.** Permanent loop.
+
+The fix, using the backup I had:
+
+```bash
+adb push partitions/p7_PARAM.img /data/good_param.img
+adb shell "dd if=/data/good_param.img of=/dev/block/mmcblk0p7 bs=4096; sync"
+adb reboot
+```
+
+And a rule I am keeping forever: **with TWRP installed on a Samsung, never run a factory reset from Settings.** Wipe from TWRP itself.
+
+### The Play Store does not work, and the cleanup had nothing to do with it
+
+I checked this APK by APK, because the suspicion was reasonable. Of the 126 files I deleted, **none belonged to Google Play**. Still in place: `Phonesky.apk` (the store), `GmsCore.apk`, `GoogleServicesFramework.apk` and `GoogleLoginService.apk`. From Google I had only removed user apps: YouTube, Drive, Hangouts, Books, Play Games.
+
+The real reason came out of the APKs' own `AndroidManifest.xml`:
+
+| Package | Installed version |
+| --- | --- |
+| Play Store | **4.9.13** |
+| Google Play services | **6.1.88** |
+
+Both from 2014. Google dropped Android 4.4 support years ago and its servers no longer talk to clients that old: you cannot even sign in. Restoring Samsung's bloat would have changed nothing, it would only have handed those 231 MB back to Yahoo and AllShare.
+
+### Neither F-Droid nor Aurora Store, and for different reasons
+
+The next logical step was an alternative store. Both candidates have old versions that do install on Android 4.4: **F-Droid 1.12.1** (`minSdk=14`) and **Aurora Store 4.2.3** (`minSdk=19`), both pulled from F-Droid's archive.
+
+Installing is not the same as working. To know in advance, I extracted the tablet's certificate store without touching the device, pulling it out of the official `system.img` with `simg2img` and `debugfs`: **156 certificates, all from 2015**. It has `DST Root CA X3`, **expired on September 30th, 2021**, and it does **not** have `ISRG Root X1`, Let's Encrypt's root, which Android did not ship until 7.1.1.
+
+With that you can simulate exactly which connections the tablet would validate:
+
+```bash
+openssl s_client -connect f-droid.org:443 -CAfile tablet_certificates.pem
+```
+
+| Server | Validates? |
+| --- | --- |
+| `f-droid.org` and its three official mirrors | ❌ all four fail |
+| `android.clients.google.com` | ✅ |
+| `auroraoss.com` | ✅ |
+
+So **F-Droid installs but cannot reach its own repository or any mirror**, because its entire infrastructure runs on Let's Encrypt.
+
+Aurora looked like the winner, so I installed it and drove it all the way through. It starts up perfectly, interface translated, and the onboarding works (you have to pick "Native installer", since the default one wants Android 5.0+). It reaches the sign-in screen and dies there: both "Anonymous" and "Anonymous (insecure)" fail with a badly worded "No Error". The log is clearer:
+
+```
+FUEL [POST:-1] https://auroraoss.com/api/auth
+```
+
+Code −1: the request never completes. All three servers **require TLS 1.2**, and Android 4.4 can speak it but **ships with it disabled by default**; the app has to enable it explicitly. Aurora 4.2.3 does not use OkHttp for this — which would enable it — but **Fuel, which sits on `HttpURLConnection`**, and there it stays on TLS 1.0.
+
+Both die, for different reasons: **F-Droid on the certificate, Aurora on the TLS version.** There is no possible app store on this tablet. What does work is using the PC as the store: download the APKs there, where modern TLS is fine, and push them with `adb install`. I wrote a script that searches F-Droid's index for the newest version with `minSdk<=19` and installs it over USB. VLC 3.7.1 — the current release — and OsmAnd~ 4.0.9 still work on KitKat.
+
+### Second cleanup round: 87 MB of Google processes
+
+While I was at it: if the Play Store cannot work, the entire Google block is dead weight. This time I measured it properly with `dumpsys meminfo`, which reports PSS and discounts what is shared between processes. (The RSS column in `ps` lies: it added up to 1,528 MB on a device with 832.)
+
+There were **fourteen Google processes running**, taking **87 MB of PSS** between them. Not one of them was useful. Adding the gallery, the mail client, the phone app on a WiFi-only tablet, Chrome and the clock widgets, it came to about **125 MB** — out of the 271 MB the whole system was using. Nearly half.
+
+I prepared the removal, 250 MB of `/system`, and applied it from TWRP.
+
+### And then the storage died
+
+On reboot, the 250 MB were **back**. The APKs in `/system` again, with their original 2015 timestamps. But the first round's deletions were still gone. So it was not a reflash: `/system` had returned exactly to its state before that day's writes.
+
+The answer was in the previous boot's kernel log:
+
+```
+mmcblk0: command error, retrying timeout
+mmcblk0: timed out sending r/w cmd command, card status 0x400d00
+```
+
+**129 write command timeouts**, starting nine seconds into TWRP's boot. That `card status 0x400d00` leaves the card in `rcv` state: it accepts the write command and never completes the transfer. The writes never reached the flash, and on reboot ext4 replayed its journal and rolled back to the last consistent state.
+
+I confirmed it with four tests:
+
+1. **A 100 MB file written from Android** with `sync` and a verified MD5: after rebooting, `No such file or directory`.
+2. **50 MB in `/cache`**, correct MD5 read back from the page cache. Unmount and remount — which forces a real read from flash — and **the file no longer existed**.
+3. **Not even raw writes worked**: `dd` of 512 KB straight to the block device, bypassing the filesystem, read back with a different MD5. Not ext4, not the journal. The chip.
+4. `e2fsck -fn` on `/data` finished with `WARNING: Filesystem still has errors`, and `/system`'s superblock had a last-write timestamp from an hour before the deletions I thought I had made.
+
+Everything else ruled out: battery at 100% and 4.189 V, 31.8 °C, and no software-forced read-only flag.
+
+This is the classic end-of-life failure mode for an eMMC: **it locks itself read-only internally but keeps reporting that writes succeeded.** That is why `sync` never errored and the `df` numbers added up: I was reading the RAM cache, not the chip.
+
+And it explains, all at once, everything strange about that afternoon: the setup wizard reappearing, USB debugging switching itself off twice, the 250 MB coming back. One fault behind all of it.
+
+What it does not explain is any fault of ours. We wrote a few hundred megabytes between the firmware, the cleanup and the tests; a healthy eMMC is rated for **terabytes** over its life. The chip was eleven years old and already spent. A session with heavier-than-usual writing is precisely when a chip at its limit finishes off its reserve. It was going to happen anyway.
+
+### What I am taking away from part two
+
+**That a `sync` returning success does not mean anything was saved.** Linux writes to RAM and tells you it is done. If you want to know whether something really hit the disk, unmount and remount, or reboot. Everything that confused me that day came from reading the cache while believing I was reading flash.
+
+**That the manufacturer may store things where you do not expect.** I looked for the boot flag in `MISC` because that is where Android puts it. Samsung puts it in `PARAM`. Half an hour lost to assuming the standard is followed.
+
+**And that sometimes the correct diagnosis is that the device died.** I spent a while hunting for what I had broken, because that was the comfortable explanation. The uncomfortable one was reading the kernel log and accepting that the chip was throwing writes away.
+
+The tablet boots and runs, but it cannot reliably save anything new. For a car display that is useless: it would lose Torque's settings and the downloaded maps without warning. So **it is no longer in the car**. A second-hand SM-T210 goes for twenty euros, and replacing the chip means desoldering a BGA for considerably more than the tablet is worth.
+
+One irony to close on: I spent two days stripping bloat off a tablet to make it faster, and it died from the very partition that bloat lived in. I would still do it again. My dad got two days of a fast tablet, and I learned how Samsung boots its devices, why Let's Encrypt broke half the internet for old Android, and what a flash chip looks like when it dies.
+
 
 ---
 

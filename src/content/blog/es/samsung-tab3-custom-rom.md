@@ -1,7 +1,8 @@
 ---
 title: 'La ROM que no era LineageOS: dos días con la tablet de mi padre'
-description: 'Una Samsung Galaxy Tab 3 de 2013, un handshake USB que fallaba siempre, un hub que compré por un diagnóstico equivocado, y una ROM que resultó ser otra cosa distinta a lo que decía su nombre. Acabé volviendo a Android de fábrica, y fue la decisión correcta.'
+description: 'Una Samsung Galaxy Tab 3 de 2013, un handshake USB que fallaba siempre, un hub que compré por un diagnóstico equivocado, y una ROM que resultó ser otra cosa distinta a lo que decía su nombre. Acabé volviendo a Android de fábrica, y fue la decisión correcta. Actualizado el 11 de septiembre: por qué se quedaba arrancando en recovery, por qué no hay tienda de apps posible en Android 4.4, y cómo se murió su memoria flash delante de mí.'
 pubDate: '2026-09-09'
+updatedDate: '2026-09-11'
 heroImage: '../../../assets/blog/tab3-cover.jpg'
 heroImageAlt: 'Una Samsung Galaxy Tab 3 mostrando su pantalla de inicio de fábrica, con ChatON, Dropbox, Polaris Office y Samsung Apps'
 tags: ['linux']
@@ -213,6 +214,124 @@ Y un regalo inesperado: el `system.img` oficial de Samsung no incluye `install-r
 **A veces el objetivo correcto no es el que te marcaste.** Yo quería Android 7 en una tablet de 2013. Eso no existía. Lo que sí existía era quitarle cien paquetes de basura al Android que ya tenía y devolverle 106 MB de RAM. Menos épico, mucho más útil, y mi padre la nota más rápida.
 
 La tablet sigue en el coche. Con el mismo Android que salió de fábrica en 2015, sin la nube de Samsung, sin ChatON y sin los widgets de Yahoo. Y yo aprendí más con el proyecto que fracasó que con el que salió bien.
+
+*(Eso escribí el 9 de septiembre. Dos días después dejó de ser verdad: sigue leyendo.)*
+
+## Actualización: 11 de septiembre de 2026
+
+Dos días después de escribir esto volví a la tablet, porque mi padre me dijo que la Play Store no le funcionaba y yo di por hecho que había sido culpa de mi limpieza. No lo era. Y tirando de ese hilo acabé encontrando algo bastante peor.
+
+### Primero: la tablet se había quedado arrancando siempre en TWRP
+
+No arrancaba Android. Daba igual el método —`adb reboot`, `adb reboot system`, `reboot` a secas—, siempre volvía al recovery. El `uptime` confirmaba que reiniciaba de verdad, y la línea de comandos del kernel venía con `recovery_mode=1`, o sea que era el propio bootloader de Samsung el que elegía recovery.
+
+Descarté lo obvio con pruebas: la partición del kernel estaba intacta (mismo MD5 que el firmware oficial), el BCB de la partición `MISC` estaba entera a ceros, no había ningún `/cache/recovery/command` pendiente y ninguna tecla encallada.
+
+La causa resultó ser algo que no sabía: **Samsung no guarda el modo de arranque en la partición `MISC`, como hace el Android estándar. Lo guarda en la partición `PARAM`.** Comparando un volcado de `PARAM` con la copia que había hecho antes de empezar, apareció un registro nuevo llamado literalmente `samsung_bootmode_setting.inf`.
+
+Lo que había pasado: alguien hizo un "Restablecer datos de fábrica" desde los Ajustes. Android escribe ahí el flag de "arranca en recovery" y reinicia. **El recovery de Samsung habría hecho el borrado y habría limpiado el flag; pero el recovery ahora era TWRP, que no conoce ese flag y lo dejó puesto.** Bucle permanente.
+
+El arreglo, con la copia que tenía:
+
+```bash
+adb push particiones/p7_PARAM.img /data/param_bueno.img
+adb shell "dd if=/data/param_bueno.img of=/dev/block/mmcblk0p7 bs=4096; sync"
+adb reboot
+```
+
+Y una regla que me apunto para siempre: **con TWRP instalado en una Samsung, no hagas un reset de fábrica desde los Ajustes.** Bórralo desde el propio TWRP.
+
+### La Play Store no funciona, y la limpieza no tuvo nada que ver
+
+Esto lo comprobé APK por APK, porque la sospecha era razonable. De los 126 ficheros que borré, **ninguno era de Google Play**. Seguían en su sitio `Phonesky.apk` (la tienda), `GmsCore.apk`, `GoogleServicesFramework.apk` y `GoogleLoginService.apk`. De Google solo quité apps de usuario: YouTube, Drive, Hangouts, Books, Play Games.
+
+El motivo real lo saqué del `AndroidManifest.xml` de los propios APK:
+
+| Paquete | Versión instalada |
+| --- | --- |
+| Play Store | **4.9.13** |
+| Servicios de Google Play | **6.1.88** |
+
+Las dos son de 2014. Google dejó de dar soporte a Android 4.4 hace años y sus servidores ya no hablan con clientes tan viejos: no se puede ni iniciar sesión. Restaurar el relleno de Samsung no habría cambiado nada, solo habría devuelto los 231 MB a Yahoo y AllShare.
+
+### Ni F-Droid ni Aurora Store, y el motivo es distinto en cada una
+
+Lo siguiente lógico era buscar una tienda alternativa. Las dos candidatas tienen versiones antiguas que sí instalan en Android 4.4: **F-Droid 1.12.1** (`minSdk=14`) y **Aurora Store 4.2.3** (`minSdk=19`), ambas sacadas del archivo histórico de F-Droid.
+
+Instalarse no es lo mismo que funcionar. Para saberlo de antemano extraje el almacén de certificados de la propia tablet, sin tocarla, sacándolo del `system.img` oficial con `simg2img` y `debugfs`: **156 certificados, todos de 2015**. Tiene `DST Root CA X3`, **caducado el 30 de septiembre de 2021**, y **no tiene `ISRG Root X1`**, la raíz de Let's Encrypt, que Android no incorporó hasta la 7.1.1.
+
+Con eso se puede simular exactamente qué conexiones validaría la tablet:
+
+```bash
+openssl s_client -connect f-droid.org:443 -CAfile certificados_de_la_tablet.pem
+```
+
+| Servidor | ¿Lo valida? |
+| --- | --- |
+| `f-droid.org` y sus tres espejos oficiales | ❌ los cuatro fallan |
+| `android.clients.google.com` | ✅ |
+| `auroraoss.com` | ✅ |
+
+O sea que **F-Droid se instala pero no puede conectar ni con su propio repositorio ni con ningún espejo**, porque toda su infraestructura va con Let's Encrypt.
+
+Aurora parecía la buena, así que la instalé y la probé entera. Arranca perfectamente, con la interfaz en español, y el asistente funciona (hay que elegir "Native installer", porque el que trae por defecto pide Android 5.0+). Llega a la pantalla de inicio de sesión y ahí muere: tanto "Anónimo" como "Anónima (insegura)" fallan con un mensaje mal traducido que pone "No Error". El log es más claro:
+
+```
+FUEL [POST:-1] https://auroraoss.com/api/auth
+```
+
+Código −1: la petición no llega a completarse. Los tres servidores **exigen TLS 1.2**, y Android 4.4 sabe hablarlo pero **lo trae desactivado por defecto**; la app tiene que activarlo a mano. Aurora 4.2.3 no usa OkHttp para esto —que sí lo activaría— sino **Fuel, que va sobre `HttpURLConnection`**, y ahí se queda en TLS 1.0.
+
+Las dos mueren, pero por motivos distintos: **F-Droid por el certificado, Aurora por la versión de TLS.** En esta tablet no hay tienda posible. Lo que sí funciona es usar el PC como tienda: bajar los APK ahí, donde el TLS moderno sí va, y pasarlos con `adb install`. Escribí un script que busca en el índice de F-Droid la última versión compatible con `minSdk<=19` y la instala por USB. VLC 3.7.1 —la versión actual— y OsmAnd~ 4.0.9 todavía valen para KitKat.
+
+### Segunda ronda de limpieza: 87 MB de procesos de Google
+
+Puestos a ello, si la Play Store no puede funcionar, todo el bloque de Google es peso muerto. Esta vez lo medí bien, con `dumpsys meminfo`, que da PSS y descuenta lo que se comparte entre procesos. (La columna RSS de `ps` engaña: sumaba 1.528 MB en un aparato de 832.)
+
+Había **catorce procesos de Google corriendo**, ocupando **87 MB de PSS** entre todos. Ninguno servía para nada. Sumando la galería, el cliente de correo, la app de teléfono en una tablet solo-WiFi, Chrome y los widgets de reloj, salían unos **125 MB** — sobre los 271 MB que usaba el sistema entero. Casi la mitad.
+
+Preparé el borrado, 250 MB de `/system`, y lo apliqué desde TWRP.
+
+### Y entonces se murió la memoria
+
+Al reiniciar, los 250 MB **estaban de vuelta**. Los APK otra vez en `/system`, con su fecha original de 2015. Pero los de la primera ronda seguían borrados. O sea que no era un reflasheo: `/system` había vuelto exactamente al estado previo a las escrituras de ese día.
+
+La respuesta estaba en el log del kernel del arranque anterior:
+
+```
+mmcblk0: command error, retrying timeout
+mmcblk0: timed out sending r/w cmd command, card status 0x400d00
+```
+
+**129 timeouts de comando de escritura**, empezando a los nueve segundos de arrancar TWRP. El `card status 0x400d00` deja la tarjeta en estado `rcv`: acepta el comando de escritura y nunca completa la transferencia. Las escrituras no llegaban a la flash, y al reiniciar ext4 reproducía el diario y volvía al último estado consistente.
+
+Lo confirmé con cuatro pruebas:
+
+1. **Un fichero de 100 MB escrito desde Android** con `sync` y MD5 verificado: tras reiniciar, `No such file or directory`.
+2. **50 MB en `/cache`**, MD5 correcto leído de la caché de memoria. Desmontar y volver a montar —lo que fuerza a leer de la flash de verdad— y **el fichero ya no existía**.
+3. **Ni las escrituras crudas funcionaban**: `dd` de 512 KB directo al bloque, saltándose el sistema de ficheros, releído da otro MD5. No era ext4 ni el diario. Era el chip.
+4. `e2fsck -fn` en `/data` terminaba con `WARNING: Filesystem still has errors`, y el superbloque de `/system` tenía como última escritura una hora antes de las borradas que yo creía haber hecho.
+
+Descartado lo demás: batería al 100 % a 4,189 V, 31,8 °C, y sin solo-lectura forzada por software.
+
+Es el modo de fallo típico de una eMMC al final de su vida: **se bloquea en solo-lectura por dentro pero sigue contestando que todo ha ido bien.** Por eso `sync` no daba error y los `df` cuadraban: los estaba leyendo de la caché en RAM, no del chip.
+
+Y explica de golpe todo lo raro de esa tarde: el asistente de configuración reapareciendo, la depuración USB apagándose sola dos veces, los 250 MB resucitando. Un solo fallo detrás de todo.
+
+Lo que no explica es que fuera culpa nuestra. Escribimos unos cientos de megas entre el firmware, la limpieza y las pruebas; una eMMC sana aguanta **terabytes** a lo largo de su vida. El chip tenía once años y ya estaba agotado. Una sesión con más escritura de lo normal es justo el momento en que un chip al límite acaba de gastar su reserva. Iba a pasar igual.
+
+### Qué me llevo de esta segunda parte
+
+**Que un `sync` que devuelve éxito no significa que nada se haya guardado.** Linux escribe en RAM y te dice que ya está. Si quieres saber si algo llegó al disco de verdad, desmonta y vuelve a montar, o reinicia. Todo lo que me confundió ese día venía de leer la caché creyendo que leía la flash.
+
+**Que el fabricante puede guardar cosas donde no esperas.** Yo busqué el flag de arranque en `MISC` porque es donde lo pone Android. Samsung lo pone en `PARAM`. Media hora perdida por asumir que el estándar se cumple.
+
+**Y que a veces el diagnóstico correcto es que el aparato se ha muerto.** Estuve un rato buscando qué había roto yo, porque era la explicación cómoda. La incómoda era mirar el log del kernel y aceptar que el chip estaba tirando las escrituras a la basura.
+
+La tablet arranca y funciona, pero no puede guardar nada nuevo de forma fiable. Para pantalla de coche eso no vale: perdería los ajustes de Torque y los mapas descargados sin avisar. Así que **ya no está en el coche**. Una SM-T210 de segunda mano anda por veinte euros, y cambiar el chip implica desoldar un BGA por bastante más de lo que vale la tablet.
+
+Quedaba una ironía: pasé dos días quitándole relleno a una tablet para que fuera más rápida, y acabó muriéndose de la partición donde vivía ese relleno. Aun así, volvería a hacerlo. Mi padre tuvo dos días de tablet rápida, y yo aprendí cómo Samsung arranca sus aparatos, por qué Let's Encrypt rompió media internet para los Android viejos, y qué aspecto tiene una memoria flash cuando se muere.
+
 
 ---
 

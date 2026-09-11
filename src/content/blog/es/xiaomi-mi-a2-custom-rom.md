@@ -1,8 +1,8 @@
 ---
 title: 'Cómo le di una segunda vida a mi Xiaomi Mi A2 con una Custom ROM'
-description: 'Guía completa sobre cómo instalé una Custom ROM en un Xiaomi Mi A2 abandonado por el fabricante. Actualizado en septiembre de 2026 con dos días de depuración: Error 7, contadores de slot, el límite de 768 MB de fastboot y un cuelgue de arranque que resultó ser un sistema de ficheros equivocado.'
+description: 'Guía completa sobre cómo instalé una Custom ROM en un Xiaomi Mi A2 abandonado por el fabricante. Actualizado en septiembre de 2026 con dos días de depuración: Error 7, contadores de slot, el límite de 768 MB de fastboot y un cuelgue de arranque que resultó ser un sistema de ficheros equivocado. Actualizado el 11 de septiembre con la cámara, que no funciona: por qué, y por qué no tiene arreglo con un módulo de Magisk.'
 pubDate: '2026-09-07'
-updatedDate: '2026-09-07'
+updatedDate: '2026-09-11'
 heroImage: '../../../assets/blog/mi_a2.jpg'
 heroImageAlt: 'Xiaomi Mi A2 con Custom ROM'
 tags: ['linux']
@@ -571,6 +571,171 @@ Un apunte sobre lo que escribí en el post original acerca de convertir el Mi A2
 ArrowOS 12.1, Android 12, funcionando y con root vía Magisk. El parche de seguridad es de octubre de 2022, que no es ideal, pero es el móvil de uso diario de mi padre y prefiero algo estable y probado antes que una build abandonada con problemas de WiFi conocidos.
 
 Dos días para cambiar una línea de un fstab. Pero ahora sé por qué falla, que era lo que quería.
+
+---
+
+## Actualización: 11 de septiembre de 2026 — la cámara
+
+Cuatro días después de dar el teléfono por terminado, resultó que la cámara no funciona. Abres Camera Go, da error, y no hay imagen. Ni trasera ni frontal.
+
+Di por hecho que sería la app. Me equivoqué, y el camino hasta entenderlo tiene un par de lecciones que me parecen más útiles que el problema en sí.
+
+### Lo primero: el sistema no tiene cámaras
+
+`dumpsys media.camera` lo dice sin rodeos:
+
+```
+Number of camera devices: 0
+Number of normal camera devices: 0
+```
+
+Y en el log, Camera Go no está fallando: está informando.
+
+```
+E pck: No cameras available
+```
+
+Probar otra app no habría servido de nada. Es el sistema el que no tiene ninguna cámara que ofrecerle.
+
+### El hardware está perfecto, y así lo comprobé
+
+Los mensajes que importan salen durante el arranque, así que hay que capturarlos desde el primer segundo:
+
+```bash
+adb reboot
+adb wait-for-device
+timeout 150 adb logcat -b all > arranque.txt
+```
+
+Y ahí aparece esto:
+
+```
+wayne_imx376_sunny_back_i_eeprom_format_afdata:
+  [xiaomi af otp] AF OTP(horizontal) DAC: macro 710 infinity 301
+wayne_imx486_sunny_i_read_info: module_id = 0x1, 2018-8-19
+wayne_imx376_sunny_front_i_eeprom_checksum: Checksum good, sum:3913
+wayne_imx376_sunny_front_i_eeprom_format_wbdata: AWB : r/gr = 0.550781
+```
+
+Son los tres módulos de cámara respondiendo por el bus I2C y entregando su calibración de fábrica: la fecha de fabricación (agosto de 2018), los checksums correctos, los valores de balance de blancos y las matrices de corrección de lente. Un sensor muerto no contesta eso.
+
+El kernel también estaba bien: 24 `/dev/v4l-subdev*` y sus nodos de medios creados.
+
+Hardware bien, kernel bien, y aun así cero cámaras. El problema estaba justo en medio.
+
+### Dónde muere
+
+Justo después de leer la calibración:
+
+```
+QCamera : sort_camera_info: Number of cameras 0 sorted 0
+QCamera : QCamera2Factory: 0 camera devices detected!
+```
+
+Y un poco antes, la pista de verdad:
+
+```
+sensor_sdk_util_get_i2c_freq_mode: Invalid i2c_freq_mode = 4
+```
+
+El driver del sensor declara que habla I2C en el modo 4, y el gestor de sensores le contesta que ese modo no existe. Dos piezas que deberían entenderse y no se entienden.
+
+### La causa: ArrowOS cambió el motor pero dejó las piezas de Xiaomi
+
+Para confirmarlo comparé la partición `vendor` de ArrowOS 12.1 con la de LineageOS 18.1, que es la ROM que el móvil llevaba antes. La saqué del `payload.bin` y la abrí con `debugfs`, sin tocar el teléfono.
+
+| | ArrowOS 12.1 | LineageOS 18.1 |
+|---|---|---|
+| Ficheros en `/vendor/lib` | **752** | **1799** |
+
+Menos de la mitad. Y comparando fichero a fichero los que están en las dos:
+
+- Las **306 `libchromatix_*`**, que son los datos de calibración de Xiaomi, son **idénticas**.
+- El driver del sensor `libmmcamera_wayne_imx376_sunny_back_i.so` es **idéntico**: 831.156 bytes en ambas.
+- Pero **81 de las 97 `libmmcamera*` comunes tienen distinto tamaño**, y las de ArrowOS son sistemáticamente más pequeñas.
+
+| Librería | ArrowOS | LineageOS |
+|---|---|---|
+| `libmmcamera2_sensor_modules.so` | 1.113.468 | **1.579.136** |
+| `camera.sdm660.so` (el HAL) | 1.177.420 | **1.442.456** |
+
+Ahí está todo. **ArrowOS se quedó los drivers de sensor y la calibración de Xiaomi, pero sustituyó el motor de cámara entero por otra compilación.** Los blobs de Xiaomi hablan un dialecto que ese motor no entiende, y de ahí el `Invalid i2c_freq_mode = 4`.
+
+Buscando después, resultó ser un fallo conocido de esa build: el hilo de XDA de ArrowOS 12.1 para `jasmine_sprout` está cerrado, varios usuarios reportaron el mismo "No cameras available" y el mantenedor desapareció. Lo arreglaron en ArrowOS 13. Que es, justamente, la build que en este móvil no se puede instalar.
+
+### El intento de arreglo, y dos errores míos que merece la pena contar
+
+La idea era clara: si falta el motor bueno, se lo pongo por encima con un módulo de Magisk. Sin tocar particiones y pudiendo revertirlo.
+
+**Primer intento**: copié todas las `libmmcamera*` y el `camera.sdm660.so` de LineageOS 18.1. El servicio de cámara pasó de dar cero cámaras a no arrancar en absoluto, reiniciándose cada cinco segundos.
+
+```
+dlopen failed: library "lib_lowlight.so" not found: needed by camera.sdm660.so
+```
+
+Había filtrado por nombre, y `lib_lowlight.so` no empieza por `libmmcamera`. Error de bulto.
+
+**La forma correcta** es no adivinar y leer las dependencias reales de cada binario:
+
+```bash
+readelf -d libreria.so | grep NEEDED
+```
+
+Y resolverlo en cadena, porque las dependencias tienen dependencias. Al hacerlo aparecieron **16 librerías más**, todas blobs propietarios de Xiaomi que ArrowOS había eliminado: `lib_lowlight.so`, `libarcsoft_beautyshot.so` (29 MB), `libmibokeh_660.so` (35 MB), `libMiWatermark.so`, `libvidhance.so`, `libXMFD_AgeGender.so`...
+
+Eso reforzó el diagnóstico: ArrowOS no solo cambió el motor, también tiró los blobs de los que ese motor depende.
+
+**Segundo intento**: 120 librerías, cero dependencias pendientes. Mismo error exacto. El fichero estaba ahí —lo veía con `ls`— y el enlazador seguía diciendo que no lo encontraba.
+
+La explicación es de las que no se olvidan:
+
+```
+lib_lowlight.so   →  u:object_r:system_file:s0     ← mal
+/vendor/lib       →  u:object_r:vendor_file:s0     ← lo correcto
+/vendor/lib/hw    →  u:object_r:vendor_hal_file:s0
+```
+
+**Magisk etiqueta como `system_file` todo lo que metes en `system/`.** Cuando un fichero reemplaza a otro que ya existe clona la etiqueta del original, y por eso las `libmmcamera*` estaban bien. Pero los **ficheros nuevos** no tienen de dónde clonarla. Y el HAL de cámara corre en un dominio de SELinux que solo puede leer `vendor_file`, así que para él esas librerías sencillamente no existían.
+
+Se arregla en el `customize.sh` del módulo:
+
+```bash
+set_perm_recursive $MODPATH/system/vendor/lib 0 0 0755 0644 u:object_r:vendor_file:s0
+set_perm $MODPATH/system/vendor/lib/hw 0 0 0755 u:object_r:vendor_hal_file:s0
+```
+
+Un truco para detectarlo sin root: desde `adb shell`, los ficheros **mal** etiquetados se leen sin problema, y los correctos salen como `-?????????`. Si ves los tuyos y no los del sistema, la etiqueta está mal.
+
+### El muro de verdad
+
+Con todo corregido, el HAL de Xiaomi **arrancó**. Llegó a leer el fabricante del módulo:
+
+```
+QCamera : MIPreview: mManufacturer = longcheer
+```
+
+Y murió un paso después:
+
+```
+mct_shimlayer_process_module_init: Failed to open config node. errno 21
+```
+
+El stack de cámara de LineageOS no encuentra el nodo de configuración del kernel. Con el módulo puesto el kernel exponía 1 `/dev/media` y 21 subdispositivos; sin él llegaban a 4 y 24, porque esos nodos extra los creaba la parte del HAL de ArrowOS que sí funcionaba.
+
+Resumiendo: había cambiado una incompatibilidad por otra.
+
+- El HAL de **ArrowOS** no entiende los blobs de sensor de **Xiaomi**.
+- El HAL de **LineageOS** no entiende el kernel de **ArrowOS**.
+
+Para usar el stack de LineageOS haría falta también su kernel, y eso ya es instalar LineageOS. **No hay arreglo en espacio de usuario.** Quité el módulo, porque dejaba el servicio reiniciándose en bucle y gastando batería para nada.
+
+### Qué me llevo
+
+Que un HAL de Android no es una pieza suelta: es un contrato a tres bandas entre el kernel, los blobs del fabricante y la capa de Qualcomm. Puedes sustituir una de las tres y a veces cuela, pero cuando las tres vienen de sitios distintos no hay módulo que lo salve.
+
+Y una regla práctica que me habría ahorrado dos intentos: **nunca elijas qué librerías copiar por el nombre**. `readelf -d` y cierre transitivo. El nombre miente.
+
+La cámara sigue sin funcionar. La única solución real sería volver a LineageOS 18.1, con su kernel y su vendor coherentes entre sí, y eso implica reflasheo y perder los datos. Es el móvil de uso diario de mi padre, apenas usa la cámara, y prefiero no tocarlo. A veces la respuesta correcta es dejarlo estar.
 
 ---
 
