@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Two readers and one self-hosted library</title>
+  <desc id="desc">EPUB files reach Calibre-Web-Automated and sync as KEPUB to Kobo's native reader. CBZ files are downloaded over OPDS and read in KOReader.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#101827"/><stop offset="1" stop-color="#1d2940"/></linearGradient>
+    <linearGradient id="source" x1="0" x2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#6366f1"/></linearGradient>
+    <linearGradient id="server" x1="0" x2="1"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#2563eb"/></linearGradient>
+    <linearGradient id="native" x1="0" x2="1"><stop offset="0" stop-color="#10b981"/><stop offset="1" stop-color="#059669"/></linearGradient>
+    <linearGradient id="comic" x1="0" x2="1"><stop offset="0" stop-color="#f59e0b"/><stop offset="1" stop-color="#ea580c"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#000" flood-opacity=".28"/></filter>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#94a3b8"/></marker>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <text x="70" y="76" fill="#f1f5f9" font-family="system-ui, sans-serif" font-size="42" font-weight="700">Two readers, one library</text>
+  <text x="70" y="116" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="23">Nickel keeps the Kobo experience. KOReader handles manga and comics.</text>
+  <text x="70" y="190" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="21" font-weight="600">INPUT</text>
+  <rect x="70" y="215" width="310" height="150" rx="18" fill="url(#source)" filter="url(#shadow)"/>
+  <text x="100" y="260" fill="#fff" font-family="system-ui, sans-serif" font-size="28" font-weight="700">My own files</text>
+  <text x="100" y="302" fill="#ede9fe" font-family="ui-monospace, monospace" font-size="23">EPUB</text>
+  <text x="100" y="337" fill="#ede9fe" font-family="ui-monospace, monospace" font-size="23">CBR / CBZ</text>
+  <path d="M390 290 L535 290" stroke="#94a3b8" stroke-width="4" marker-end="url(#arrow)"/>
+  <text x="545" y="190" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="21" font-weight="600">SERVER</text>
+  <rect x="545" y="215" width="430" height="150" rx="18" fill="url(#server)" filter="url(#shadow)"/>
+  <text x="575" y="260" fill="#fff" font-family="system-ui, sans-serif" font-size="29" font-weight="700">Calibre-Web-Automated</text>
+  <text x="575" y="303" fill="#dbeafe" font-family="system-ui, sans-serif" font-size="20">Metadata, catalogue and copies</text>
+  <text x="575" y="335" fill="#bfdbfe" font-family="ui-monospace, monospace" font-size="18">EPUB + KEPUB + CBZ</text>
+  <path d="M985 270 C1080 270 1060 225 1155 225" stroke="#34d399" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+  <path d="M985 310 C1080 310 1060 455 1155 455" stroke="#f59e0b" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+  <rect x="1165" y="160" width="365" height="155" rx="18" fill="url(#native)" filter="url(#shadow)"/>
+  <text x="1195" y="205" fill="#fff" font-family="system-ui, sans-serif" font-size="28" font-weight="700">Nickel</text>
+  <text x="1195" y="242" fill="#d1fae5" font-family="system-ui, sans-serif" font-size="20">Native reader</text>
+  <text x="1195" y="277" fill="#a7f3d0" font-family="ui-monospace, monospace" font-size="18">Kobo Sync · KEPUB</text>
+  <rect x="1165" y="385" width="365" height="155" rx="18" fill="url(#comic)" filter="url(#shadow)"/>
+  <text x="1195" y="430" fill="#fff" font-family="system-ui, sans-serif" font-size="28" font-weight="700">KOReader</text>
+  <text x="1195" y="467" fill="#ffedd5" font-family="system-ui, sans-serif" font-size="20">Manga, comics and PDF</text>
+  <text x="1195" y="502" fill="#fed7aa" font-family="ui-monospace, monospace" font-size="18">OPDS · CBZ on demand</text>
+  <rect x="70" y="610" width="1460" height="190" rx="20" fill="#0b1220" stroke="#334155" stroke-width="2"/>
+  <text x="105" y="660" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="26" font-weight="700">Layers installed on the Kobo</text>
+  <rect x="105" y="690" width="410" height="76" rx="12" fill="#182235" stroke="#475569" stroke-width="2"/>
+  <text x="132" y="721" fill="#f1f5f9" font-family="system-ui, sans-serif" font-size="21" font-weight="700">NickelHome</text>
+  <text x="132" y="749" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="17">Hides promotional cards</text>
+  <rect x="595" y="690" width="410" height="76" rx="12" fill="#182235" stroke="#475569" stroke-width="2"/>
+  <text x="622" y="721" fill="#f1f5f9" font-family="system-ui, sans-serif" font-size="21" font-weight="700">NickelMenu</text>
+  <text x="622" y="749" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="17">Shortcuts, server and launcher</text>
+  <rect x="1085" y="690" width="410" height="76" rx="12" fill="#182235" stroke="#475569" stroke-width="2"/>
+  <text x="1112" y="721" fill="#f1f5f9" font-family="system-ui, sans-serif" font-size="21" font-weight="700">Folder profiles</text>
+  <text x="1112" y="749" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="17">LTR for comics, RTL for manga</text>
+  <text x="70" y="850" fill="#64748b" font-family="system-ui, sans-serif" font-size="19">No KoboPatch was applied. Every change has a way back.</text>
+</svg>
