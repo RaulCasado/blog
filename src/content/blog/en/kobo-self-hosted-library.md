@@ -2,8 +2,8 @@
 title: 'How I turned my Kobo into a client for my self-hosted library'
 description: 'What began as removing recommendations from the home screen became two reading paths: KEPUB in Nickel for books and CBZ over OPDS in KOReader for manga and comics. Backups, commands, decisions and real verification.'
 pubDate: '2026-09-13'
-heroImage: '../../../assets/blog/kobo-library-flow-en.png'
-heroImageAlt: 'Diagram of a self-hosted library sending KEPUB files to Nickel and CBZ files to KOReader'
+heroImage: '../../../assets/blog/kobo-library-cover.jpg'
+heroImageAlt: 'An e-ink reader displaying a black-and-white comic page'
 tags: ['linux', 'devops']
 lang: 'en'
 featured: true
@@ -20,8 +20,6 @@ The list grew while I discussed the options with Copilot. NickelMenu, KOReader, 
 One condition was fixed from the start: **every change had to be reversible**. I did not want to replace the original reader, break a sync setup that already worked or apply a binary patch blindly because a website recognised the model.
 
 The final setup uses two readers on the same device. Nickel, Kobo's original software, still handles novels and non-fiction. KOReader handles fixed-layout image content. The server remains the only library.
-
-![Two paths leave the same library: KEPUB goes to Nickel and CBZ goes to KOReader](../../../assets/blog/kobo-library-flow-en.svg)
 
 ## The conversation was a lead, not proof
 
@@ -296,3 +294,5 @@ There is a complete device backup, three server database restore points, the ori
 Installing three tools was not the most useful part. Giving each one a limited job and checking every boundary was: firmware, archive, database, network and device. If an update breaks NickelHome, I can remove it without losing KOReader. If I stop using KOReader, Nickel and Kobo Sync remain. If CWA misreads another collection, the pilot will expose it before a hundred files enter the library.
 
 That is what reversible meant in this project. It did not mean that nothing could fail. It meant that every failure had a known way out.
+
+*Cover image adapted from a [CC0 photograph by freestocks.org](https://commons.wikimedia.org/wiki/File:Reading_on_an_e-book_reader_(Unsplash).jpg).*

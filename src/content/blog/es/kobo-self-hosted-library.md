@@ -2,8 +2,8 @@
 title: 'Cómo convertí mi Kobo en el cliente de mi biblioteca autoalojada'
 description: 'De quitar recomendaciones de la pantalla de inicio a montar dos flujos de lectura: KEPUB en Nickel para libros y CBZ por OPDS en KOReader para manga y cómic. Copias, decisiones, comandos y verificaciones reales.'
 pubDate: '2026-09-13'
-heroImage: '../../../assets/blog/kobo-library-flow.png'
-heroImageAlt: 'Diagrama de una biblioteca autoalojada que envía KEPUB a Nickel y CBZ a KOReader'
+heroImage: '../../../assets/blog/kobo-library-cover.jpg'
+heroImageAlt: 'Un lector de tinta electrónica mostrando una página de cómic en blanco y negro'
 tags: ['linux', 'devops']
 lang: 'es'
 featured: true
@@ -20,8 +20,6 @@ La lista creció mientras hablaba con Copilot sobre las opciones. Aparecieron Ni
 Había una condición que no estaba dispuesto a negociar: **todo tenía que ser reversible**. No quería sustituir el lector original, perder la sincronización que ya funcionaba ni aplicar un parche binario a ciegas porque una web reconociese el modelo.
 
 El resultado final usa dos lectores en el mismo aparato. Nickel, el software original de Kobo, sigue llevando las novelas y el ensayo. KOReader se ocupa del contenido fijo basado en imágenes. El servidor sigue siendo la única biblioteca.
-
-![Dos flujos salen de la misma biblioteca: KEPUB hacia Nickel y CBZ hacia KOReader](../../../assets/blog/kobo-library-flow.svg)
 
 ## La conversación era una pista, no una prueba
 
@@ -296,3 +294,5 @@ Hay una copia completa del dispositivo, tres puntos de restauración de las base
 La parte más útil no fue instalar tres herramientas. Fue dar a cada una un trabajo limitado y comprobar cada frontera: firmware, archivo, base de datos, red y dispositivo. Si una actualización rompe NickelHome, puedo retirarlo sin perder KOReader. Si KOReader deja de interesarme, Nickel y Kobo Sync siguen ahí. Si CWA interpreta mal otro paquete, el piloto lo mostrará antes de que entren cien archivos.
 
 Eso era lo que quería decir con reversible. No que nada pueda fallar, sino que cada fallo tenga una salida conocida.
+
+*Imagen de portada adaptada a partir de una [fotografía CC0 de freestocks.org](https://commons.wikimedia.org/wiki/File:Reading_on_an_e-book_reader_(Unsplash).jpg).*
