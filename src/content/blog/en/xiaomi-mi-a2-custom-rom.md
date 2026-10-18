@@ -731,7 +731,7 @@ The camera still does not work. The only real fix would be going back to Lineage
 
 ---
 
-# The original post (February 2026)
+## The original post (February 2026)
 
 ## Introduction
 

@@ -6,7 +6,7 @@ heroImage: '../../../assets/blog/kobo-library-cover.jpg'
 heroImageAlt: 'Un lector de tinta electrónica mostrando una página de cómic en blanco y negro'
 tags: ['linux', 'devops']
 lang: 'es'
-featured: true
+featured: false
 ---
 
 ## Todo empezó por dos tarjetas que no quería ver

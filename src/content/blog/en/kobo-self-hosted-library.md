@@ -6,7 +6,7 @@ heroImage: '../../../assets/blog/kobo-library-cover.jpg'
 heroImageAlt: 'An e-ink reader displaying a black-and-white comic page'
 tags: ['linux', 'devops']
 lang: 'en'
-featured: true
+featured: false
 ---
 
 ## It started with two cards I did not want to see

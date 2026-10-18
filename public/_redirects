@@ -66,3 +66,14 @@
 /en/blog/six-week.md/          /en/blog/learning-journey/  301
 /en/blog/seventh-week/         /en/blog/learning-journey/  301
 /en/blog/seventh-week.md/      /en/blog/learning-journey/  301
+
+# 3) Retired tags still indexed by Google (no tag pages exist for them any more).
+#    Send them to the blog index instead of a 404.
+/es/blog/tag/javascript    /es/blog/  301
+/es/blog/tag/javascript/   /es/blog/  301
+/es/blog/tag/react         /es/blog/  301
+/es/blog/tag/react/        /es/blog/  301
+/en/blog/tag/javascript    /en/blog/  301
+/en/blog/tag/javascript/   /en/blog/  301
+/en/blog/tag/react         /en/blog/  301
+/en/blog/tag/react/        /en/blog/  301

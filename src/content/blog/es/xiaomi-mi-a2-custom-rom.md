@@ -739,7 +739,7 @@ La cámara sigue sin funcionar. La única solución real sería volver a Lineage
 
 ---
 
-# El post original (febrero de 2026)
+## El post original (febrero de 2026)
 
 ## Introducción
 
