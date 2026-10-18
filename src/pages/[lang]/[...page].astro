@@ -43,15 +43,19 @@ const t = useTranslations(lang);
 
 const pageTitleKey = `${pageName}.title`;
 const pageDescriptionKey = `${pageName}.description`;
+// Pages that define a name-bearing meta title/description use them for <head>
+// only; the on-page heading keeps using `${pageName}.title`.
+const metaTitleKey = `${pageName}.metaTitle` as typeof pageTitleKey;
+const metaDescriptionKey = `${pageName}.metaDescription` as typeof pageDescriptionKey;
 
 const htmlLang = lang || defaultLanguage;
 ---
 
 <StandardPageLayout
-  title={t(pageTitleKey)}
-  description={t(pageDescriptionKey)}
+  title={t(metaTitleKey) || t(pageTitleKey)}
+  description={t(metaDescriptionKey) || t(pageDescriptionKey)}
   lang={htmlLang}
-  pageType={pageName === 'about' ? 'about' : 'page'}
+  pageType={pageName === 'about' ? 'about' : pageName === 'cv' ? 'cv' : 'page'}
 >
   <PageContentComponent lang={lang} page={pageData} allProjects={allProjects} />
 </StandardPageLayout>

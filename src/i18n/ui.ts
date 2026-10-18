@@ -49,7 +49,9 @@ export const translations = {
 
         // About page
         'about.title': 'About Me',
+        'about.metaTitle': 'About Raúl Casado — Full Stack Web Developer',
         'about.description': 'Raúl Casado - Web Developer',
+        'about.metaDescription': 'Raúl Casado Moreno is a Full Stack web developer working on production applications with PHP, JavaScript, SQL and Firebase. Background, experience and how to get in touch.',
 
         // SEO meta (home & blog index)
         'home.metaTitle': 'Raúl Casado — Full Stack Web Developer',
@@ -84,7 +86,9 @@ export const translations = {
 
         // CV page
         'cv.title': 'Resume',
+        'cv.metaTitle': 'Raúl Casado — Resume | Full Stack Web Developer',
         'cv.description': 'CV Raul Casado',
+        'cv.metaDescription': 'Resume of Raúl Casado Moreno, Full Stack web developer: work experience, education and technical skills in PHP, JavaScript, SQL and Firebase.',
         'cv.header': 'Resume',
         'cv.subtitle': 'My professional experience, skills and education.',
         'cv.download': 'Download CV',
@@ -254,7 +258,9 @@ export const translations = {
         
         // Página Sobre Mi
         'about.title': 'Sobre Mí',
+        'about.metaTitle': 'Sobre Raúl Casado — Desarrollador Web Full Stack',
         'about.description': 'Raúl Casado - Desarrollador Web',
+        'about.metaDescription': 'Raúl Casado Moreno es desarrollador web Full Stack en aplicaciones en producción con PHP, JavaScript, SQL y Firebase. Trayectoria, experiencia y cómo contactar.',
 
         // SEO meta (home y blog index)
         'home.metaTitle': 'Raúl Casado — Desarrollador Web Full Stack',
@@ -288,7 +294,9 @@ export const translations = {
 
         // Página CV
         'cv.title': 'Curriculum Vitae',
+        'cv.metaTitle': 'Raúl Casado — Curriculum Vitae | Desarrollador Web Full Stack',
         'cv.description': 'CV Raul Casado',
+        'cv.metaDescription': 'Curriculum vitae de Raúl Casado Moreno, desarrollador web Full Stack: experiencia laboral, formación y habilidades técnicas en PHP, JavaScript, SQL y Firebase.',
         'cv.header': 'Curriculum Vitae',
         'cv.subtitle': 'Mi experiencia profesional, habilidades y educación.',
         'cv.download': 'Descargar CV',

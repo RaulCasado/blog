@@ -1,13 +1,14 @@
 ---
 import '../styles/global.css';
 import { SITE_TITLE } from '../consts';
+import profileImage from '../assets/profile/raul_casado.png';
 
 interface Props {
 	title: string;
 	description: string;
 	image?: string;
 	lang?: string;
-	pageType?: 'home' | 'article' | 'about' | 'page';
+	pageType?: 'home' | 'article' | 'about' | 'cv' | 'page';
 	pubDate?: Date;
 	updatedDate?: Date;
 	tags?: string[];
@@ -49,12 +50,25 @@ const jobTitle = lang === 'en' ? 'Full Stack Developer' : 'Desarrollador Full St
 const publishedISO = pubDate ? new Date(pubDate).toISOString() : undefined;
 const modifiedISO = updatedDate || pubDate ? new Date(updatedDate || pubDate!).toISOString() : undefined;
 
+// Stable @id so WebSite, Person and BlogPosting authorship all resolve to one entity.
+const personId = new URL('/#person', Astro.site).href;
+
 const personSchema = {
 	'@context': 'https://schema.org',
 	'@type': 'Person',
+	'@id': personId,
 	name: AUTHOR_NAME,
+	// Spellings people actually search for, including the unaccented one.
+	alternateName: ['Raúl Casado', 'Raul Casado', 'Raul Casado Moreno'],
 	url: aboutURL,
+	mainEntityOfPage: aboutURL,
+	image: new URL(profileImage.src, Astro.site).href,
 	jobTitle,
+	description:
+		lang === 'en'
+			? 'Full Stack web developer working on production applications with PHP, JavaScript, SQL and Firebase.'
+			: 'Desarrollador web Full Stack en aplicaciones en producción con PHP, JavaScript, SQL y Firebase.',
+	knowsAbout: ['PHP', 'JavaScript', 'SQL', 'Firebase', 'Docker', 'Linux'],
 	sameAs,
 };
 
@@ -62,8 +76,10 @@ const websiteSchema = {
 	'@context': 'https://schema.org',
 	'@type': 'WebSite',
 	name: 'Raúl Casado',
+	alternateName: ['Raul Casado', 'raulcasado.com'],
 	url: Astro.site?.href,
 	inLanguage: lang,
+	author: { '@id': personId },
 };
 
 const articleSchema =
@@ -78,15 +94,15 @@ const articleSchema =
 				image: imageURL.href,
 				inLanguage: lang,
 				keywords: tags.length ? tags.join(', ') : undefined,
-				author: { '@type': 'Person', name: AUTHOR_NAME, url: aboutURL },
-				publisher: { '@type': 'Person', name: AUTHOR_NAME, url: aboutURL },
+				author: { '@type': 'Person', '@id': personId, name: AUTHOR_NAME, url: aboutURL },
+				publisher: { '@type': 'Person', '@id': personId, name: AUTHOR_NAME, url: aboutURL },
 				mainEntityOfPage: canonicalURL.href,
 			}
 		: null;
 
 const schemas = [];
 if (pageType === 'home') schemas.push(websiteSchema, personSchema);
-else if (pageType === 'about') schemas.push(personSchema);
+else if (pageType === 'about' || pageType === 'cv') schemas.push(personSchema);
 else if (articleSchema) schemas.push(articleSchema);
 ---
 

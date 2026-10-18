@@ -1,6 +1,6 @@
 ---
-title: 'How I Set Up a Modded Minecraft Server with Docker on an Old PC'
-description: 'Complete guide to deploying a Minecraft server with Cobblemon using Docker Compose on limited hardware. From initial setup to RAM optimization, CLI mod management and admin tricks.'
+title: 'Minecraft Server with Docker on an Old PC (Cobblemon + ZRAM)'
+description: 'How I built a modded Minecraft server (Cobblemon) with Docker Compose on an old PC running Ubuntu Server: ZRAM, Aikar flags, CLI mod management and admin commands.'
 pubDate: '2026-02-08'
 heroImage: '../../../assets/blog/minecraft.webp'
 heroImageAlt: 'Minecraft server with Docker'
