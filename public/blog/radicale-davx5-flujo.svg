@@ -1,0 +1,33 @@
+<svg xml:lang="es" xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+<title id="title">De Radicale al aviso del calendario</title>
+<desc id="desc">Radicale intercambia calendarios y contactos con DAVx5. DAVx5 sincroniza los proveedores de Android. Fossify lee el calendario y programa la notificación. La aplicación de contactos lee la agenda.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 10 5 0 10" fill="#7dd3fc"/></marker></defs>
+<rect width="1600" height="900" rx="32" fill="#101c2a"/>
+<g font-family="system-ui,sans-serif" text-anchor="middle" fill="#f1f5f9">
+<text x="800" y="135" font-size="44" font-weight="700">Sincronizar y avisar son dos trabajos</text>
+<text x="800" y="188" font-size="26" fill="#b8c8d9">Flujo conceptual de calendario y contactos</text>
+<g fill="#1c3045" stroke="#6086a5" stroke-width="2">
+<rect x="150" y="295" width="330" height="160" rx="18"/>
+<rect x="635" y="295" width="330" height="160" rx="18"/>
+<rect x="1120" y="295" width="330" height="160" rx="18"/>
+<rect x="500" y="600" width="340" height="155" rx="18"/>
+<rect x="995" y="600" width="380" height="155" rx="18"/>
+</g>
+<text x="315" y="357" font-size="36" font-weight="700">Radicale</text>
+<text x="315" y="407" font-size="26" fill="#c2d3e5">Calendarios y agenda</text>
+<text x="800" y="357" font-size="36" font-weight="700">DAVx⁵</text>
+<text x="800" y="407" font-size="26" fill="#c2d3e5">Sincronización DAV</text>
+<text x="1285" y="352" font-size="32" font-weight="700">Android</text>
+<text x="1285" y="398" font-size="24" fill="#c2d3e5">Proveedores de datos</text>
+<text x="670" y="659" font-size="32" font-weight="700">App de contactos</text>
+<text x="670" y="708" font-size="24" fill="#c2d3e5">Lee y edita la agenda</text>
+<text x="1185" y="659" font-size="32" font-weight="700">Fossify Calendar</text>
+<text x="1185" y="708" font-size="24" fill="#c2d3e5">Lee eventos y programa avisos</text>
+<g fill="none" stroke="#7dd3fc" stroke-width="4" marker-end="url(#arrow)">
+<path d="M500 375H615" marker-start="url(#arrow)"/>
+<path d="M985 375H1100" marker-start="url(#arrow)"/>
+<path d="M1240 475V525H670V580"/>
+<path d="M1325 475V550H1185V580"/>
+</g>
+<text x="800" y="818" font-size="24" fill="#b8c8d9">Una sincronización correcta todavía necesita una aplicación que entregue el aviso.</text>
+</g></svg>
