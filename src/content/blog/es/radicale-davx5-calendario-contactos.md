@@ -2,8 +2,8 @@
 title: 'Radicale y DAVx⁵: el calendario se sincronizaba, pero el aviso no llegaba'
 description: 'Separar servidor, sincronización y aplicación de calendario permitió encontrar por qué una cita podía llegar al móvil sin entregar su aviso. Lo que probé con Radicale, DAVx⁵ y Fossify.'
 pubDate: '2026-10-25'
-heroImage: '../../../assets/blog/radicale-davx5-flujo.webp'
-heroImageAlt: 'Radicale sincroniza con DAVx5 y los proveedores de Android; la app de contactos lee la agenda y Fossify lee el calendario y programa sus avisos'
+heroImage: '../../../assets/blog/radicale-agenda-stock.webp'
+heroImageAlt: 'Agenda abierta con un calendario mensual y recordatorios escritos junto a un rotulador amarillo'
 tags: ['linux', 'devops']
 lang: 'es'
 ---
@@ -22,7 +22,7 @@ Los eventos se conservan como archivos `.ics`; los contactos, como vCard, habitu
 
 **DAVx⁵** conecta esos protocolos con los proveedores de datos de Android, los almacenes del sistema que consultan las aplicaciones. La app donde veo el mes no necesita hablar directamente con mi servidor. Puede leer el calendario que DAVx⁵ ya ha sincronizado.
 
-En mi instalación quedaron cuatro responsabilidades, representadas en el [esquema ampliable de portada](/blog/radicale-davx5-flujo.svg):
+En mi instalación quedaron cuatro responsabilidades:
 
 1. Radicale conserva los datos en el servidor.
 2. DAVx⁵ los intercambia con Android.
@@ -141,3 +141,5 @@ La **copia de seguridad sigue pendiente**. La propuesta es conservar datos y con
 Para alguien con un servidor propio, Android y una agenda personal, esta separación permite elegir servidor y aplicaciones por separado y localizar dónde falla el recorrido. Exige también mantener permisos, sincronización de fondo y respaldo. Si se buscan invitaciones, agenda web integrada o garantías de avisos que no se quieren comprobar y mantener, el alcance que he probado aquí resulta insuficiente.
 
 Antes de confiarle esos recordatorios, me quedan dos tareas concretas: repetir el ensayo remoto sin tocar el móvil y recuperar una copia en un entorno separado. Son las que decidirán si el montaje encaja en mi uso diario.
+
+*Foto de portada: [Estée Janssens en Unsplash](https://unsplash.com/photos/white-planner-with-pen-on-top-mO3s5xdo68Y), bajo la [licencia Unsplash](https://unsplash.com/license). Fotografía de archivo sobre calendarios y recordatorios.*

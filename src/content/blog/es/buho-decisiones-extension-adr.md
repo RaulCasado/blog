@@ -2,8 +2,8 @@
 title: 'Búho de Decisiones: qué significa guardar bien un ADR'
 description: 'Un formulario que guardaba Markdown acabó necesitando pruebas de concurrencia, reservas por número y decisiones sobre errores parciales. Así está evolucionando mi extensión de VS Code.'
 pubDate: '2026-10-25'
-heroImage: '../../../assets/blog/buho-reserva-numero.webp'
-heroImageAlt: 'Dos guardados pueden elegir el mismo ID; reservar por número y releer la carpeta antes de escribir permite detectar que el candidato ya está ocupado'
+heroImage: '../../../assets/blog/buho-notas-stock.webp'
+heroImageAlt: 'Cuaderno abierto y lápiz junto a un portátil y un teléfono sobre una mesa blanca'
 tags: ['web_development', 'devops']
 lang: 'es'
 ---
@@ -140,7 +140,7 @@ El fallo de la aserción es el resultado esperado del ejemplo. Para cubrir este 
 
 Elegimos crear una reserva como `.0003.lock` usando el modo `wx` de Node: crear el archivo para escribir, de forma exclusiva. Si ya existe, se recibe `EEXIST`. La comprobación y la creación se hacen como una operación indivisible del filesystem local utilizado.
 
-Aplicarlo solo al Markdown habría cubierto nombres idénticos. Con títulos distintos, los dos nombres completos podrían crearse sin colisión. La reserva depende únicamente del ID, como muestra el [esquema ampliable de portada](/blog/buho-reserva-numero.svg).
+Aplicarlo solo al Markdown habría cubierto nombres idénticos. Con títulos distintos, los dos nombres completos podrían crearse sin colisión. La reserva depende únicamente del ID.
 
 Estas fueron las alternativas reales:
 
@@ -275,3 +275,5 @@ El grafo visual, la renumeración entre ramas y el acceso desde agentes son lín
 Para una herramienta basada en archivos, «guardar bien» acaba incluyendo identidad, conservación del texto y claridad ante un fallo. Lo que puedo trasladar a otro proyecto es el método que nos ayudó aquí: escribir la intercalación, forzarla en un test y comprobar los datos que deben sobrevivir. Después, abrir la aplicación y recorrer el caso que el mock no representa.
 
 El siguiente cambio de Búho está en ese mismo punto: el usuario debe poder distinguir que se creó su documento de que terminaron todas las actualizaciones del reemplazo. Hasta cerrar ese recorrido y sus pruebas, la primera versión sigue pendiente.
+
+*Foto de portada: [JESHOOTS.COM en Unsplash](https://unsplash.com/photos/an-open-empty-notebook-on-a-white-desk-next-to-an-iphone-and-a-macbook-pUAM5hPaCRI), bajo la [licencia Unsplash](https://unsplash.com/license). Fotografía de archivo sobre la toma de notas; no es una captura de Búho.*

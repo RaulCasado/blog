@@ -2,8 +2,8 @@
 title: 'Hermes en CPU: de elegir modelos a esperar una respuesta en Telegram'
 description: 'Qué cambió al convertir modelos locales en un agente: memoria, cuantización, pruebas de código, latencia de entrada y una compresión que cancelamos después de 46 minutos.'
 pubDate: '2026-10-25'
-heroImage: '../../../assets/blog/hermes-flujo.webp'
-heroImageAlt: 'Telegram intercambia mensajes con Hermes, que consulta a Ornith mediante llama.cpp y devuelve al modelo los resultados de sus herramientas'
+heroImage: '../../../assets/blog/hermes-hardware-stock.webp'
+heroImageAlt: 'Primer plano de los chips y circuitos de una placa electrónica de ordenador'
 tags: ['artificial_intelligence', 'linux', 'devops']
 lang: 'es'
 ---
@@ -18,7 +18,7 @@ Esta vez la máquina era un HP ProDesk 400 G6 Mini, con **i5-10500T, seis núcle
 
 **Hermes Agent, de Nous Research, coordina un modelo, herramientas y una conversación.** El modelo genera texto o solicita una acción; Hermes ejecuta las herramientas disponibles y le devuelve sus resultados. Ese bucle permite que una petición requiera varias operaciones antes de contestar.
 
-Por ejemplo, si pido resumir un archivo, el modelo puede solicitar su lectura. Hermes la ejecuta, incorpora el contenido a la conversación y vuelve a consultar al modelo. Entonces llega el resumen, o quizá otra petición de herramienta. Es el recorrido del [esquema de portada, que puede ampliarse](/blog/hermes-flujo.svg).
+Por ejemplo, si pido resumir un archivo, el modelo puede solicitar su lectura. Hermes la ejecuta, incorpora el contenido a la conversación y vuelve a consultar al modelo. Entonces llega el resumen, o quizá otra petición de herramienta.
 
 Decir «he leído el archivo» es fácil para un modelo. Comprobar que hubo una llamada real, que leyó el archivo correcto y que el resumen es fiel requiere mirar el trabajo del programa que lo rodea.
 
@@ -281,3 +281,5 @@ Con lo medido, los modelos locales sí daban trabajo útil en tareas delimitadas
 Para elegir en otra máquina miraría primero una tarea propia: ¿termina correctamente, cuánto tarda la primera respuesta y qué memoria deja libre? Si el objetivo es un chat inmediato, cinco minutos de entrada pueden descartar la configuración aunque genere deprisa después. Si admite tareas lentas, sigue siendo necesario comprobar el resultado antes de darle permisos de escritura.
 
 En mi instalación quedó una respuesta real por Telegram y un problema de compresión abierto. La siguiente prueba será un solo encargo pequeño, con criterio de acierto previo, repetido varias veces; después, comprobar si el resumidor configurado llega a utilizarse. Eso permitiría decidir si mantener el bot para ese uso concreto.
+
+*Foto de portada: [Alexandre Debiève en Unsplash](https://unsplash.com/photos/macro-photography-of-black-circuit-board-FO7JIlwjOtU), bajo la [licencia Unsplash](https://unsplash.com/license). Fotografía de archivo de hardware; no corresponde a mi servidor.*

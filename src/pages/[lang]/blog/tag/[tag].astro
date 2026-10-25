@@ -57,7 +57,7 @@ const cardImageSizes = '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw
               widths={cardImageWidths}
               sizes={cardImageSizes}
               width={720}
-              height={360}
+              height={405}
               quality={80}
               loading="lazy"
             />
@@ -80,7 +80,7 @@ const cardImageSizes = '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw
 <style>
 .posts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
   gap: 2rem;
   margin-top: 2rem;
 }
@@ -108,6 +108,7 @@ const cardImageSizes = '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw
 
 .post-image {
   width: 100%;
+  height: auto;
   aspect-ratio: 16/9;
   object-fit: cover;
   transition: transform 0.3s;
