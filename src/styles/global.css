@@ -20,80 +20,81 @@ body {
 }
 
 /*
- * Design tokens — inspired by refine.dev (zinc palette + green accent).
+ * Design tokens — warm paper, ink and a single clay accent.
  * Colors are stored as HSL channels so they compose with hsl(var(--x) / alpha).
+ * Names are our own (paper/ink/brand/line…) on purpose: no shadcn vocabulary.
  */
 :root,
 .light {
 	/* Base colors */
-	--background: 0 0% 100%;
-	--foreground: 240 5.9% 10%;
+	--paper: 42 38% 97%;
+	--ink: 28 14% 9%;
 
-	/* Primary colors (green accent) */
-	--primary: 142.1 76.2% 36.3%;
-	--primary-foreground: 0 0% 100%;
+	/* Brand (clay / terracotta accent) */
+	--brand: 14 78% 37%;
+	--brand-ink: 0 0% 100%;
 
-	/* Secondary colors */
-	--secondary: 240 4.8% 95.9%;
-	--secondary-foreground: 240 5.9% 10%;
+	/* Tints */
+	--tint: 40 28% 93%;
+	--tint-ink: 28 14% 9%;
 
-	/* Muted colors */
-	--muted: 240 4.8% 95.9%;
-	--muted-foreground: 240 3.8% 46.1%;
+	/* Quiet text and washes */
+	--wash: 40 28% 93%;
+	--ink-soft: 28 8% 36%;
 
-	/* Accent colors */
-	--accent: 240 4.8% 95.9%;
-	--accent-foreground: 240 5.9% 10%;
+	/* Hover surfaces */
+	--hover: 40 28% 93%;
+	--hover-ink: 28 14% 9%;
 
-	/* Card styles */
-	--card: 0 0% 100%;
-	--card-foreground: 240 5.9% 10%;
+	/* Surfaces */
+	--surface: 0 0% 100%;
+	--surface-ink: 28 14% 9%;
 
-	/* Border styles */
-	--border: 240 5.9% 90%;
-	--input: 240 5.9% 90%;
+	/* Lines */
+	--line: 38 20% 85%;
+	--line-strong: 36 14% 72%;
 
-	/* Destructive */
-	--destructive: 0 84.2% 60.2%;
-	--destructive-foreground: 210 40% 98%;
+	/* Danger */
+	--danger: 4 70% 44%;
+	--danger-ink: 0 0% 100%;
 
-	/* Ring */
-	--ring: 142.1 76.2% 36.3%;
+	/* Focus ring */
+	--focus: 14 78% 37%;
 
 	/* Code blocks & inline code */
-	--code-bg: 240 10% 3.9%;
+	--code-bg: 28 12% 6%;
 	--code-color: 0 0% 83%;
-	--inline-code-bg: 240 5.9% 90%;
-	--inline-code-color: 240 5.2% 33.9%;
+	--inline-code-bg: 38 20% 88%;
+	--inline-code-color: 28 10% 28%;
 
-	/* Prose (article body) — refine keeps body copy softer than headings */
-	--prose-text: 240 5.2% 33.9%;
-	--prose-heading: 240 5.9% 10%;
-	--prose-link: 240 3.8% 46.1%;
+	/* Prose (article body) — body copy a notch softer than headings */
+	--prose-text: 28 8% 24%;
+	--prose-heading: 28 14% 9%;
+	--prose-link: 14 78% 37%;
 
-	/* Typography */
-	--font-sans: 'Inter', 'InterVariable', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+	/* Typography: display serif for titles, neutral grotesque for running text.
+	 * --font-sans and --font-display are injected by Astro's Fonts API (astro.config.mjs). */
 	--font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 
-	/* Layout */
-	--radius: 0.5rem;
-	--radius-lg: 0.75rem;
-	--radius-xl: 1rem;
+	/* Layout — squarer corners than the usual 8px/12px */
+	--corner: 0.25rem;
+	--corner-lg: 0.375rem;
+	--corner-xl: 0.625rem;
 	--pill-radius: 999px;
 	--content-width: 45rem;
 	--post-col: 45rem;
 	--toc-col: 21.25rem;
 	--post-max: 75rem;
 	--header-h: 4rem;
-	/* Eyebrow: the 10px uppercase meta label refine uses everywhere */
-	--eyebrow-size: 0.625rem;
-	--eyebrow-tracking: -0.01em;
+	/* Eyebrow: small uppercase meta label */
+	--eyebrow-size: 0.6875rem;
+	--eyebrow-tracking: 0.08em;
 
 	/* Legacy colors - kept for compatibility */
-	--black: 9, 9, 11;
-	--gray: 113, 113, 122;
-	--gray-light: 228, 228, 231;
-	--gray-dark: 39, 39, 42;
+	--black: 26, 23, 20;
+	--gray: 113, 105, 98;
+	--gray-light: 224, 219, 209;
+	--gray-dark: 42, 38, 34;
 	--gray-gradient: rgba(var(--gray-light), 0.6);
 	--box-shadow:
 		0 1px 2px rgba(var(--black), 5%), 0 4px 12px rgba(var(--black), 8%);
@@ -101,54 +102,44 @@ body {
 
 /* Dark theme */
 .dark {
-	/* Base colors - dark mode (zinc-900 surface, pure white headings) */
-	--background: 240 5.9% 10%;
-	--foreground: 0 0% 100%;
+	--paper: 28 10% 8%;
+	--ink: 40 24% 95%;
 
-	/* Primary colors - dark mode */
-	--primary: 141.7 76.6% 58%;
-	--primary-foreground: 240 5.9% 10%;
+	--brand: 14 86% 66%;
+	--brand-ink: 28 10% 8%;
 
-	/* Secondary colors - dark mode */
-	--secondary: 240 3.7% 15.9%;
-	--secondary-foreground: 240 20% 97%;
+	--tint: 28 8% 14%;
+	--tint-ink: 40 24% 95%;
 
-	/* Muted colors - dark mode */
-	--muted: 240 3.7% 15.9%;
-	--muted-foreground: 240 4.9% 64.9%;
+	--wash: 28 8% 14%;
+	--ink-soft: 34 10% 66%;
 
-	/* Accent colors - dark mode */
-	--accent: 240 3.7% 15.9%;
-	--accent-foreground: 240 20% 97%;
+	--hover: 28 8% 14%;
+	--hover-ink: 40 24% 95%;
 
-	/* Card styles - dark mode */
-	--card: 240 3.7% 15.9%;
-	--card-foreground: 0 0% 100%;
+	--surface: 28 8% 11%;
+	--surface-ink: 40 24% 95%;
 
-	/* Border styles - dark mode */
-	--border: 240 3.7% 15.9%;
-	--input: 240 3.7% 15.9%;
+	--line: 28 7% 20%;
+	--line-strong: 28 7% 30%;
 
-	/* Ring */
-	--ring: 141.7 76.6% 58%;
+	--focus: 14 86% 66%;
 
-	/* Code blocks & inline code */
-	--code-bg: 240 10% 3.9%;
+	--code-bg: 28 12% 5%;
 	--code-color: 0 0% 83%;
-	--inline-code-bg: 240 5.3% 26.1%;
-	--inline-code-color: 240 4.9% 83.9%;
+	--inline-code-bg: 28 7% 22%;
+	--inline-code-color: 34 12% 82%;
 
-	/* Prose - dark mode */
-	--prose-text: 240 4.9% 83.9%;
-	--prose-heading: 0 0% 100%;
-	--prose-link: 240 5% 64.9%;
+	--prose-text: 34 12% 82%;
+	--prose-heading: 40 24% 95%;
+	--prose-link: 14 86% 66%;
 
 	/* Legacy colors - dark mode adaptations */
-	--black: 244, 244, 245;
-	--gray: 161, 161, 170;
-	--gray-light: 39, 39, 42;
-	--gray-dark: 228, 228, 231;
-	--gray-gradient: rgba(24, 24, 27, 0.9);
+	--black: 245, 243, 239;
+	--gray: 177, 169, 160;
+	--gray-light: 42, 38, 34;
+	--gray-dark: 224, 219, 209;
+	--gray-gradient: rgba(22, 20, 18, 0.9);
 	--box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.45);
 }
 
@@ -157,16 +148,14 @@ body {
 	margin: 0;
 	padding: 0;
 	text-align: left;
-	background-color: hsl(var(--background));
-	color: hsl(var(--foreground));
+	background-color: hsl(var(--paper));
+	color: hsl(var(--ink));
 	word-wrap: break-word;
 	overflow-wrap: break-word;
 	font-size: 16px;
 	line-height: 1.5;
-	letter-spacing: 0.01em;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	font-feature-settings: 'cv11', 'ss01';
 }
 
 main {
@@ -182,10 +171,12 @@ h4,
 h5,
 h6 {
 	margin: 0 0 0.5rem 0;
-	color: hsl(var(--foreground));
-	line-height: 1.25;
-	font-weight: 600;
-	letter-spacing: -0.02em;
+	color: hsl(var(--ink));
+	font-family: var(--font-display);
+	line-height: 1.2;
+	font-weight: 500;
+	letter-spacing: -0.015em;
+	font-optical-sizing: auto;
 }
 h1 {
 	font-size: 2.5rem;   /* 40px / 48px */
@@ -205,8 +196,7 @@ h5 {
 }
 h6 {
 	font-size: 1rem;
-	color: hsl(var(--primary));
-	letter-spacing: -0.005em;
+	color: hsl(var(--brand));
 }
 
 strong,
@@ -215,12 +205,12 @@ b {
 }
 
 a {
-	color: hsl(var(--foreground));
+	color: hsl(var(--ink));
 	text-decoration-thickness: 1px;
 	text-underline-offset: 3px;
 }
 a:hover {
-	color: hsl(var(--primary));
+	color: hsl(var(--brand));
 }
 
 p {
@@ -238,10 +228,10 @@ input {
 img {
 	max-width: 100%;
 	height: auto;
-	border-radius: var(--radius);
+	border-radius: var(--corner);
 }
 
-/* Code — JetBrains-style mono stack */
+/* Code — mono stack */
 code {
 	font-family: var(--font-mono);
 	padding: 2px 5px;
@@ -255,8 +245,8 @@ pre {
 	font-family: var(--font-mono);
 	background-color: hsl(var(--code-bg));
 	color: hsl(var(--code-color));
-	border-radius: var(--radius);
-	border: 1px solid hsl(var(--border));
+	border-radius: var(--corner);
+	border: 1px solid hsl(var(--line));
 }
 
 pre > code {
@@ -266,16 +256,16 @@ pre > code {
 }
 
 blockquote {
-	border-left: 3px solid hsl(var(--primary));
+	border-left: 3px solid hsl(var(--brand));
 	padding: 0.5rem 0 0.5rem 1rem;
 	margin: 0 0 1.5rem;
 	font-size: 1em;
-	color: hsl(var(--muted-foreground));
+	color: hsl(var(--ink-soft));
 }
 
 hr {
 	border: none;
-	border-top: 1px solid hsl(var(--border));
+	border-top: 1px solid hsl(var(--line));
 }
 
 pre, code {
@@ -296,7 +286,7 @@ pre {
 
 /*
  * Shiki inlines the theme's own background on .astro-code; override it so
- * code sits on our zinc-950 slab. Token colours come from dark-plus and are
+ * code sits on our dark slab. Token colours come from dark-plus and are
  * light-on-dark, which is why the slab stays dark in the light theme too.
  */
 .astro-code {
@@ -314,12 +304,12 @@ table {
 
 table th {
 	font-weight: 600;
-	color: hsl(var(--foreground));
+	color: hsl(var(--ink));
 }
 
 table th, table td {
 	padding: 0.5rem 0.75rem;
-	border: 1px solid hsl(var(--border));
+	border: 1px solid hsl(var(--line));
 }
 
 /* Mobile styles */

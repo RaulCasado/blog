@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import { SITE_TITLE } from '../consts';
 import profileImage from '../assets/profile/raul_casado.png';
+import { Font } from 'astro:assets';
 
 interface Props {
 	title: string;
@@ -119,13 +120,9 @@ else if (articleSchema) schemas.push(articleSchema);
 />
 <meta name="generator" content={Astro.generator} />
 
-<!-- Fonts: single variable Google Font (Inter); mono uses the system stack -->
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link
-	rel="stylesheet"
-	href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap"
-/>
+<!-- Fonts: self-hosted at build time by Astro (Fraunces for titles, Hanken Grotesk for text) -->
+<Font cssVariable="--font-display" preload={[{ subset: 'latin', style: 'normal' }]} />
+<Font cssVariable="--font-sans" preload={[{ subset: 'latin', style: 'normal' }]} />
 
 <!-- Canonical & language alternates -->
 <link rel="canonical" href={canonicalURL} />
