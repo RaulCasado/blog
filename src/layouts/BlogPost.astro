@@ -133,7 +133,7 @@ const hasToc = headings.length > 0;
 			line-height: 1.6;
 			text-transform: uppercase;
 			letter-spacing: var(--eyebrow-tracking);
-			color: hsl(var(--muted-foreground));
+			color: hsl(var(--ink-soft));
 		}
 
 		.eyebrow-link {
@@ -146,7 +146,7 @@ const hasToc = headings.length > 0;
 		}
 
 		.eyebrow-link:hover {
-			color: hsl(var(--foreground));
+			color: hsl(var(--ink));
 		}
 
 		.dot {
@@ -172,7 +172,7 @@ const hasToc = headings.length > 0;
 		}
 
 		.byline-left .eyebrow-link {
-			color: hsl(var(--primary));
+			color: hsl(var(--brand));
 		}
 
 		.post-hero {
@@ -185,14 +185,14 @@ const hasToc = headings.length > 0;
 			height: auto;
 			aspect-ratio: 16 / 9;
 			object-fit: cover;
-			border-radius: var(--radius-xl);
+			border-radius: var(--corner-xl);
 		}
 
 		.post-updated {
 			margin: 1.5rem 0 0;
 			font-size: 0.8125rem;
 			font-style: italic;
-			color: hsl(var(--muted-foreground));
+			color: hsl(var(--ink-soft));
 		}
 
 		@media (min-width: 640px) {
@@ -259,7 +259,7 @@ const hasToc = headings.length > 0;
 		}
 
 		.prose :global(li::marker) {
-			color: hsl(var(--muted-foreground));
+			color: hsl(var(--ink-soft));
 		}
 
 		.prose :global(a) {
@@ -270,7 +270,7 @@ const hasToc = headings.length > 0;
 		}
 
 		.prose :global(a:hover) {
-			color: hsl(var(--primary));
+			color: hsl(var(--brand));
 			text-decoration: underline;
 			text-underline-offset: 0.2em;
 		}
@@ -285,14 +285,14 @@ const hasToc = headings.length > 0;
 			max-width: 100%;
 			height: auto;
 			margin: 1.5rem 0;
-			border-radius: var(--radius-xl);
+			border-radius: var(--corner-xl);
 		}
 
 		.prose :global(blockquote) {
 			margin: 1.5rem 0;
 			padding: 0.25rem 0 0.25rem 1rem;
-			border-left: 3px solid hsl(var(--primary));
-			color: hsl(var(--muted-foreground));
+			border-left: 3px solid hsl(var(--brand));
+			color: hsl(var(--ink-soft));
 		}
 
 		.prose :global(blockquote p:last-child) {
@@ -302,7 +302,7 @@ const hasToc = headings.length > 0;
 		.prose :global(hr) {
 			margin: 2.5rem 0;
 			border: 0;
-			border-top: 1px solid hsl(var(--border));
+			border-top: 1px solid hsl(var(--line));
 		}
 
 		/* Inline code — pill on a tinted surface, never the block styling */
@@ -326,8 +326,8 @@ const hasToc = headings.length > 0;
 			line-height: 1.55;
 			color: hsl(var(--code-color));
 			background-color: hsl(var(--code-bg));
-			border: 1px solid hsl(var(--border));
-			border-radius: var(--radius);
+			border: 1px solid hsl(var(--line));
+			border-radius: var(--corner);
 		}
 
 		.prose :global(pre code) {
@@ -350,14 +350,14 @@ const hasToc = headings.length > 0;
 		.prose :global(th),
 		.prose :global(td) {
 			padding: 0.5rem 0.75rem;
-			border: 1px solid hsl(var(--border));
+			border: 1px solid hsl(var(--line));
 			text-align: left;
 		}
 
 		.prose :global(th) {
 			color: hsl(var(--prose-heading));
 			font-weight: 600;
-			background-color: hsl(var(--card));
+			background-color: hsl(var(--surface));
 		}
 
 		:global(.copy-code-btn) {
@@ -389,14 +389,14 @@ const hasToc = headings.length > 0;
 
 		:global(.copy-code-btn.copied) {
 			opacity: 1;
-			color: hsl(var(--primary));
-			border-color: hsl(var(--primary) / 0.4);
+			color: hsl(var(--brand));
+			border-color: hsl(var(--brand) / 0.4);
 		}
 
 		.post-comments {
 			margin-top: 4rem;
 			padding-top: 2rem;
-			border-top: 1px solid hsl(var(--border));
+			border-top: 1px solid hsl(var(--line));
 		}
 	</style>
 	</head>

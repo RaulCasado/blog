@@ -86,9 +86,9 @@ const cardImageSizes = '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw
 }
 
 .post-card {
-  background: hsl(var(--card));
-  border-radius: var(--radius-lg);
-  border: 1px solid hsl(var(--border));
+  background: hsl(var(--surface));
+  border-radius: var(--corner-lg);
+  border: 1px solid hsl(var(--line));
   box-shadow: none;
   overflow: hidden;
   display: flex;
@@ -97,7 +97,7 @@ const cardImageSizes = '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw
 }
 
 .post-card:hover {
-  border-color: hsl(var(--muted-foreground) / 0.4);
+  border-color: hsl(var(--ink-soft) / 0.4);
   transform: translateY(-2px);
 }
 
@@ -112,7 +112,7 @@ const cardImageSizes = '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw
   aspect-ratio: 16/9;
   object-fit: cover;
   transition: transform 0.3s;
-  border-bottom: 1px solid hsl(var(--border));
+  border-bottom: 1px solid hsl(var(--line));
 }
 
 .post-card:hover .post-image {
@@ -133,14 +133,14 @@ const cardImageSizes = '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw
 }
 
 .post-card-content p {
-  color: hsl(var(--muted-foreground));
+  color: hsl(var(--ink-soft));
   margin-bottom: 1rem;
   flex: 1;
 }
 
 .post-meta {
   font-size: 0.95rem;
-  color: hsl(var(--muted-foreground));
+  color: hsl(var(--ink-soft));
   margin-top: auto;
   display: flex;
   gap: 1rem;
@@ -150,13 +150,13 @@ const cardImageSizes = '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw
 .back-link {
   display: inline-block;
   margin-bottom: 1.5rem;
-  color: hsl(var(--muted-foreground));
+  color: hsl(var(--ink-soft));
   text-decoration: none;
   font-weight: 500;
   transition: color 0.2s;
 }
 
 .back-link:hover {
-  color: hsl(var(--primary));
+  color: hsl(var(--brand));
 }
 </style>
