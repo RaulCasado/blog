@@ -103,12 +103,12 @@ const languageNames = {
     
     .language-select {
         appearance: none;
-        background-color: hsl(var(--background));
-        border: 1px solid hsl(var(--border));
+        background-color: hsl(var(--paper));
+        border: 1px solid hsl(var(--line));
         border-radius: 6px;
         padding: 0.5rem 2rem 0.5rem 0.75rem;
         font-size: 0.9rem;
-        color: hsl(var(--foreground));
+        color: hsl(var(--ink));
         cursor: pointer;
         transition: all 0.2s ease;
         min-width: 110px;
@@ -119,14 +119,14 @@ const languageNames = {
     }
     
     .language-select:hover {
-        border-color: hsl(var(--accent));
-        background-color: hsl(var(--accent) / 0.1);
+        border-color: hsl(var(--hover));
+        background-color: hsl(var(--hover) / 0.1);
     }
     
     .language-select:focus {
         outline: none;
-        border-color: hsl(var(--primary));
-        box-shadow: 0 0 0 2px hsl(var(--primary) / 0.2);
+        border-color: hsl(var(--brand));
+        box-shadow: 0 0 0 2px hsl(var(--brand) / 0.2);
     }
     
     .sr-only {
@@ -170,7 +170,7 @@ const languageNames = {
         }
         
         .language-select:focus {
-            box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px currentColor;
+            box-shadow: 0 0 0 2px hsl(var(--paper)), 0 0 0 4px currentColor;
         }
     }
     

@@ -20,7 +20,7 @@ a {
 }
 a.active {
 	font-weight: 600;
-	color: hsl(var(--foreground));
+	color: hsl(var(--ink));
 }
 
 @media (max-width: 768px) {
@@ -28,18 +28,18 @@ a.active {
 		display: block;
 		text-align: center;
 		padding: 0.75rem 1rem;
-		border-radius: var(--radius);
-		color: hsl(var(--muted-foreground));
+		border-radius: var(--corner);
+		color: hsl(var(--ink-soft));
 	}
 
 	a:hover, a:focus {
-		background-color: hsl(var(--accent));
-		color: hsl(var(--foreground));
+		background-color: hsl(var(--hover));
+		color: hsl(var(--ink));
 	}
 
 	a.active {
-		background-color: hsl(var(--secondary));
-		color: hsl(var(--foreground));
+		background-color: hsl(var(--tint));
+		color: hsl(var(--ink));
 	}
 }
 </style>

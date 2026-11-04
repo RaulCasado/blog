@@ -75,10 +75,10 @@ const translatePath = useTranslatedPath(lang);
 	header {
 		margin: 0;
 		padding: 0 1.5rem;
-		background-color: hsl(var(--background) / 0.85);
+		background-color: hsl(var(--paper) / 0.85);
 		backdrop-filter: blur(8px);
 		-webkit-backdrop-filter: blur(8px);
-		border-bottom: 1px solid hsl(var(--border));
+		border-bottom: 1px solid hsl(var(--line));
 		position: sticky;
 		top: 0;
 		z-index: 1000;
@@ -135,7 +135,7 @@ const translatePath = useTranslatedPath(lang);
 	
 	nav a {
 		padding: 1.25em 0.75em;
-		color: hsl(var(--muted-foreground));
+		color: hsl(var(--ink-soft));
 		font-size: 0.9375rem;
 		font-weight: 500;
 		border-bottom: 2px solid transparent;
@@ -144,13 +144,13 @@ const translatePath = useTranslatedPath(lang);
 	}
 
 	nav a:hover {
-		color: hsl(var(--foreground));
+		color: hsl(var(--ink));
 	}
 
 	nav a.active {
-		color: hsl(var(--foreground));
+		color: hsl(var(--ink));
 		font-weight: 600;
-		border-bottom-color: hsl(var(--primary));
+		border-bottom-color: hsl(var(--brand));
 	}
 	
 	.internal-links {
@@ -161,12 +161,12 @@ const translatePath = useTranslatedPath(lang);
 	.social-links a {
 		display: flex;
 		align-items: center;
-		color: hsl(var(--muted-foreground));
+		color: hsl(var(--ink-soft));
 		transition: color 0.2s ease;
 	}
 
 	.social-links a:hover {
-		color: hsl(var(--foreground));
+		color: hsl(var(--ink));
 	}
 	
 	body.menu-open {
@@ -219,7 +219,7 @@ const translatePath = useTranslatedPath(lang);
 			left: 0;
 			height: 100vh;
 			width: 100%;
-			background-color: hsl(var(--background));
+			background-color: hsl(var(--paper));
 			flex-direction: column;
 			justify-content: center;
 			gap: 2rem;
@@ -227,7 +227,7 @@ const translatePath = useTranslatedPath(lang);
 			transition: transform 0.3s ease-in-out;
 			z-index: 10;
 			padding: 2rem;
-			border-left: 1px solid hsl(var(--border));
+			border-left: 1px solid hsl(var(--line));
 			overflow-y: auto;
 		}
 		
