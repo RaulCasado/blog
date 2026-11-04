@@ -29,6 +29,11 @@ export const translations = {
         'features.title': 'Check out my work',
         'features.description': 'Take a look at my latest blog posts, portfolio projects, and professional experience.',
         
+        // Latest posts (home)
+        'latest.title': 'Latest from the blog',
+        'latest.description': 'Notes from real projects: home servers, local AI, custom ROMs and the odd decision record.',
+        'latest.all': 'All posts',
+
         // Cards
         'card.blog.title': 'Blog',
         'card.blog.description': 'Read technical notes, lessons learned, and decisions from real projects.',
@@ -238,6 +243,11 @@ export const translations = {
         'features.title': 'Mira mi trabajo',
         'features.description': 'Échale un vistazo a mis últimas publicaciones en el blog, proyectos de portafolio y experiencia profesional.',
         
+        // Últimas entradas (home)
+        'latest.title': 'Lo último del blog',
+        'latest.description': 'Notas de proyectos reales: servidores caseros, IA local, ROMs personalizadas y alguna decisión documentada.',
+        'latest.all': 'Todas las entradas',
+
         // Tarjetas
         'card.blog.title': 'Blog',
         'card.blog.description': 'Lee notas técnicas, aprendizajes y decisiones tomadas en proyectos reales.',

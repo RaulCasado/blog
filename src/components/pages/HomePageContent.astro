@@ -1,91 +1,120 @@
 ---
 import { Picture } from 'astro:assets';
+import { getCollection } from 'astro:content';
 import profileImage from '../../assets/profile/raul_casado.png';
+import fallbackHeroImage from '../../assets/blog/blog-placeholder-1.jpg';
+import { getLangPosts, postSlug } from '../../utils/posts';
 import ContactCTA from '../ContactCTA.astro';
 const { lang, t, translatePath } = Astro.props;
+
+// Real product shots: the three posts the blog index leads with, with their own covers.
+const latestPosts = getLangPosts(await getCollection('blog'), lang).slice(0, 3);
+const dateLocale = lang === 'es' ? 'es-ES' : 'en-GB';
+
+// Text-only index (no icon tiles): number + title + one line + link.
+const sections = ['blog', 'portfolio', 'about'] as const;
 ---
 
-
 <section class="hero">
-				<div class="container">
-					<div class="hero-content">
-						<div class="hero-text">
-							<h1>{t('hero.greeting')}</h1>
-							<p>{t('hero.tagline')}</p>
-							<div class="cta-buttons">
-								<a href={translatePath('portfolio')} class="btn btn-primary">{t('hero.cta.projects')}</a>
-								<a href={translatePath('about')} class="btn btn-outline">{t('hero.cta.about')}</a>
-							</div>
-						</div>
-						<div class="hero-image">
-							<Picture
-								src={profileImage}
-								alt="Raúl Casado - Desarrollador Web" 
-								width={400} 
-								height={400}
-								formats={['avif', 'webp']}
-								fallbackFormat="png"
-								loading="eager"
-								quality={85}
-							/>
-						</div>
-					</div>
+	<div class="container">
+		<div class="hero-content">
+			<div class="hero-text">
+				<h1>{t('hero.greeting')}</h1>
+				<p>{t('hero.tagline')}</p>
+				<div class="cta-buttons">
+					<a href={translatePath('portfolio')} class="btn btn-primary">{t('hero.cta.projects')}</a>
+					<a href={translatePath('about')} class="btn btn-outline">{t('hero.cta.about')}</a>
 				</div>
-			</section>
-			
-			<!-- Featured Sections -->
-			<section class="features">
-				<div class="container">
-					<div class="section-header">
-						<h2>{t('features.title')}</h2>
-						<p>{t('features.description')}</p>
+			</div>
+			<div class="hero-image">
+				<Picture
+					src={profileImage}
+					alt="Raúl Casado - Desarrollador Web"
+					width={400}
+					height={400}
+					formats={['avif', 'webp']}
+					fallbackFormat="png"
+					loading="eager"
+					quality={85}
+				/>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- Latest posts: real covers, real content -->
+<section class="latest">
+	<div class="container">
+		<div class="section-head">
+			<div class="section-head-text">
+				<h2>{t('latest.title')}</h2>
+				<p>{t('latest.description')}</p>
+			</div>
+			<a href={translatePath('blog')} class="section-head-link">{t('latest.all')} <span aria-hidden="true">→</span></a>
+		</div>
+
+		<div class="post-grid">
+			{latestPosts.map((post) => (
+				<article class="post">
+					<a class="post-media" href={translatePath(`blog/${postSlug(post.id, lang)}/`)} tabindex="-1" aria-hidden="true">
+						<Picture
+							src={post.data.heroImage || fallbackHeroImage}
+							alt=""
+							width={720}
+							height={480}
+							widths={[360, 540, 720]}
+							sizes="(min-width: 900px) 30vw, 100vw"
+							formats={['avif', 'webp']}
+							loading="lazy"
+						/>
+					</a>
+					<p class="post-meta">
+						<time datetime={post.data.pubDate.toISOString()}>
+							{post.data.pubDate.toLocaleDateString(dateLocale, { year: 'numeric', month: 'short', day: 'numeric' })}
+						</time>
+					</p>
+					<h3>
+						<a href={translatePath(`blog/${postSlug(post.id, lang)}/`)}>{post.data.title}</a>
+					</h3>
+					{post.data.description && <p class="post-description">{post.data.description}</p>}
+				</article>
+			))}
+		</div>
+	</div>
+</section>
+
+<!-- Where to go next: text with hierarchy, no icon tiles -->
+<section class="features">
+	<div class="container split">
+		<div class="split-head">
+			<h2>{t('features.title')}</h2>
+			<p>{t('features.description')}</p>
+		</div>
+
+		<ol class="index">
+			{sections.map((key, i) => (
+				<li class="index-row">
+					<span class="index-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+					<div class="index-body">
+						<h3>{t(`card.${key}.title`)}</h3>
+						<p>{t(`card.${key}.description`)}</p>
 					</div>
-					
-					<div class="card-grid">
-						<div class="card">
-							<div class="card-content">
-								<div class="card-icon">
-									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
-								</div>
-								<h3>{t('card.blog.title')}</h3>
-								<p>{t('card.blog.description')}</p>
-								<a href={translatePath('blog')} class="card-link">{t('card.blog.link')}<span>→</span></a>
-							</div>
-						</div>
-						
-						<div class="card">
-							<div class="card-content">
-								<div class="card-icon">
-									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="8" y1="12" x2="16" y2="12"></line><line x1="8" y1="16" x2="16" y2="16"></line><line x1="8" y1="8" x2="10" y2="8"></line></svg>
-								</div>
-								<h3>{t('card.portfolio.title')}</h3>
-								<p>{t('card.portfolio.description')}</p>
-								<a href={translatePath('portfolio')} class="card-link">{t('card.portfolio.link')} <span>→</span></a>
-							</div>
-						</div>
-						
-						<div class="card">
-							<div class="card-content">
-								<div class="card-icon">
-									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-								</div>
-								<h3>{t('card.about.title')}</h3>
-								<p>{t('card.about.description')}</p>
-								<a href={translatePath('about')} class="card-link">{t('card.about.link')} <span>→</span></a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
-			
-			<!-- Tech Stack Section -->
-			<section class="tech-stack">
-				<div class="container">
-					<div class="section-header">
-						<h2>{t('tech.title')}</h2>
-						<p>{t('tech.description')}</p>
-					</div>
-					<div class="tech-icons">
+					<a href={translatePath(key)} class="index-link">{t(`card.${key}.link`)} <span aria-hidden="true">→</span></a>
+				</li>
+			))}
+		</ol>
+	</div>
+</section>
+
+<!-- Tech Stack Section -->
+<section class="tech-stack">
+	<div class="container split">
+		<div class="split-head">
+			<h2>{t('tech.title')}</h2>
+			<p>{t('tech.description')}</p>
+			<a href={translatePath('about')} class="stack-link">{t('tech.viewFullStack')} <span aria-hidden="true">→</span></a>
+		</div>
+		<div class="tech-icons">
 						<div class="tech-icon">
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="40" height="40" fill="#F7DF1E">
 								<path d="M0 32v448h448V32H0zm243.8 349.4c0 43.6-25.6 63.5-62.9 63.5-33.7 0-53.2-17.4-63.2-38.5l34.3-20.7c6.6 11.7 12.6 21.6 27.1 21.6 13.8 0 22.6-5.4 22.6-26.5V237.7h42.1v143.7zm99.6 63.5c-39.1 0-64.4-18.6-76.7-43l34.3-19.8c9 14.7 20.8 25.6 41.5 25.6 17.4 0 28.6-8.7 28.6-20.8 0-14.4-11.4-19.5-30.7-28l-10.5-4.5c-30.4-12.9-50.5-29.2-50.5-63.5 0-31.6 24.1-55.6 61.6-55.6 26.8 0 46 9.3 59.8 33.7L368 290c-7.2-12.9-15-18-27.1-18-12.3 0-20.1 7.8-20.1 18 0 12.6 7.8 17.7 25.9 25.6l10.5 4.5c35.8 15.3 55.9 31 55.9 66.2 0 37.8-29.8 58.6-69.7 58.6z"/>
@@ -111,17 +140,10 @@ const { lang, t, translatePath } = Astro.props;
 							<p>React</p>
 						</div>
 					</div>
-					
-					<div class="view-more-container">
-						<a href={translatePath('about')} class="btn btn-outline view-more-btn">
-							<span>{t('tech.viewFullStack')}</span>
-							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-						</a>
-					</div>
-				</div>
-			</section>
+	</div>
+</section>
 
-			<ContactCTA lang={lang} />
+<ContactCTA lang={lang} />
 
 <style>
 	main {
@@ -133,265 +155,306 @@ const { lang, t, translatePath } = Astro.props;
 		overflow-x: hidden;
 	}
 
-	/* Container */
+	/* Container: one left edge for every section */
 	.container {
 		width: 100%;
-		max-width: 1400px;
+		max-width: 1200px;
 		margin: 0 auto;
-		padding: 0 1rem;
+		padding: 0 1.25rem;
 		box-sizing: border-box;
 	}
 
-	/* Hero Section */
+	section {
+		padding: 3rem 0;
+	}
+
+	/* Hero */
 	.hero {
-		width: 100%;
-		padding: 2rem 0;
-		background-color: hsl(var(--muted) / 0.4);
-		overflow-x: hidden;
+		background-color: transparent;
+		padding: 2.5rem 0 3rem;
+		border-bottom: 1px solid hsl(var(--line));
 	}
 
 	.hero-content {
 		display: grid;
 		grid-template-columns: 1fr;
-		gap: 1.5rem;
+		gap: 2rem;
 		align-items: center;
-		width: 100%;
 	}
 
 	.hero-text {
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
-		gap: 1rem;
-		text-align: center;
-		width: 100%;
-		padding: 0 0.5rem;
-		box-sizing: border-box;
+		gap: 1.25rem;
+		text-align: left;
 	}
 
 	.hero-text h1 {
-		font-size: 1.75rem;
-		font-weight: 600;
-		line-height: 1.2;
+		font-size: clamp(2.5rem, 7vw, 4.5rem);
+		font-weight: 500;
+		line-height: 1.02;
+		letter-spacing: -0.03em;
 		margin: 0;
-		letter-spacing: -0.02em;
-		word-break: break-word;
+		text-wrap: balance;
 	}
 
 	.hero-text p {
-		font-size: 1rem;
-		color: hsl(var(--muted-foreground));
-		width: 100%;
-		max-width: 100%;
-		margin: 0 auto;
-		word-break: break-word;
-	}
-
-	.hero-image {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		order: -1; /* Show image first on mobile */
-		width: 100%;
+		font-size: 1.125rem;
+		line-height: 1.6;
+		color: hsl(var(--ink-soft));
+		max-width: 52ch;
+		margin: 0;
 	}
 
 	.hero-image img {
-		border-radius: var(--radius);
+		display: block;
+		width: 100%;
+		max-width: 22rem;
+		aspect-ratio: 1;
+		height: auto;
 		object-fit: cover;
-		max-width: 100%;
-		width: 200px;
-		height: 200px;
-		box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+		border-radius: var(--corner);
 	}
 
-	/* CTA Buttons */
 	.cta-buttons {
 		display: flex;
 		flex-wrap: wrap;
-		justify-content: center;
 		gap: 0.75rem;
-		margin-top: 0.75rem;
+		margin-top: 0.5rem;
 	}
 
 	.btn {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		padding: 0.75rem 1.25rem;
-		border-radius: var(--radius);
+		padding: 0.7rem 1.25rem;
+		border-radius: var(--corner);
 		font-weight: 600;
 		text-decoration: none;
-		transition: all 0.2s ease-in-out;
-		cursor: pointer;
+		transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 		font-size: 0.9375rem;
 	}
 
 	.btn-primary {
-		background-color: hsl(var(--primary));
-		color: hsl(var(--primary-foreground));
+		background-color: hsl(var(--brand));
+		border: 1px solid hsl(var(--brand));
+		color: hsl(var(--brand-ink));
 	}
 
 	.btn-primary:hover {
+		color: hsl(var(--brand-ink));
 		opacity: 0.9;
 	}
 
 	.btn-outline {
 		background-color: transparent;
-		border: 2px solid hsl(var(--primary));
-		color: hsl(var(--primary));
+		border: 1px solid hsl(var(--line-strong));
+		color: hsl(var(--ink));
 	}
 
 	.btn-outline:hover {
-		background-color: hsl(var(--primary));
-		color: hsl(var(--primary-foreground));
+		border-color: hsl(var(--ink));
+		color: hsl(var(--ink));
 	}
 
-	/* Section Styles */
-	section {
-		padding: 2.5rem 0;
-	}
-
-	.section-header {
-		text-align: center;
-		margin-bottom: 2rem;
-		padding: 0 0.5rem;
-		width: 100%;
-		box-sizing: border-box;
-	}
-
-	.section-header h2 {
-		font-size: 1.5rem;
-		font-weight: 600;
-		letter-spacing: -0.02em;
+	/* Section heads: left-aligned */
+	h2 {
+		font-size: clamp(1.75rem, 4vw, 2.5rem);
+		font-weight: 500;
+		line-height: 1.1;
+		letter-spacing: -0.025em;
 		margin: 0 0 0.75rem;
-		word-wrap: break-word;
+		text-wrap: balance;
 	}
 
-	.section-header p {
-		font-size: 1rem;
-		color: hsl(var(--muted-foreground));
-		max-width: 100%;
-		margin: 0 auto;
-		word-wrap: break-word;
+	.section-head p,
+	.split-head p {
+		color: hsl(var(--ink-soft));
+		line-height: 1.6;
+		margin: 0;
+		max-width: 46ch;
 	}
 
-	/* Card Grid */
-	.card-grid {
-		display: grid;
-		grid-template-columns: repeat(1, 1fr);
-		gap: 1.25rem;
-		width: 100%;
-	}
-
-	.card {
-		background-color: hsl(var(--card));
-		border-radius: var(--radius-lg);
-		border: 1px solid hsl(var(--border));
-		box-shadow: none;
-		transition: border-color 0.2s ease, transform 0.2s ease;
-		height: 100%;
-		width: 100%;
-		overflow: hidden;
-		box-sizing: border-box;
-	}
-
-	.card:hover {
-		border-color: hsl(var(--muted-foreground) / 0.4);
-		transform: translateY(-2px);
-	}
-
-	.card-content {
-		padding: 1.25rem;
+	.section-head {
 		display: flex;
 		flex-direction: column;
+		align-items: flex-start;
+		gap: 1rem;
+		margin-bottom: 2rem;
+	}
+
+	.section-head-link,
+	.stack-link,
+	.index-link {
+		display: inline-flex;
 		align-items: center;
-		text-align: center;
-		gap: 0.875rem;
-		height: 100%;
-		width: 100%;
-		box-sizing: border-box;
-	}
-	
-	.card-content h3 {
-		word-break: break-word;
-		width: 100%;
-	}
-	
-	.card-content p {
-		word-break: break-word;
-		width: 100%;
-	}
-
-	.card-icon {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 3rem;
-		height: 3rem;
-		background-color: hsl(var(--primary) / 0.1);
-		color: hsl(var(--primary));
-		border-radius: 50%;
-		padding: 0.5rem;
-	}
-
-	.card h3 {
-		font-size: 1.25rem;
-		font-weight: 600;
-		margin: 0;
-	}
-
-	.card p {
-		color: hsl(var(--muted-foreground));
-		margin: 0;
-	}
-
-	.card-link {
-		display: flex;
-		align-items: center;
-		gap: 0.25rem;
-		color: hsl(var(--primary));
+		gap: 0.35rem;
+		color: hsl(var(--brand));
 		text-decoration: none;
-		font-weight: 500;
-		margin-top: 1rem;
+		font-weight: 600;
+		font-size: 0.9375rem;
 	}
 
-	.card-link span {
-		transition: transform 0.2s ease-in-out;
+	.section-head-link span,
+	.stack-link span,
+	.index-link span {
+		transition: transform 0.2s ease;
 	}
 
-	.card-link:hover span {
+	.section-head-link:hover span,
+	.stack-link:hover span,
+	.index-link:hover span {
 		transform: translateX(4px);
 	}
 
-	/* Tech Stack */
-	.tech-stack {
-		background-color: hsl(var(--muted));
+	.stack-link {
+		margin-top: 1.25rem;
+	}
+
+	/* Latest posts */
+	.post-grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 2.25rem;
+	}
+
+	.post-media {
+		display: block;
+		overflow: hidden;
+		border-radius: var(--corner);
+		background-color: hsl(var(--wash));
+		margin-bottom: 1rem;
+	}
+
+	.post-media img {
+		display: block;
 		width: 100%;
-		overflow-x: hidden;
+		aspect-ratio: 3 / 2;
+		height: auto;
+		object-fit: cover;
+		border-radius: 0;
+		transition: transform 0.4s ease;
+	}
+
+	.post:hover .post-media img {
+		transform: scale(1.03);
+	}
+
+	.post-meta {
+		font-family: var(--font-mono);
+		font-size: var(--eyebrow-size);
+		letter-spacing: var(--eyebrow-tracking);
+		text-transform: uppercase;
+		color: hsl(var(--ink-soft));
+		margin: 0 0 0.5rem;
+	}
+
+	.post h3 {
+		font-size: 1.375rem;
+		line-height: 1.2;
+		margin: 0 0 0.5rem;
+		text-wrap: balance;
+	}
+
+	.post h3 a {
+		text-decoration: none;
+	}
+
+	.post h3 a:hover {
+		color: hsl(var(--brand));
+	}
+
+	.post-description {
+		color: hsl(var(--ink-soft));
+		font-size: 0.9375rem;
+		line-height: 1.55;
+		margin: 0;
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		line-clamp: 3;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+	/* Split layout: heading column + content column on a 12-col grid */
+	.split {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 2rem;
+	}
+
+	.split-head {
+		align-self: start;
+	}
+
+	/* Text index */
+	.features {
+		border-top: 1px solid hsl(var(--line));
+	}
+
+	.index {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		border-top: 1px solid hsl(var(--ink));
+	}
+
+	.index-row {
+		display: grid;
+		grid-template-columns: 2.25rem 1fr;
+		column-gap: 0.75rem;
+		row-gap: 0.75rem;
+		padding: 1.5rem 0;
+		border-bottom: 1px solid hsl(var(--line));
+	}
+
+	.index-num {
+		font-family: var(--font-mono);
+		font-size: 0.8125rem;
+		color: hsl(var(--brand));
+		padding-top: 0.45rem;
+	}
+
+	.index-body h3 {
+		font-size: 1.625rem;
+		line-height: 1.15;
+		margin: 0 0 0.4rem;
+	}
+
+	.index-body p {
+		color: hsl(var(--ink-soft));
+		margin: 0;
+		max-width: 48ch;
+		line-height: 1.55;
+	}
+
+	.index-link {
+		grid-column: 2;
+	}
+
+	/* Tech stack */
+	.tech-stack {
+		border-top: 1px solid hsl(var(--line));
+		background-color: hsl(var(--wash));
 	}
 
 	.tech-icons {
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
-		gap: 2rem 1rem;
-		justify-content: center;
-		margin-top: 2rem;
-		width: 100%;
+		gap: 2rem 1.5rem;
+		align-content: start;
 	}
 
 	.tech-icon {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
-		gap: 0.5rem;
-		width: 100%;
+		align-items: flex-start;
+		gap: 0.6rem;
 	}
-	
+
 	.tech-icon svg {
-		max-width: 100%;
-		height: auto;
-		width: 56px;
-		height: 56px;
+		width: 44px;
+		height: 44px;
 	}
 
 	.tech-icon p {
@@ -399,135 +462,88 @@ const { lang, t, translatePath } = Astro.props;
 		font-size: 0.875rem;
 		font-weight: 500;
 	}
-	
-	.view-more-container {
-		display: flex;
-		justify-content: center;
-		margin-top: 2rem;
-	}
-	
-	.view-more-btn {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.5rem;
-		border-color: hsl(var(--border));
-		color: hsl(var(--foreground));
-		transition: all 0.2s ease-in-out;
-	}
 
-	.view-more-btn:hover {
-		background-color: hsl(var(--primary));
-		border-color: hsl(var(--primary));
-		color: hsl(var(--primary-foreground));
-	}
-	
-	.view-more-btn svg {
-		transition: transform 0.2s ease-in-out;
-	}
-	
-	.view-more-btn:hover svg {
-		transform: translateX(4px);
-	}
-
-	/* Responsive Design */
-	@media (min-width: 480px) {
-		.container {
-			padding: 0 1.5rem;
-		}
-		
-		.hero {
-			padding: 2.5rem 0;
-		}
-		
-		.hero-text h1 {
-			font-size: 2.25rem;
-		}
-		
-		.section-header h2 {
-			font-size: 2rem;
-		}
-	}
-	
 	@media (min-width: 640px) {
-		.tech-icons {
-			grid-template-columns: repeat(4, 1fr);
-		}
-		
-		.card-grid {
-			grid-template-columns: repeat(2, 1fr);
-		}
-	}
-	
-	@media (min-width: 768px) {
 		.container {
 			padding: 0 2rem;
 		}
-		
-		.hero {
-			padding: 3rem 0;
+
+		.post-grid {
+			grid-template-columns: repeat(2, 1fr);
 		}
-		
-		.hero-content {
-			grid-template-columns: 1fr 400px;
-			gap: 3rem;
+
+		.section-head {
+			flex-direction: row;
+			align-items: flex-end;
+			justify-content: space-between;
 		}
-		
-		.hero-image {
-			order: 1; /* Restore image to right side on larger screens */
-		}
-		
-		.hero-image img {
-			width: 350px;
-			height: 350px;
-		}
-		
-		.hero-text {
-			text-align: left;
-			gap: 1.5rem;
-		}
-		
-		.hero-text p {
-			margin: 0;
-		}
-		
-		.cta-buttons {
-			justify-content: flex-start;
-			margin-top: 1rem;
-		}
-		
-		.card-grid {
-			grid-template-columns: repeat(3, 1fr);
-		}
-		
-		.hero-text h1 {
-			font-size: 2.75rem;
-		}
-		
-		.section-header {
-			margin-bottom: 3rem;
-		}
-		
-		.section-header h2 {
-			font-size: 2.25rem;
-		}
-		
-		section {
-			padding: 4rem 0;
-		}
-	}
-	
-	@media (min-width: 1024px) {
-		.hero-text h1 {
-			font-size: 3.5rem;
-		}
-		
-		.hero-image img {
-			width: 400px;
-			height: 400px;
-		}
-		
+
 		.tech-icons {
 			grid-template-columns: repeat(4, 1fr);
+		}
+	}
+
+	@media (min-width: 900px) {
+		section {
+			padding: 5rem 0;
+		}
+
+		.hero {
+			padding: 4rem 0 5rem;
+		}
+
+		.hero-content {
+			grid-template-columns: repeat(12, 1fr);
+			column-gap: 2rem;
+		}
+
+		.hero-text {
+			grid-column: 1 / span 8;
+		}
+
+		.hero-image {
+			grid-column: 9 / -1;
+		}
+
+		.hero-image img {
+			max-width: none;
+		}
+
+		.post-grid {
+			grid-template-columns: repeat(3, 1fr);
+			gap: 2rem;
+		}
+
+		.split {
+			grid-template-columns: repeat(12, 1fr);
+			column-gap: 2rem;
+		}
+
+		.split-head {
+			grid-column: 1 / span 4;
+			position: sticky;
+			top: calc(var(--header-h) + 2rem);
+		}
+
+		.index,
+		.tech-icons {
+			grid-column: 6 / -1;
+		}
+
+		.index-row {
+			grid-template-columns: 3rem 1fr auto;
+			align-items: start;
+			column-gap: 1rem;
+		}
+
+		.index-link {
+			grid-column: 3;
+			padding-top: 0.6rem;
+		}
+
+		.tech-icons {
+			grid-template-columns: repeat(4, 1fr);
+			align-self: center;
 		}
 	}
 </style>
