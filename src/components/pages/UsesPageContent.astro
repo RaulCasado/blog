@@ -112,21 +112,21 @@ const t = useTranslations(lang);
         line-height: 1.2;
         margin-bottom: 0.5rem;
         letter-spacing: -0.025em;
-        color: hsl(var(--foreground));
+        color: hsl(var(--ink));
     }
     
     .uses-subtitle {
         font-size: 1.1rem;
-        color: hsl(var(--muted-foreground));
+        color: hsl(var(--ink-soft));
     }
 
     /* Card styles */
     .uses-card {
-        background-color: hsl(var(--card));
-        border-radius: var(--radius);
+        background-color: hsl(var(--surface));
+        border-radius: var(--corner);
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         overflow: hidden;
-        border: 1px solid hsl(var(--border));
+        border: 1px solid hsl(var(--line));
         transition: box-shadow 0.2s ease-in-out;
     }
     
@@ -136,15 +136,15 @@ const t = useTranslations(lang);
     
     .uses-card-header {
         padding: 1.25rem 1.5rem;
-        border-bottom: 1px solid hsl(var(--border));
-        background-color: hsl(var(--secondary) / 0.3);
+        border-bottom: 1px solid hsl(var(--line));
+        background-color: hsl(var(--tint) / 0.3);
     }
     
     .uses-card-title {
         font-size: 1.25rem;
         font-weight: 600;
         margin: 0;
-        color: hsl(var(--foreground));
+        color: hsl(var(--ink));
     }
     
     .uses-card-content {
@@ -163,7 +163,7 @@ const t = useTranslations(lang);
     .uses-list li {
         font-size: 1.05rem;
         line-height: 1.7;
-        color: hsl(var(--foreground));
+        color: hsl(var(--ink));
         position: relative;
         padding-left: 1.75rem;
     }
@@ -172,17 +172,17 @@ const t = useTranslations(lang);
         content: '→';
         position: absolute;
         left: 0;
-        color: hsl(var(--primary));
+        color: hsl(var(--brand));
         font-weight: bold;
     }
     
     .uses-list li strong {
-        color: hsl(var(--foreground));
+        color: hsl(var(--ink));
         font-weight: 600;
     }
     
     .uses-list li i {
-        color: hsl(var(--muted-foreground));
+        color: hsl(var(--ink-soft));
     }
 
     /* Responsive Design */

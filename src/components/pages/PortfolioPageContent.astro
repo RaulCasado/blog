@@ -150,11 +150,11 @@ function getTextColor(hex: string) {
     font-size: 2rem;
     font-weight: 700;
     margin-bottom: 1rem;
-    color: hsl(var(--foreground));
+    color: hsl(var(--ink));
   }
 
   .portfolio-intro {
-    color: hsl(var(--muted-foreground));
+    color: hsl(var(--ink-soft));
     margin-bottom: 2.5rem;
     font-size: 1.1rem;
   }
@@ -166,9 +166,9 @@ function getTextColor(hex: string) {
   }
 
   .project-card {
-    background-color: hsl(var(--card));
-    border-radius: var(--radius);
-    border: 1px solid hsl(var(--border));
+    background-color: hsl(var(--surface));
+    border-radius: var(--corner);
+    border: 1px solid hsl(var(--line));
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
@@ -191,14 +191,14 @@ function getTextColor(hex: string) {
   .project-icon {
     /* The tint carries the language colour; the glyph itself uses the text
        token, since a raw brand colour can't clear AA on a dark surface. */
-    color: hsl(var(--foreground));
+    color: hsl(var(--ink));
     width: 40px;
     height: 40px;
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: var(--radius);
+    border-radius: var(--corner);
     font-weight: 600;
     font-size: 0.875rem;
   }
@@ -212,7 +212,7 @@ function getTextColor(hex: string) {
     margin: 0 0 0.35rem 0;
     font-weight: 600;
     font-size: 1.25rem;
-    color: hsl(var(--foreground));
+    color: hsl(var(--ink));
   }
 
   .project-language-pill {
@@ -223,7 +223,7 @@ function getTextColor(hex: string) {
   }
 
   .project-description {
-    color: hsl(var(--muted-foreground));
+    color: hsl(var(--ink-soft));
     font-size: 0.95rem;
     line-height: 1.6;
     margin-bottom: 1.5rem;
@@ -247,7 +247,7 @@ function getTextColor(hex: string) {
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;
-    color: hsl(var(--muted-foreground));
+    color: hsl(var(--ink-soft));
     font-size: 0.825rem;
   }
 
@@ -256,9 +256,9 @@ function getTextColor(hex: string) {
     align-items: center;
     gap: 0.4rem;
     padding: 0.4rem 0.75rem;
-    background-color: hsl(var(--muted));
-    border-radius: var(--radius);
-    color: hsl(var(--foreground));
+    background-color: hsl(var(--wash));
+    border-radius: var(--corner);
+    color: hsl(var(--ink));
     font-size: 0.875rem;
     font-weight: 500;
     text-decoration: none;
@@ -266,8 +266,8 @@ function getTextColor(hex: string) {
   }
 
   .project-link:hover {
-    background-color: hsl(var(--primary));
-    color: hsl(var(--primary-foreground));
+    background-color: hsl(var(--brand));
+    color: hsl(var(--brand-ink));
   }
 
   @media (min-width: 640px) {

@@ -305,12 +305,12 @@ const t = useTranslations(lang);
         line-height: 1.2;
         margin-bottom: 0.5rem;
         letter-spacing: -0.025em;
-        color: hsl(var(--foreground));
+        color: hsl(var(--ink));
     }
     
     .cv-subtitle {
         font-size: 1.25rem;
-        color: hsl(var(--muted-foreground));
+        color: hsl(var(--ink-soft));
         max-width: 700px;
         margin-top: 0;
     }
@@ -320,10 +320,10 @@ const t = useTranslations(lang);
         align-items: center;
         justify-content: center;
         gap: 0.5rem;
-        background-color: hsl(var(--primary));
-        color: hsl(var(--primary-foreground));
+        background-color: hsl(var(--brand));
+        color: hsl(var(--brand-ink));
         padding: 0.75rem 1.5rem;
-        border-radius: var(--radius);
+        border-radius: var(--corner);
         font-weight: 500;
         border: none;
         cursor: pointer;
@@ -340,19 +340,19 @@ const t = useTranslations(lang);
         display: flex;
         align-items: center;
         justify-content: center;
-        color: hsl(var(--muted-foreground));
+        color: hsl(var(--ink-soft));
     }
     
     .download-icon {
-        color: hsl(var(--primary-foreground));
+        color: hsl(var(--brand-ink));
     }
     
     .cv-card {
-        background-color: hsl(var(--card));
-        border-radius: var(--radius);
+        background-color: hsl(var(--surface));
+        border-radius: var(--corner);
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         overflow: hidden;
-        border: 1px solid hsl(var(--border));
+        border: 1px solid hsl(var(--line));
         transition: box-shadow 0.2s ease-in-out;
     }
     
@@ -362,15 +362,15 @@ const t = useTranslations(lang);
     
     .cv-card-header {
         padding: 1.25rem 1.5rem;
-        border-bottom: 1px solid hsl(var(--border));
-        background-color: hsl(var(--secondary) / 0.3);
+        border-bottom: 1px solid hsl(var(--line));
+        background-color: hsl(var(--tint) / 0.3);
     }
     
     .cv-card-title {
         font-size: 1.25rem;
         font-weight: 600;
         margin: 0;
-        color: hsl(var(--foreground));
+        color: hsl(var(--ink));
     }
     
     .cv-card-content {
@@ -392,7 +392,7 @@ const t = useTranslations(lang);
     .cv-experience-item, .cv-education-item {
         padding-bottom: 1.75rem;
         margin-bottom: 1.75rem;
-        border-bottom: 1px solid hsl(var(--border));
+        border-bottom: 1px solid hsl(var(--line));
     }
     
     .cv-experience-item:last-child, .cv-education-item:last-child {
@@ -412,13 +412,13 @@ const t = useTranslations(lang);
         font-size: 1.25rem;
         font-weight: 600;
         margin: 0;
-        color: hsl(var(--foreground));
+        color: hsl(var(--ink));
     }
     
     .cv-company-title, .cv-institution {
         font-weight: 500;
         margin-bottom: 0.75rem;
-        color: hsl(var(--foreground));
+        color: hsl(var(--ink));
     }
     
     .cv-badge {
@@ -426,8 +426,8 @@ const t = useTranslations(lang);
         align-items: center;
         gap: 0.5rem;
         padding: 0.25rem 0.75rem;
-        background-color: hsl(var(--secondary));
-        color: hsl(var(--secondary-foreground));
+        background-color: hsl(var(--tint));
+        color: hsl(var(--tint-ink));
         border-radius: 9999px;
         font-size: 0.75rem;
         font-weight: 500;
@@ -442,8 +442,8 @@ const t = useTranslations(lang);
     
     .cv-badge-outline {
         background-color: transparent;
-        border: 1px solid hsl(var(--border));
-        color: hsl(var(--foreground));
+        border: 1px solid hsl(var(--line));
+        color: hsl(var(--ink));
     }
     
     .cv-badge img {
@@ -452,7 +452,7 @@ const t = useTranslations(lang);
     }
     
     .cv-description {
-        color: hsl(var(--muted-foreground));
+        color: hsl(var(--ink-soft));
         margin-bottom: 1.25rem;
         line-height: 1.6;
     }
@@ -465,7 +465,7 @@ const t = useTranslations(lang);
     
     .cv-experience-list li {
         margin-bottom: 0.5rem;
-        color: hsl(var(--muted-foreground));
+        color: hsl(var(--ink-soft));
     }
     
     .cv-skills-grid {
@@ -478,7 +478,7 @@ const t = useTranslations(lang);
         font-size: 1.125rem;
         font-weight: 600;
         margin-bottom: 1rem;
-        color: hsl(var(--foreground));
+        color: hsl(var(--ink));
     }
     
     .cv-skills-badges, .cv-tech-badges {
@@ -492,8 +492,8 @@ const t = useTranslations(lang);
         align-items: center;
         gap: 0.5rem;
         padding: 0.25rem 0.75rem;
-        background-color: hsl(var(--primary) / 0.15);
-        color: hsl(var(--primary));
+        background-color: hsl(var(--brand) / 0.15);
+        color: hsl(var(--brand));
         border-radius: 9999px;
         font-size: 0.75rem;
         font-weight: 500;

@@ -163,13 +163,13 @@ const t = useTranslations(lang);
         line-height: 1.2;
         margin-bottom: 0.5rem;
         letter-spacing: -0.025em;
-        color: hsl(var(--foreground));
+        color: hsl(var(--ink));
     }
 
     .about-description {
         font-size: 1.05rem;
         line-height: 1.7;
-        color: hsl(var(--muted-foreground));
+        color: hsl(var(--ink-soft));
         margin-bottom: 1.5rem;
     }
 
@@ -179,11 +179,11 @@ const t = useTranslations(lang);
     
     /* Card styles */
     .about-card {
-        background-color: hsl(var(--card));
-        border-radius: var(--radius);
+        background-color: hsl(var(--surface));
+        border-radius: var(--corner);
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         overflow: hidden;
-        border: 1px solid hsl(var(--border));
+        border: 1px solid hsl(var(--line));
         transition: box-shadow 0.2s ease-in-out;
     }
     
@@ -193,15 +193,15 @@ const t = useTranslations(lang);
     
     .about-card-header {
         padding: 1.25rem 1.5rem;
-        border-bottom: 1px solid hsl(var(--border));
-        background-color: hsl(var(--secondary) / 0.3);
+        border-bottom: 1px solid hsl(var(--line));
+        background-color: hsl(var(--tint) / 0.3);
     }
     
     .about-card-title {
         font-size: 1.25rem;
         font-weight: 600;
         margin: 0;
-        color: hsl(var(--foreground));
+        color: hsl(var(--ink));
     }
     
     .about-card-content {
@@ -218,8 +218,8 @@ const t = useTranslations(lang);
     .about-metric-item {
         text-align: center;
         padding: 1rem;
-        background-color: hsl(var(--secondary) / 0.1);
-        border-radius: var(--radius);
+        background-color: hsl(var(--tint) / 0.1);
+        border-radius: var(--corner);
         transition: transform 0.2s ease;
     }
     
@@ -230,7 +230,7 @@ const t = useTranslations(lang);
     .about-metric-value {
         font-size: 2rem;
         font-weight: 700;
-        color: hsl(var(--primary));
+        color: hsl(var(--brand));
         margin-bottom: 0.25rem;
         min-height: 2.4rem;
         display: flex;
@@ -245,7 +245,7 @@ const t = useTranslations(lang);
     
     .about-metric-label {
         font-size: 0.875rem;
-        color: hsl(var(--muted-foreground));
+        color: hsl(var(--ink-soft));
     }
     
     /* Tech badges */
@@ -262,8 +262,8 @@ const t = useTranslations(lang);
         justify-content: center;
         gap: 0.5rem;
         padding: 1rem;
-        background-color: hsl(var(--secondary) / 0.3);
-        border-radius: var(--radius);
+        background-color: hsl(var(--tint) / 0.3);
+        border-radius: var(--corner);
         font-size: 0.875rem;
         font-weight: 500;
         transition: background-color 0.2s ease, transform 0.2s ease;
@@ -274,7 +274,7 @@ const t = useTranslations(lang);
     }
     
     .about-tech-badge:hover {
-        background-color: hsl(var(--secondary) / 0.5);
+        background-color: hsl(var(--tint) / 0.5);
         transform: translateY(-2px);
         box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
@@ -286,12 +286,12 @@ const t = useTranslations(lang);
     }
     
     .about-tech-badge span {
-        color: hsl(var(--foreground));
+        color: hsl(var(--ink));
     }
     
     /* Links */
     .about-link {
-        color: hsl(var(--primary));
+        color: hsl(var(--brand));
         font-weight: 500;
         text-decoration: none;
         transition: color 0.2s ease;

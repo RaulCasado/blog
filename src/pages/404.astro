@@ -44,11 +44,11 @@ const t = useTranslations(lang);
 
     .error-content {
         max-width: 600px;
-        background-color: hsl(var(--card));
+        background-color: hsl(var(--surface));
         padding: 3rem 2rem;
-        border-radius: var(--radius-lg);
+        border-radius: var(--corner-lg);
         box-shadow: var(--box-shadow);
-        border: 1px solid hsl(var(--border));
+        border: 1px solid hsl(var(--line));
         animation: fadeIn 0.5s ease-out;
     }
 
@@ -57,23 +57,23 @@ const t = useTranslations(lang);
         font-weight: 800;
         line-height: 1;
         margin: 0;
-        background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary) / 0.5));
+        background: linear-gradient(135deg, hsl(var(--brand)), hsl(var(--brand) / 0.5));
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         letter-spacing: -0.05em;
-        text-shadow: 0 4px 10px hsl(var(--primary) / 0.2);
+        text-shadow: 0 4px 10px hsl(var(--brand) / 0.2);
     }
 
     .error-subtitle {
         font-size: 1.5rem;
         font-weight: 600;
-        color: hsl(var(--foreground));
+        color: hsl(var(--ink));
         margin: 1rem 0;
     }
 
     .error-description {
         font-size: 1.1rem;
-        color: hsl(var(--muted-foreground));
+        color: hsl(var(--ink-soft));
         margin-bottom: 2.5rem;
         line-height: 1.6;
     }
@@ -82,20 +82,20 @@ const t = useTranslations(lang);
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        background-color: hsl(var(--primary));
-        color: hsl(var(--primary-foreground));
+        background-color: hsl(var(--brand));
+        color: hsl(var(--brand-ink));
         padding: 0.75rem 1.5rem;
         border-radius: 9999px;
         font-weight: 600;
         text-decoration: none;
         transition: all 0.2s ease;
-        box-shadow: 0 4px 6px -1px hsl(var(--primary) / 0.3);
+        box-shadow: 0 4px 6px -1px hsl(var(--brand) / 0.3);
     }
 
     .back-home-btn:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 12px -2px hsl(var(--primary) / 0.4);
-        background-color: hsl(var(--primary) / 0.9);
+        box-shadow: 0 6px 12px -2px hsl(var(--brand) / 0.4);
+        background-color: hsl(var(--brand) / 0.9);
     }
 
     .back-home-btn:active {
