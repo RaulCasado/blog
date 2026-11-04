@@ -41,10 +41,10 @@ const availableLanguages = [...new Set(
     
     .filter-link {
         padding: 8px 16px;
-        border: 1px solid hsl(var(--border));
-        border-radius: var(--radius);
-        background-color: hsl(var(--background));
-        color: hsl(var(--foreground));
+        border: 1px solid hsl(var(--line));
+        border-radius: var(--corner);
+        background-color: hsl(var(--paper));
+        color: hsl(var(--ink));
         font-size: 0.875rem;
         font-weight: 500;
         transition: all 0.2s ease;
@@ -52,13 +52,13 @@ const availableLanguages = [...new Set(
     }
     
     .filter-link:hover {
-        background-color: hsl(var(--muted));
-        border-color: hsl(var(--primary));
+        background-color: hsl(var(--wash));
+        border-color: hsl(var(--brand));
     }
     
     .filter-link.active {
-        background-color: hsl(var(--primary));
-        color: hsl(var(--primary-foreground));
-        border-color: hsl(var(--primary));
+        background-color: hsl(var(--brand));
+        color: hsl(var(--brand-ink));
+        border-color: hsl(var(--brand));
     }
 </style>

@@ -74,10 +74,10 @@ const { tags = [], selectedTags = [], lang = 'es' } = Astro.props;
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background: hsl(var(--card) / 0.8);
+    background: hsl(var(--surface) / 0.8);
     backdrop-filter: blur(4px);
-    border: 1px solid hsl(var(--border));
-    color: hsl(var(--foreground));
+    border: 1px solid hsl(var(--line));
+    color: hsl(var(--ink));
     cursor: pointer;
     box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.1);
     opacity: 0;
@@ -91,7 +91,7 @@ const { tags = [], selectedTags = [], lang = 'es' } = Astro.props;
   }
 
   .tag-scroll-btn:hover {
-    background: hsl(var(--muted));
+    background: hsl(var(--wash));
     transform: scale(1.05);
   }
 
@@ -120,7 +120,7 @@ const { tags = [], selectedTags = [], lang = 'es' } = Astro.props;
     left: 0;
     background: linear-gradient(
       to right,
-      hsl(var(--background)) 0%,
+      hsl(var(--paper)) 0%,
       transparent 100%
     );
   }
@@ -129,7 +129,7 @@ const { tags = [], selectedTags = [], lang = 'es' } = Astro.props;
     right: 0;
     background: linear-gradient(
       to left,
-      hsl(var(--background)) 0%,
+      hsl(var(--paper)) 0%,
       transparent 100%
     );
   }
@@ -169,9 +169,9 @@ const { tags = [], selectedTags = [], lang = 'es' } = Astro.props;
     flex-shrink: 0;
     padding: 0.35rem 0.9rem;
     border-radius: var(--pill-radius);
-    background: hsl(var(--secondary));
-    color: hsl(var(--muted-foreground));
-    border: 1px solid hsl(var(--border));
+    background: hsl(var(--tint));
+    color: hsl(var(--ink-soft));
+    border: 1px solid hsl(var(--line));
     cursor: pointer;
     font-size: 0.8125rem;
     font-weight: 500;
@@ -180,16 +180,16 @@ const { tags = [], selectedTags = [], lang = 'es' } = Astro.props;
   }
 
   .tag-filter-btn:hover {
-    color: hsl(var(--foreground));
-    border-color: hsl(var(--muted-foreground) / 0.4);
+    color: hsl(var(--ink));
+    border-color: hsl(var(--ink-soft) / 0.4);
     transform: translateY(-1px);
   }
 
   .tag-filter-btn.active,
   .tag-filter-btn:active {
-    background: hsl(var(--primary) / 0.1);
-    color: hsl(var(--primary));
-    border-color: hsl(var(--primary) / 0.35);
+    background: hsl(var(--brand) / 0.1);
+    color: hsl(var(--brand));
+    border-color: hsl(var(--brand) / 0.35);
   }
 </style>
 

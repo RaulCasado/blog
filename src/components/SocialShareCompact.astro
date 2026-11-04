@@ -102,7 +102,7 @@ const platforms = [
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: var(--eyebrow-tracking);
-    color: hsl(var(--muted-foreground));
+    color: hsl(var(--ink-soft));
     white-space: nowrap;
   }
 
@@ -121,7 +121,7 @@ const platforms = [
     height: 32px;
     flex-shrink: 0;
     color: #fff;
-    background-color: var(--brand, hsl(var(--secondary)));
+    background-color: var(--brand, hsl(var(--tint)));
     border: 1px solid hsl(0 0% 100% / 0.08);
     border-radius: 0.375rem;
     cursor: pointer;
@@ -139,13 +139,13 @@ const platforms = [
   }
 
   .copy-button {
-    color: hsl(var(--muted-foreground));
-    background-color: hsl(var(--secondary));
-    border-color: hsl(var(--border));
+    color: hsl(var(--ink-soft));
+    background-color: hsl(var(--tint));
+    border-color: hsl(var(--line));
   }
 
   .copy-button:hover {
-    color: hsl(var(--foreground));
+    color: hsl(var(--ink));
   }
 
   .share-feedback {
@@ -153,7 +153,7 @@ const platforms = [
     top: calc(100% + 0.375rem);
     right: 0;
     font-size: 0.6875rem;
-    color: hsl(var(--primary));
+    color: hsl(var(--brand));
     white-space: nowrap;
     pointer-events: none;
   }

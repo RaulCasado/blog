@@ -165,7 +165,7 @@ const hasHeadings = filteredHeadings.length > 0;
     line-height: 1;
     text-transform: uppercase;
     letter-spacing: 0.01em;
-    color: hsl(var(--muted-foreground));
+    color: hsl(var(--ink-soft));
   }
 
   .toc-icon {
@@ -228,7 +228,7 @@ const hasHeadings = filteredHeadings.length > 0;
     top: 0;
     bottom: 0;
     width: 1px;
-    background-color: hsl(var(--border));
+    background-color: hsl(var(--line));
   }
 
   .toc-rail-thumb {
@@ -238,7 +238,7 @@ const hasHeadings = filteredHeadings.length > 0;
     width: 3px;
     height: 0;
     border-radius: var(--pill-radius);
-    background-color: hsl(var(--foreground));
+    background-color: hsl(var(--ink));
     transition: top 0.2s ease, height 0.2s ease;
   }
 
@@ -254,7 +254,7 @@ const hasHeadings = filteredHeadings.length > 0;
     padding: 0.5rem 1rem 0.5rem 1.5rem;
     font-size: 0.875rem;
     line-height: 1.4;
-    color: hsl(var(--muted-foreground));
+    color: hsl(var(--ink-soft));
     text-decoration: none;
     transition: color 0.2s ease;
   }
@@ -265,11 +265,11 @@ const hasHeadings = filteredHeadings.length > 0;
   }
 
   .toc-item:hover {
-    color: hsl(var(--foreground));
+    color: hsl(var(--ink));
   }
 
   .toc-item.active {
-    color: hsl(var(--foreground));
+    color: hsl(var(--ink));
   }
 
   /* Below the two-column breakpoint the TOC becomes a normal card above
@@ -280,9 +280,9 @@ const hasHeadings = filteredHeadings.length > 0;
       max-height: none;
       padding: 1rem 1.25rem;
       margin-bottom: 2rem;
-      background-color: hsl(var(--card));
-      border: 1px solid hsl(var(--border));
-      border-radius: var(--radius-lg);
+      background-color: hsl(var(--surface));
+      border: 1px solid hsl(var(--line));
+      border-radius: var(--corner-lg);
     }
 
     .toc-label {

@@ -105,14 +105,14 @@ const platforms = [
     margin-top: 2.5rem;
     margin-bottom: 1.5rem;
     padding-top: 1.5rem;
-    border-top: 1px solid hsl(var(--border) / 0.5);
+    border-top: 1px solid hsl(var(--line) / 0.5);
   }
 
   .social-share-title {
     font-size: 1.1rem;
     font-weight: 600;
     margin-bottom: 1rem;
-    color: hsl(var(--foreground));
+    color: hsl(var(--ink));
   }
 
   .social-share-buttons {
@@ -127,15 +127,15 @@ const platforms = [
     align-items: center;
     justify-content: center;
     padding: 0.6rem;
-    background-color: hsl(var(--secondary) / 0.3);
-    color: hsl(var(--foreground));
-    border-radius: var(--radius);
+    background-color: hsl(var(--tint) / 0.3);
+    color: hsl(var(--ink));
+    border-radius: var(--corner);
     transition: background-color 0.2s ease, transform 0.2s ease;
-    border: 1px solid hsl(var(--border) / 0.7);
+    border: 1px solid hsl(var(--line) / 0.7);
   }
 
   .social-share-button:hover {
-    background-color: hsl(var(--secondary) / 0.6);
+    background-color: hsl(var(--tint) / 0.6);
     transform: translateY(-1px);
   }
 
@@ -168,7 +168,7 @@ const platforms = [
   .copy-link-feedback {
     margin-top: 0.5rem;
     font-size: 0.875rem;
-    color: hsl(var(--primary));
+    color: hsl(var(--brand));
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
   }

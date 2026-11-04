@@ -14,8 +14,11 @@ const cvHref = '/raulcasado_cv.pdf';
 ---
 
 <section class="contact-cta">
-	<h2 class="contact-cta-title">{t('contact.title')}</h2>
-	<p class="contact-cta-subtitle">{t('contact.subtitle')}</p>
+	<div class="contact-cta-text">
+		<h2 class="contact-cta-title">{t('contact.title')}</h2>
+		<p class="contact-cta-subtitle">{t('contact.subtitle')}</p>
+	</div>
+	<div class="contact-cta-side">
 	<div class="contact-cta-actions">
 		<a class="contact-btn contact-btn--primary" href={`mailto:${email}`}>
 			{t('contact.email')}
@@ -28,39 +31,45 @@ const cvHref = '/raulcasado_cv.pdf';
 		</a>
 	</div>
 	<a class="contact-cta-email" href={`mailto:${email}`}>{email}</a>
+	</div>
 </section>
 
 <style>
+	/* Left-aligned, two-column on wide screens: pitch on the left, actions on the right */
 	.contact-cta {
-		max-width: 720px;
-		margin: 4rem auto 2rem;
-		padding: 2.5rem 1.5rem;
-		text-align: center;
-		background-color: hsl(var(--secondary) / 0.2);
-		border: 1px solid hsl(var(--border));
-		border-radius: var(--radius);
+		max-width: calc(1200px - 2.5rem);
+		width: calc(100% - 2.5rem);
+		margin: 3rem auto 2rem;
+		padding: 2.5rem 0 0;
+		border-top: 1px solid hsl(var(--ink));
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 1.5rem;
+		text-align: left;
 	}
 
 	.contact-cta-title {
-		font-size: 1.5rem;
-		font-weight: 600;
-		letter-spacing: -0.02em;
-		margin: 0 0 0.5rem;
-		color: hsl(var(--foreground));
+		font-size: clamp(1.75rem, 4vw, 2.5rem);
+		font-weight: 500;
+		line-height: 1.1;
+		letter-spacing: -0.025em;
+		margin: 0 0 0.75rem;
+		color: hsl(var(--ink));
+		text-wrap: balance;
 	}
 
 	.contact-cta-subtitle {
 		max-width: 48ch;
-		margin: 0 auto 1.75rem;
-		color: hsl(var(--muted-foreground));
+		margin: 0;
+		color: hsl(var(--ink-soft));
 		line-height: 1.6;
 	}
 
 	.contact-cta-actions {
 		display: flex;
 		flex-wrap: wrap;
-		justify-content: center;
 		gap: 0.75rem;
+		margin-top: 0.5rem;
 	}
 
 	.contact-btn {
@@ -69,24 +78,24 @@ const cvHref = '/raulcasado_cv.pdf';
 		justify-content: center;
 		min-height: 2.75rem;
 		padding: 0.6rem 1.25rem;
-		border: 1px solid hsl(var(--border));
-		border-radius: var(--radius);
-		color: hsl(var(--foreground));
+		border: 1px solid hsl(var(--line-strong));
+		border-radius: var(--corner);
+		color: hsl(var(--ink));
 		text-decoration: none;
 		font-weight: 600;
 		transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 	}
 
 	.contact-btn:hover {
-		background-color: hsl(var(--primary));
-		border-color: hsl(var(--primary));
-		color: hsl(var(--primary-foreground));
+		background-color: hsl(var(--brand));
+		border-color: hsl(var(--brand));
+		color: hsl(var(--brand-ink));
 	}
 
 	.contact-btn--primary {
-		background-color: hsl(var(--primary));
-		border-color: hsl(var(--primary));
-		color: hsl(var(--primary-foreground));
+		background-color: hsl(var(--brand));
+		border-color: hsl(var(--brand));
+		color: hsl(var(--brand-ink));
 	}
 
 	.contact-btn--primary:hover {
@@ -96,13 +105,37 @@ const cvHref = '/raulcasado_cv.pdf';
 	.contact-cta-email {
 		display: inline-block;
 		margin-top: 1.25rem;
-		font-size: 0.95rem;
-		color: hsl(var(--muted-foreground));
+		font-family: var(--font-mono);
+		font-size: 0.875rem;
+		color: hsl(var(--ink-soft));
 		text-decoration: none;
 	}
 
 	.contact-cta-email:hover {
-		color: hsl(var(--primary));
+		color: hsl(var(--brand));
 		text-decoration: underline;
+	}
+
+	@media (min-width: 900px) {
+		.contact-cta {
+			grid-template-columns: repeat(12, 1fr);
+			column-gap: 2rem;
+			max-width: calc(1200px - 4rem);
+			width: calc(100% - 4rem);
+			padding: 3rem 0 0;
+		}
+
+		.contact-cta-text {
+			grid-column: 1 / span 6;
+		}
+
+		.contact-cta-side {
+			grid-column: 8 / -1;
+			align-self: end;
+		}
+
+		.contact-cta-actions {
+			margin-top: 0;
+		}
 	}
 </style>
