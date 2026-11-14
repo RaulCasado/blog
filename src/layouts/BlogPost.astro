@@ -5,6 +5,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import TableOfContents from '../components/TableOfContents.astro';
 import SocialShareCompact from '../components/SocialShareCompact.astro';
+import RelatedPosts from '../components/RelatedPosts.astro';
 import { getLangFromUrl } from '../i18n/utils';
 import { getReadingTime } from '../utils/posts';
 import { Picture } from 'astro:assets';
@@ -16,6 +17,7 @@ type Props = CollectionEntry<'blog'>['data'] & {
 		text: string;
 	}[];
 	body?: string;
+	related?: CollectionEntry<'blog'>[];
 };
 
 const {
@@ -29,6 +31,7 @@ const {
 	tags = [],
 	headings = [],
 	body,
+	related = [],
 } = Astro.props;
 
 const currentPageUrl = Astro.url.href;
@@ -43,6 +46,7 @@ const copy = {
 	updated: isEnglish ? 'Updated' : 'Actualizado',
 	copy: isEnglish ? 'Copy' : 'Copiar',
 	copied: isEnglish ? 'Copied!' : '¡Copiado!',
+	keepReading: isEnglish ? 'Keep reading' : 'Sigue leyendo',
 };
 
 const readingTime = getReadingTime({ body: body ?? '' });
@@ -97,7 +101,8 @@ const hasToc = headings.length > 0;
 			.post-aside { order: 3; }
 			.prose { order: 4; }
 			.post-updated { order: 4; }
-			.post-comments { order: 5; }
+			.post-related { order: 5; }
+			.post-comments { order: 6; }
 		}
 
 		@media (min-width: 1024px) {
@@ -468,6 +473,10 @@ const hasToc = headings.length > 0;
 
 					<div class="prose">
 						<slot />
+					</div>
+
+					<div class="post-related">
+						<RelatedPosts posts={related} lang={lang} title={copy.keepReading} minRead={copy.minRead} />
 					</div>
 
 					<div class="post-comments">
