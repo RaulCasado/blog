@@ -1,0 +1,54 @@
+name: Desplegar en VPS
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Un solo despliegue a la vez; el nuevo espera al que está en curso.
+concurrency:
+  group: deploy-vps
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Instalar dependencias
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Preparar SSH (clave de despliegue y huella del host fijada)
+        env:
+          VPS_DEPLOY_KEY: ${{ secrets.VPS_DEPLOY_KEY }}
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$VPS_DEPLOY_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          echo '62.83.91.99 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOwmdfgTr2cx1ADMzjytNa9mWBvDxydIepKMt3t3bQc/' > ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: Subir dist/ al VPS
+        run: |
+          rsync -az --delete \
+            -e "ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts -o StrictHostKeyChecking=yes" \
+            dist/ raul@62.83.91.99:/
+
+      - name: Limpiar la clave
+        if: always()
+        run: rm -f ~/.ssh/deploy_key
